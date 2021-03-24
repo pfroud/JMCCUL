@@ -1,7 +1,7 @@
-package mcdaq;
+package jmccul;
 
 import java.awt.Component;
-import static mcdaq.McDaqUtils.throwIfNeeded;
+import static jmccul.JMCCULUtils.throwIfNeeded;
 
 /**
  * The USB-1408FS is used in the new sphere control box.
@@ -12,7 +12,7 @@ import static mcdaq.McDaqUtils.throwIfNeeded;
  *
  * @author Peter Froud
  */
-public final class USB_1408FS extends AbstractMcDaqDevice {
+public final class USB_1408FS extends AbstractJMCCULDevice {
 
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
 
@@ -25,23 +25,23 @@ public final class USB_1408FS extends AbstractMcDaqDevice {
     public final static int PIN_DIGIATL_OUT_ZERO_TO_TEN = 4; // set pin high to connect 0-10V output to DUT
     public final static int PIN_DIGIATL_OUT_BARCODE_SCAN = 5; // set pin high to trigger QR code scanner
 
-    public USB_1408FS(Component parentComponent) throws McDaqException {
+    public USB_1408FS(Component parentComponent) throws JMCCULException {
         super(parentComponent, "USB-1408FS-Plus");
 
         // Digital outputs are used for matrix, barcode scanner trigger, and relay to (dis)connect 0-10V.
         throwIfNeeded(LIBRARY.cbDConfigPort(BOARD_NUMBER, PORT_DIGITAL_IO, PORT_DIRECTION_DIGITAL_OUT));
     }
 
-    public void setDigitalPin(int pinNumber, boolean isOn) throws McDaqException {
+    public void setDigitalPin(int pinNumber, boolean isOn) throws JMCCULException {
         throwIfNeeded(LIBRARY.cbDBitOut(BOARD_NUMBER, PORT_DIGITAL_IO, pinNumber, (short) (isOn ? 1 : 0)));
     }
 
-    public void setAnalogVoltage(int pinNumber, float volts) throws McDaqException {
+    public void setAnalogVoltage(int pinNumber, float volts) throws JMCCULException {
         final int OPTIONS = 0;
         if (volts < 0 || volts > 5) {
             throw new IllegalArgumentException("setting analog volts to " + volts + ", sensible range is 0V - 5V");
         }
-        throwIfNeeded(LIBRARY.cbVOut(BOARD_NUMBER, pinNumber, AtoDRange.UNIPOLAR_5_VOLTS.VALUE, volts, OPTIONS));
+        throwIfNeeded(LIBRARY.cbVOut(BOARD_NUMBER, pinNumber, AnalogToDigitalRange.UNIPOLAR_5_VOLTS.VALUE, volts, OPTIONS));
     }
 
 }

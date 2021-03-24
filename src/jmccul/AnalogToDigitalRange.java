@@ -1,11 +1,11 @@
-package mcdaq;
+package jmccul;
 
 /**
  * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm#Misc/Supported_A_D_Ranges.htm
  *
  * @author Peter Froud
  */
-public enum AtoDRange {
+public enum AnalogToDigitalRange {
     BIPOLAR_60_VOLTS(MeasurementComputingUniversalLibrary.BIP60VOLTS),
     BIPOLAR_20_VOLTS(MeasurementComputingUniversalLibrary.BIP20VOLTS),
     BIPOLAR_15_VOLTS(MeasurementComputingUniversalLibrary.BIP15VOLTS),
@@ -57,7 +57,7 @@ public enum AtoDRange {
 
     public final int VALUE;
 
-    AtoDRange(int value) {
+    AnalogToDigitalRange(int value) {
         VALUE = value;
     }
 

@@ -1,8 +1,8 @@
-package mcdaq;
+package jmccul;
 
 import java.awt.Component;
 import java.nio.FloatBuffer;
-import static mcdaq.McDaqUtils.throwIfNeeded;
+import static jmccul.JMCCULUtils.throwIfNeeded;
 
 /**
  * The USB-2001-TC is used for getting data for thermal equations.
@@ -13,7 +13,7 @@ import static mcdaq.McDaqUtils.throwIfNeeded;
  *
  * @author Peter Froud
  */
-public class USB_2001_TC extends AbstractMcDaqDevice {
+public class USB_2001_TC extends AbstractJMCCULDevice {
 
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
 
@@ -24,11 +24,11 @@ public class USB_2001_TC extends AbstractMcDaqDevice {
     private final int TEMPERATURE_UNITS_CELCIUS = MeasurementComputingUniversalLibrary.CELSIUS;
     private final int TC_OPTION_TEN_SAMPLES_AVERAGE = MeasurementComputingUniversalLibrary.FILTER;
 
-    public USB_2001_TC(Component parentComponent) throws McDaqException {
+    public USB_2001_TC(Component parentComponent) throws JMCCULException {
         super(parentComponent, "USB-2001-TC");
     }
 
-    public float readTemperature() throws McDaqException {
+    public float readTemperature() throws JMCCULException {
         final int channel = 0;
         throwIfNeeded(LIBRARY.cbSetConfig(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, channel, CONFIG_ITEM_THERMOCOUPLE_TYPE, THERMOCOUPLE_TYPE_K));
 

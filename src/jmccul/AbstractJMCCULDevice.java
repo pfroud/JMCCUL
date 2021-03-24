@@ -1,16 +1,16 @@
-package mcdaq;
+package jmccul;
 
 import java.awt.Component;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import javax.swing.JOptionPane;
-import static mcdaq.McDaqUtils.throwIfNeeded;
+import static jmccul.JMCCULUtils.throwIfNeeded;
 
 /**
  *
  * @author Peter Froud
  */
-public abstract class AbstractMcDaqDevice {
+public abstract class AbstractJMCCULDevice {
 
     public static boolean debugPrintouts = false;
     private static boolean alreadyCalledIgnoreInstaCal = false;
@@ -29,7 +29,7 @@ public abstract class AbstractMcDaqDevice {
     public final String BOARD_NAME;
     public final String USER_DEVICE_IDENTIFIER;
 
-    public AbstractMcDaqDevice(Component parentComponent, String desiredBoardName) throws McDaqException {
+    public AbstractJMCCULDevice(Component parentComponent, String desiredBoardName) throws JMCCULException {
         /*
         There are two ways to set up MC DAQ boards.
         See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Ical-APIDetect.htm
@@ -58,7 +58,7 @@ public abstract class AbstractMcDaqDevice {
             alreadyCalledIgnoreInstaCal = true;
         }
 
-        final DaqDeviceDescriptor[] foundDevicesArray = McDaqUtils.findDaqDevices();
+        final DaqDeviceDescriptor[] foundDevicesArray = JMCCULUtils.findDaqDevices();
         final int foundDevicesCount = foundDevicesArray.length;
 
         if (foundDevicesCount < 1) {
@@ -71,7 +71,7 @@ public abstract class AbstractMcDaqDevice {
                         + "找不到USB-1408FS数据采集设备。 该软件仍将运行，但是某些功能将无法使用。";
                 JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.WARNING_MESSAGE);
             }
-            throw new McDaqException("No MC DAQ devices found!");
+            throw new JMCCULException("No MC DAQ devices found!");
         }
         final StringBuilder allDevicesToPrintOut = new StringBuilder();
         for (int i = 0; i < foundDevicesCount; i++) {
@@ -113,24 +113,24 @@ public abstract class AbstractMcDaqDevice {
             JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.WARNING_MESSAGE);
         }
 
-        throw new McDaqException("multiple MC DAQ devices found");
+        throw new JMCCULException("multiple MC DAQ devices found");
 
     }
 
-    public final void release() throws McDaqException {
+    public final void release() throws JMCCULException {
         if (debugPrintouts) {
             System.out.println(BOARD_NAME + ": releasing board number " + BOARD_NUMBER);
         }
         throwIfNeeded(LIBRARY.cbReleaseDaqDevice(BOARD_NUMBER));
     }
 
-    private String getBoardName() throws McDaqException {
+    private String getBoardName() throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(BOARD_NAME_LENGTH);
         throwIfNeeded(LIBRARY.cbGetBoardName(BOARD_NUMBER, buf));
         return new String(buf.array()).trim();
     }
 
-    private String getFactorySerialNumber() throws McDaqException {
+    private String getFactorySerialNumber() throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(CONFIG_ITEM_LENGTH);
         final IntBuffer maxConfigLen = IntBuffer.wrap(new int[]{CONFIG_ITEM_LENGTH});
         final int DEVICE_NUMBER_BASE_BOARD = 0; //set to 1 to get the factory serial number of an expansion board
@@ -138,7 +138,7 @@ public abstract class AbstractMcDaqDevice {
         return new String(buf.array(), 0, maxConfigLen.get(0));
     }
 
-    private String getUserDeviceIdentifier() throws McDaqException {
+    private String getUserDeviceIdentifier() throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(CONFIG_ITEM_LENGTH);
         final IntBuffer maxConfigLen = IntBuffer.wrap(new int[]{CONFIG_ITEM_LENGTH});
         final int DEVICE_NUMBER_DEFAULT = 0;

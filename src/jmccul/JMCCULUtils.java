@@ -1,4 +1,4 @@
-package mcdaq;
+package jmccul;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -8,7 +8,7 @@ import java.util.Arrays;
  *
  * @author Peter Froud
  */
-public class McDaqUtils {
+public class JMCCULUtils {
 
     private static final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
 
@@ -16,22 +16,22 @@ public class McDaqUtils {
 
     private final static int ERROR_STRING_LENGTH = MeasurementComputingUniversalLibrary.ERRSTRLEN;
 
-    public static String getErrorMessage(int errorCode) throws McDaqException {
+    public static String getErrorMessage(int errorCode) throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(ERROR_STRING_LENGTH);
         int errorCode2 = LIBRARY.cbGetErrMsg(errorCode, buf);
         if (errorCode2 != 0) {
-            throw new McDaqException(errorCode);
+            throw new JMCCULException(errorCode);
         }
         return new String(buf.array()).trim();
     }
 
-    public static void throwIfNeeded(int errorCode) throws McDaqException {
+    public static void throwIfNeeded(int errorCode) throws JMCCULException {
         if (errorCode != MeasurementComputingUniversalLibrary.NOERRORS) {
-            throw new McDaqException(errorCode);
+            throw new JMCCULException(errorCode);
         }
     }
 
-    public static DaqDeviceDescriptor[] findDaqDevices() throws McDaqException {
+    public static DaqDeviceDescriptor[] findDaqDevices() throws JMCCULException {
 
         final int MAX_DEVICE_COUNT = 5;
 

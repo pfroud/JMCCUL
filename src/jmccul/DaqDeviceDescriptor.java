@@ -1,4 +1,4 @@
-package mcdaq;
+package jmccul;
 
 import com.sun.jna.Structure;
 import java.util.Arrays;
