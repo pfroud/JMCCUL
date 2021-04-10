@@ -25,7 +25,7 @@ public class USB_2001_TC extends AbstractJMCCULDevice {
     private final int TC_OPTION_TEN_SAMPLES_AVERAGE = MeasurementComputingUniversalLibrary.FILTER;
 
     public USB_2001_TC(Component parentComponent) throws JMCCULException {
-        super(parentComponent, "USB-2001-TC");
+        super("USB-2001-TC");
     }
 
     public float readTemperature() throws JMCCULException {

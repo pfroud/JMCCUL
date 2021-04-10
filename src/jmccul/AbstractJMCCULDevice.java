@@ -1,6 +1,5 @@
 package jmccul;
 
-import java.awt.Component;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import javax.swing.JOptionPane;
@@ -29,7 +28,7 @@ public abstract class AbstractJMCCULDevice {
     public final String BOARD_NAME;
     public final String USER_DEVICE_IDENTIFIER;
 
-    public AbstractJMCCULDevice(Component parentComponent, String desiredBoardName) throws JMCCULException {
+    public AbstractJMCCULDevice(String desiredBoardName) throws JMCCULException {
         /*
         There are two ways to set up MC DAQ boards.
         See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Ical-APIDetect.htm
@@ -62,15 +61,13 @@ public abstract class AbstractJMCCULDevice {
         final int foundDevicesCount = foundDevicesArray.length;
 
         if (foundDevicesCount < 1) {
-            if (parentComponent != null) {
-                final String title = "Can't find any MC DAQ devices 找不到数据采集设备";
-                final String message
-                        = "Can't find a Measurement Computing USB-1408FS data acquisition device.\n"
-                        + "The program will still run, but some functionality won't work.\n"
-                        + "Suggestions: Check the USB connection. Install the Measurement Computing Universal Library software (mccdaq.exe).\n"
-                        + "找不到USB-1408FS数据采集设备。 该软件仍将运行，但是某些功能将无法使用。";
-                JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.WARNING_MESSAGE);
-            }
+            final String title = "Can't find any MC DAQ devices 找不到数据采集设备";
+            final String message
+                    = "Can't find a Measurement Computing USB-1408FS data acquisition device.\n"
+                    + "The program will still run, but some functionality won't work.\n"
+                    + "Suggestions: Check the USB connection. Install the Measurement Computing Universal Library software (mccdaq.exe).\n"
+                    + "找不到USB-1408FS数据采集设备。 该软件仍将运行，但是某些功能将无法使用。";
+            JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
             throw new JMCCULException("No MC DAQ devices found!");
         }
         final StringBuilder allDevicesToPrintOut = new StringBuilder();
@@ -103,15 +100,13 @@ public abstract class AbstractJMCCULDevice {
         System.err.printf("Found %d MC DAQ device(s), but none match product name \"%s\":\n", foundDevicesCount, desiredBoardName);
         System.err.println(allDevicesToPrintOut.toString());
 
-        if (parentComponent != null) {
-            final String title = "Couldn't find MC DAQ device 找不到数据采集设备";
-            final String message
-                    = "Couldn't find a Measurement Computing data acquisition devices with model name " + desiredBoardName + ".\n"
-                    + "The program will still run, but some functionality won't work.\n"
-                    + "找不到正确的数据采集设备型号。\n"
-                    + "该软件仍将运行，但是某些功能将无法使用。";
-            JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.WARNING_MESSAGE);
-        }
+        final String title = "Couldn't find MC DAQ device 找不到数据采集设备";
+        final String message
+                = "Couldn't find a Measurement Computing data acquisition devices with model name " + desiredBoardName + ".\n"
+                + "The program will still run, but some functionality won't work.\n"
+                + "找不到正确的数据采集设备型号。\n"
+                + "该软件仍将运行，但是某些功能将无法使用。";
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
 
         throw new JMCCULException("multiple MC DAQ devices found");
 

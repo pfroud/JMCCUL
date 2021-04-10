@@ -1,6 +1,5 @@
 package jmccul;
 
-import java.awt.Component;
 import static jmccul.JMCCULUtils.throwIfNeeded;
 
 /**
@@ -25,8 +24,8 @@ public final class USB_1408FS extends AbstractJMCCULDevice {
     public final static int PIN_DIGIATL_OUT_ZERO_TO_TEN = 4; // set pin high to connect 0-10V output to DUT
     public final static int PIN_DIGIATL_OUT_BARCODE_SCAN = 5; // set pin high to trigger QR code scanner
 
-    public USB_1408FS(Component parentComponent) throws JMCCULException {
-        super(parentComponent, "USB-1408FS-Plus");
+    public USB_1408FS() throws JMCCULException {
+        super("USB-1408FS-Plus");
 
         // Digital outputs are used for matrix, barcode scanner trigger, and relay to (dis)connect 0-10V.
         throwIfNeeded(LIBRARY.cbDConfigPort(BOARD_NUMBER, PORT_DIGITAL_IO, PORT_DIRECTION_DIGITAL_OUT));
