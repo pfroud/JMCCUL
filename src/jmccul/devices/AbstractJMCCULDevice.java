@@ -1,9 +1,13 @@
-package jmccul;
+package jmccul.devices;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import javax.swing.JOptionPane;
+import jmccul.JMCCULException;
+import jmccul.JMCCULUtils;
 import static jmccul.JMCCULUtils.throwIfNeeded;
+import jmccul.jna.DaqDeviceDescriptor;
+import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
@@ -61,13 +65,6 @@ public abstract class AbstractJMCCULDevice {
         final int foundDevicesCount = foundDevicesArray.length;
 
         if (foundDevicesCount < 1) {
-            final String title = "Can't find any MC DAQ devices 找不到数据采集设备";
-            final String message
-                    = "Can't find a Measurement Computing USB-1408FS data acquisition device.\n"
-                    + "The program will still run, but some functionality won't work.\n"
-                    + "Suggestions: Check the USB connection. Install the Measurement Computing Universal Library software (mccdaq.exe).\n"
-                    + "找不到USB-1408FS数据采集设备。 该软件仍将运行，但是某些功能将无法使用。";
-            JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
             throw new JMCCULException("No MC DAQ devices found!");
         }
         final StringBuilder allDevicesToPrintOut = new StringBuilder();

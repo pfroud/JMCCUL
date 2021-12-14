@@ -1,11 +1,13 @@
-package jmccul;
+package jmccul.devices;
 
+import jmccul.jna.MeasurementComputingUniversalLibrary;
 import java.awt.Component;
 import java.nio.FloatBuffer;
+import jmccul.JMCCULException;
 import static jmccul.JMCCULUtils.throwIfNeeded;
 
 /**
- * The USB-2001-TC is used for getting data for thermal equations.
+ * Single-Channel thermocouple device.
  *
  * https://www.mccdaq.com/usb-data-acquisition/usb-2001-tc.aspx
  *

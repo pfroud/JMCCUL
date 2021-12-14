@@ -1,4 +1,4 @@
-package jmccul;
+package jmccul.jna;
 
 import com.sun.jna.Structure;
 import java.util.Arrays;

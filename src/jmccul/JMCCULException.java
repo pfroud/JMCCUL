@@ -10,10 +10,6 @@ public class JMCCULException extends Exception {
         super();
     }
 
-    public JMCCULException(int errorCode) throws JMCCULException {
-        super("code " + errorCode + ": " + JMCCULUtils.getErrorMessage(errorCode));
-    }
-
     public JMCCULException(String message) {
         super(message);
     }

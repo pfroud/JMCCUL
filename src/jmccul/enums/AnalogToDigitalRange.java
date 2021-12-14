@@ -1,7 +1,11 @@
-package jmccul;
+package jmccul.enums;
+
+import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm#Misc/Supported_A_D_Ranges.htm
+ *
+ * Confusingly this enum is also used for digital-to-analog ranges (cbAOut and cbAOutScan).
  *
  * @author Peter Froud
  */
@@ -57,7 +61,7 @@ public enum AnalogToDigitalRange {
 
     public final int VALUE;
 
-    AnalogToDigitalRange(int value) {
+    private AnalogToDigitalRange(int value) {
         VALUE = value;
     }
 

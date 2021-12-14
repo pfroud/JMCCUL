@@ -1,17 +1,20 @@
-package jmccul;
+package jmccul.devices;
 
+import jmccul.JMCCULException;
+import jmccul.jna.MeasurementComputingUniversalLibrary;
+import jmccul.enums.AnalogToDigitalRange;
 import static jmccul.JMCCULUtils.throwIfNeeded;
 
 /**
- * The USB-1408FS is used in the new sphere control box.
+ * Multifunction USB device.
  *
- * https://www.mccdaq.com/usb-data-acquisition/USB-1408FS.aspx
+ * https://www.mccdaq.com/usb-data-acquisition/USB-1208FS-LS-1408FS-Series.aspx
  *
- * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Users_Guide/Analog_Input_Boards/USB-12_1408FS.htm
+ * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Users_Guide/Analog_Input_Boards/USB-12_1408FS-Plus.htm
  *
  * @author Peter Froud
  */
-public final class USB_1408FS extends AbstractJMCCULDevice {
+public final class USB_1408FS_Plus extends AbstractJMCCULDevice {
 
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
 
@@ -24,7 +27,7 @@ public final class USB_1408FS extends AbstractJMCCULDevice {
     public final static int PIN_DIGIATL_OUT_ZERO_TO_TEN = 4; // set pin high to connect 0-10V output to DUT
     public final static int PIN_DIGIATL_OUT_BARCODE_SCAN = 5; // set pin high to trigger QR code scanner
 
-    public USB_1408FS() throws JMCCULException {
+    public USB_1408FS_Plus() throws JMCCULException {
         super("USB-1408FS-Plus");
 
         // Digital outputs are used for matrix, barcode scanner trigger, and relay to (dis)connect 0-10V.

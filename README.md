@@ -3,7 +3,7 @@ JMCCUL is a Java wrapper around the C API of the [Measurement Computing Corporat
 
 MCC Universal Library is a library to communicate with MCC data acquisition hardware.
 
-I am not affiliated with Measurement Computing Corporation.
+The author of the JMCCUL project is not affiliated with Measurement Computing Corporation.
 
 ## Existing UL APIs
 
@@ -17,7 +17,7 @@ There is an API for Android, but it uses `android.hardware.usb.*` stuff which we
 
 Install UL.
 
-The Universal Library puts `C:\Program Files (x86)\Measurement Computing\DAQ\` into the PATH environment variable.
+The Universal Library puts `C:\Program Files (x86)\Measurement Computing\DAQ\` into the PATH environment variable. That folder contains the DLL files.
 
 ## Limitations 
 

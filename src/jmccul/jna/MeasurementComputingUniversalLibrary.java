@@ -1,5 +1,6 @@
-package jmccul;
+package jmccul.jna;
 
+import jmccul.jna.DaqDeviceDescriptor;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.NativeLong;

@@ -3,6 +3,8 @@ package jmccul;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import jmccul.jna.DaqDeviceDescriptor;
+import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
@@ -20,29 +22,34 @@ public class JMCCULUtils {
         final ByteBuffer buf = ByteBuffer.allocate(ERROR_STRING_LENGTH);
         int errorCode2 = LIBRARY.cbGetErrMsg(errorCode, buf);
         if (errorCode2 != 0) {
-            throw new JMCCULException(errorCode);
+            throw new JMCCULException("exception when looking up the error code!");
         }
         return new String(buf.array()).trim();
     }
 
     public static void throwIfNeeded(int errorCode) throws JMCCULException {
         if (errorCode != MeasurementComputingUniversalLibrary.NOERRORS) {
-            throw new JMCCULException(errorCode);
+            final String message = "code " + errorCode + ": " + JMCCULUtils.getErrorMessage(errorCode);
+            throw new JMCCULException(message);
         }
     }
 
     public static DaqDeviceDescriptor[] findDaqDevices() throws JMCCULException {
 
+        /*
+        You can change the max device count to something bigger,
+        I just made this number up for testing.
+         */
         final int MAX_DEVICE_COUNT = 5;
 
         /*
-        Allocate an array of empty DaqDeviceDescriptors. The GetDaqDeviceInventory call will populate this array.
+        Allocate an array of empty DaqDeviceDescriptors. The cbGetDaqDeviceInventory() call will populate this array.
         See Stack Overflow answer to 'How to fill an array of structures in JNA?' https://stackoverflow.com/a/25186232
          */
         final DaqDeviceDescriptor[] buffer = (DaqDeviceDescriptor[]) new DaqDeviceDescriptor().toArray(MAX_DEVICE_COUNT);
 
         /*
-        deviceCount is used an both an input and output to GetDaqDeviceInventory.
+        The deviceCount variable is used an both an input and output to cbGetDaqDeviceInventory().
         As an input, it is the length of the DaqDeviceDescriptor array.
         As an ooutput, it is how many DAQ devices were actually found.
          */
@@ -59,7 +66,7 @@ public class JMCCULUtils {
          */
         throwIfNeeded(LIBRARY.cbGetDaqDeviceInventory(INTERFACE_TYPE_USB, buffer[0], deviceCount));
 
-        // Now, deviceCount contains how many devices were actually found.
+        // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
         final int devicesFoundCount = deviceCount.get(0);
 
         // The buffer still has MAX_DEVICE_COUNT elements in it. Return a subarray with only found devices.
