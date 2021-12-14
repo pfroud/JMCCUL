@@ -4,6 +4,9 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
+ * This enum is used for cbTIn() and cbTInScan()
+ *
+ *
  * @author Peter Froud
  */
 public enum TemperatureScale {

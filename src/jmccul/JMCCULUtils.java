@@ -20,6 +20,7 @@ public class JMCCULUtils {
 
     public static String getErrorMessage(int errorCode) throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(ERROR_STRING_LENGTH);
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm
         int errorCode2 = LIBRARY.cbGetErrMsg(errorCode, buf);
         if (errorCode2 != 0) {
             throw new JMCCULException("exception when looking up the error code!");
@@ -56,6 +57,7 @@ public class JMCCULUtils {
         final IntBuffer deviceCount = IntBuffer.wrap(new int[]{MAX_DEVICE_COUNT});
 
         /*
+        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm
         About the DaqDeviceDescriptor argument:
 
         In the function's original declaration (in the .h file), the argument is type DaqDeviceDescriptor*.

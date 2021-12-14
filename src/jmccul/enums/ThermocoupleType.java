@@ -4,6 +4,8 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
+ * This enum is used by setting the BICHANTCTYPE config item.
+ *
  * @author Peter Froud
  */
 public enum ThermocoupleType {
