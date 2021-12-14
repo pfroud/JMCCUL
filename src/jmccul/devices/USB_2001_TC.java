@@ -4,7 +4,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 import java.awt.Component;
 import java.nio.FloatBuffer;
 import jmccul.JMCCULException;
-import static jmccul.JMCCULUtils.throwIfNeeded;
+import static jmccul.JMCCULUtils.checkError;
 
 /**
  * Single-Channel thermocouple device.
@@ -32,10 +32,10 @@ public class USB_2001_TC extends AbstractJMCCULDevice {
 
     public float readTemperature() throws JMCCULException {
         final int channel = 0;
-        throwIfNeeded(LIBRARY.cbSetConfig(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, channel, CONFIG_ITEM_THERMOCOUPLE_TYPE, THERMOCOUPLE_TYPE_K));
+        checkError(LIBRARY.cbSetConfig(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, channel, CONFIG_ITEM_THERMOCOUPLE_TYPE, THERMOCOUPLE_TYPE_K));
 
         final FloatBuffer temperatureFloat = FloatBuffer.allocate(1);
-        throwIfNeeded(LIBRARY.cbTIn(BOARD_NUMBER, channel, TEMPERATURE_UNITS_CELCIUS, temperatureFloat, TC_OPTION_TEN_SAMPLES_AVERAGE));
+        checkError(LIBRARY.cbTIn(BOARD_NUMBER, channel, TEMPERATURE_UNITS_CELCIUS, temperatureFloat, TC_OPTION_TEN_SAMPLES_AVERAGE));
         return temperatureFloat.get();
     }
 

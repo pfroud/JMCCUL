@@ -1,21 +1,20 @@
-package jmccul.devices;
+package jmccul.devices2;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import javax.swing.JOptionPane;
+import jmccul.DaqDeviceNotFoundException;
 import jmccul.JMCCULException;
 import jmccul.JMCCULUtils;
+import static jmccul.JMCCULUtils.checkError;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
-import static jmccul.JMCCULUtils.checkError;
 
 /**
  *
  * @author Peter Froud
  */
-public abstract class AbstractJMCCULDevice {
+public class DaqDevice {
 
-    public static boolean debugPrintouts = false;
     private static boolean alreadyCalledIgnoreInstaCal = false;
     private static int nextBoardNumber = 0;
 
@@ -32,7 +31,10 @@ public abstract class AbstractJMCCULDevice {
     public final String BOARD_NAME;
     public final String USER_DEVICE_IDENTIFIER;
 
-    public AbstractJMCCULDevice(String desiredBoardName) throws JMCCULException {
+    final DigitalInfo digital;
+
+    public DaqDevice(String desiredBoardName) throws JMCCULException {
+
         /*
         There are two ways to set up MC DAQ boards.
         See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Ical-APIDetect.htm
@@ -47,7 +49,6 @@ public abstract class AbstractJMCCULDevice {
         (2) Use the Universal Library to detect boards and assign a board number.
             This is better than using InstaCal because the whole thing is totally automatic.
          */
-
         if (!alreadyCalledIgnoreInstaCal) {
             /*
             https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbIgnoreInstaCal.htm
@@ -58,21 +59,22 @@ public abstract class AbstractJMCCULDevice {
              opening any devices with cbCreateDaqDevice(), operations on an already openeded board
              will throw error 1028 "Tried to release a board which doesn't exist."
              Therefore we'll use boolean field to make sure we only call cbIgnoreInstaCal() once.
+
+             TODO use static initalizer block instead.
              */
             checkError(LIBRARY.cbIgnoreInstaCal());
             alreadyCalledIgnoreInstaCal = true;
         }
 
         final DaqDeviceDescriptor[] foundDevicesArray = JMCCULUtils.findDaqDevices();
-        final int foundDevicesCount = foundDevicesArray.length;
 
-        if (foundDevicesCount < 1) {
-            throw new JMCCULException("No MC DAQ devices found!");
+        if (foundDevicesArray.length < 1) {
+            throw new DaqDeviceNotFoundException(desiredBoardName, foundDevicesArray);
         }
-        final StringBuilder allDevicesToPrintOut = new StringBuilder();
-        for (int i = 0; i < foundDevicesCount; i++) {
-            final DaqDeviceDescriptor deviceDescriptor = foundDevicesArray[i];
-            if (new String(deviceDescriptor.ProductName).trim().equals(desiredBoardName)) {
+
+        for (DaqDeviceDescriptor deviceDescriptor : foundDevicesArray) {
+            final String boardNameFromDeviceDescriptor = new String(deviceDescriptor.ProductName).trim();
+            if (boardNameFromDeviceDescriptor.equals(desiredBoardName)) {
                 // Open the daq device and assign it a board number.
                 BOARD_NUMBER = nextBoardNumber;
                 nextBoardNumber++;
@@ -81,41 +83,21 @@ public abstract class AbstractJMCCULDevice {
                 BOARD_NAME = getBoardName();
                 FACTORY_SERIAL_NUMBER = getFactorySerialNumber();
                 USER_DEVICE_IDENTIFIER = getUserDeviceIdentifier();
+                /*
                 if (debugPrintouts) {
-                    System.out.printf("model=%s, SN=%s assigned to BOARD_NUMBER %d. nextBoardNumber is now %d.\n", desiredBoardName, FACTORY_SERIAL_NUMBER, BOARD_NUMBER, nextBoardNumber);
-                } else {
-                    System.out.printf("DAQ model %s, serial number %s\n", BOARD_NAME, FACTORY_SERIAL_NUMBER);
+                System.out.printf("model=%s, SN=%s assigned to BOARD_NUMBER %d. nextBoardNumber is now %d.\n", desiredBoardName, FACTORY_SERIAL_NUMBER, BOARD_NUMBER, nextBoardNumber);
                 }
+                 */
+                digital = new DigitalInfo(this);
                 return;
-            } else {
-                allDevicesToPrintOut.append(i).append(": ").append(foundDevicesArray[i].toString());
-                if (i < foundDevicesCount - 1) {
-                    allDevicesToPrintOut.append("\n");
-                }
             }
-
         }
 
-        // we looked at all found daq devices but did not found one with the correct productName.
-        System.err.printf("Found %d MC DAQ device(s), but none match product name \"%s\":\n", foundDevicesCount, desiredBoardName);
-        System.err.println(allDevicesToPrintOut.toString());
-
-        final String title = "Couldn't find MC DAQ device 找不到数据采集设备";
-        final String message
-                = "Couldn't find a Measurement Computing data acquisition devices with model name " + desiredBoardName + ".\n"
-                + "The program will still run, but some functionality won't work.\n"
-                + "找不到正确的数据采集设备型号。\n"
-                + "该软件仍将运行，但是某些功能将无法使用。";
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
-
-        throw new JMCCULException("multiple MC DAQ devices found");
+        throw new DaqDeviceNotFoundException(desiredBoardName, foundDevicesArray);
 
     }
 
     public final void release() throws JMCCULException {
-        if (debugPrintouts) {
-            System.out.println(BOARD_NAME + ": releasing board number " + BOARD_NUMBER);
-        }
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm
         checkError(LIBRARY.cbReleaseDaqDevice(BOARD_NUMBER));
     }

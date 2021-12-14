@@ -3,7 +3,7 @@ package jmccul.devices;
 import jmccul.JMCCULException;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 import jmccul.enums.AnalogToDigitalRange;
-import static jmccul.JMCCULUtils.throwIfNeeded;
+import static jmccul.JMCCULUtils.checkError;
 
 /**
  * Multifunction USB device.
@@ -31,11 +31,11 @@ public final class USB_1408FS_Plus extends AbstractJMCCULDevice {
         super("USB-1408FS-Plus");
 
         // Digital outputs are used for matrix, barcode scanner trigger, and relay to (dis)connect 0-10V.
-        throwIfNeeded(LIBRARY.cbDConfigPort(BOARD_NUMBER, PORT_DIGITAL_IO, PORT_DIRECTION_DIGITAL_OUT));
+        checkError(LIBRARY.cbDConfigPort(BOARD_NUMBER, PORT_DIGITAL_IO, PORT_DIRECTION_DIGITAL_OUT));
     }
 
     public void setDigitalPin(int pinNumber, boolean isOn) throws JMCCULException {
-        throwIfNeeded(LIBRARY.cbDBitOut(BOARD_NUMBER, PORT_DIGITAL_IO, pinNumber, (short) (isOn ? 1 : 0)));
+        checkError(LIBRARY.cbDBitOut(BOARD_NUMBER, PORT_DIGITAL_IO, pinNumber, (short) (isOn ? 1 : 0)));
     }
 
     public void setAnalogVoltage(int pinNumber, float volts) throws JMCCULException {
@@ -43,7 +43,7 @@ public final class USB_1408FS_Plus extends AbstractJMCCULDevice {
         if (volts < 0 || volts > 5) {
             throw new IllegalArgumentException("setting analog volts to " + volts + ", sensible range is 0V - 5V");
         }
-        throwIfNeeded(LIBRARY.cbVOut(BOARD_NUMBER, pinNumber, AnalogToDigitalRange.UNIPOLAR_5_VOLTS.VALUE, volts, OPTIONS));
+        checkError(LIBRARY.cbVOut(BOARD_NUMBER, pinNumber, AnalogToDigitalRange.UNIPOLAR_5_VOLTS.VALUE, volts, OPTIONS));
     }
 
 }

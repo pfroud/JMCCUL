@@ -28,7 +28,7 @@ public class JMCCULUtils {
         return new String(buf.array()).trim();
     }
 
-    public static void throwIfNeeded(int errorCode) throws JMCCULException {
+    public static void checkError(int errorCode) throws JMCCULException {
         if (errorCode != MeasurementComputingUniversalLibrary.NOERRORS) {
             final String message = "code " + errorCode + ": " + JMCCULUtils.getErrorMessage(errorCode);
             throw new JMCCULException(message);
@@ -66,7 +66,7 @@ public class JMCCULUtils {
 
         According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the array.
          */
-        throwIfNeeded(LIBRARY.cbGetDaqDeviceInventory(INTERFACE_TYPE_USB, buffer[0], deviceCount));
+        checkError(LIBRARY.cbGetDaqDeviceInventory(INTERFACE_TYPE_USB, buffer[0], deviceCount));
 
         // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
         final int devicesFoundCount = deviceCount.get(0);

@@ -2,10 +2,10 @@ package jmccul.devices;
 
 import java.nio.FloatBuffer;
 import jmccul.JMCCULException;
-import static jmccul.JMCCULUtils.throwIfNeeded;
 import jmccul.enums.TemperatureScale;
 import jmccul.enums.ThermocoupleType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
+import static jmccul.JMCCULUtils.checkError;
 
 /**
  * Eight-channel thermocouple measurement device.
@@ -32,12 +32,12 @@ public class USB_TC extends AbstractJMCCULDevice {
         }
 
 // set thermocouple type
-        throwIfNeeded(LIBRARY.cbSetConfig(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, channel, CONFIG_ITEM_THERMOCOUPLE_TYPE, thermocoupleType.VALUE));
+        checkError(LIBRARY.cbSetConfig(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, channel, CONFIG_ITEM_THERMOCOUPLE_TYPE, thermocoupleType.VALUE));
 
         // temperature input operation
         final FloatBuffer floatBuffer = FloatBuffer.allocate(1);
         final int options = tenSampleFilter ? MeasurementComputingUniversalLibrary.FILTER : MeasurementComputingUniversalLibrary.NOFILTER;
-        throwIfNeeded(LIBRARY.cbTIn(BOARD_NUMBER, channel, temperatureScale.VALUE, floatBuffer, options));
+        checkError(LIBRARY.cbTIn(BOARD_NUMBER, channel, temperatureScale.VALUE, floatBuffer, options));
 
         return floatBuffer.get();
     }
