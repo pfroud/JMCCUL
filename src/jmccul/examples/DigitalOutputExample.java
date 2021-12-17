@@ -3,7 +3,6 @@ package jmccul.examples;
 import java.util.Arrays;
 import java.util.Optional;
 import jmccul.devices2.DaqDevice;
-import jmccul.devices2.DigitalInfo;
 import jmccul.devices2.DigitalPort;
 import jmccul.devices2.DigitalPortDirection;
 
@@ -23,14 +22,12 @@ public class DigitalOutputExample {
 
             System.out.println("Opened this device: " + device.toString());
 
-            final DigitalInfo digitalInfo = device.digitalInfo;
-
-            if (!digitalInfo.isDigitalIOSupported()) {
+            if (!device.digital.isDigitalIOSupported()) {
                 System.out.println("Digital IO is not supported");
                 return;
             }
 
-            DigitalPort[] ports = digitalInfo.PORTS;
+            DigitalPort[] ports = device.digital.PORTS;
 
             System.out.printf("There are %d port(s):\n", ports.length);
             for (int i = 0; i < ports.length; i++) {
@@ -59,9 +56,9 @@ public class DigitalOutputExample {
             DigitalPort portToUse = optionalPortToUse.get();
             System.out.println("Using this port: " + portToUse);
 
-            device.digitalImpl.configurePort(portToUse.PORT_TYPE, DigitalPortDirection.OUTPUT);
+            device.digital.configurePort(portToUse.PORT_TYPE, DigitalPortDirection.OUTPUT);
 
-            device.digitalImpl.bitOutput(portToUse.PORT_TYPE, 0, true);
+            device.digital.bitOutput(portToUse.PORT_TYPE, 0, true);
             System.out.println("Success");
 
         } catch (Exception ex) {

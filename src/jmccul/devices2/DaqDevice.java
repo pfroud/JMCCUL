@@ -66,9 +66,7 @@ public class DaqDevice {
     public final String BOARD_NAME;
 //    public final String USER_DEVICE_IDENTIFIER;
 
-    // TODO merge DigitalInfo and DigitalImpl
-    public final DigitalInfo digitalInfo;
-    public final DigitalImpl digitalImpl;
+    public final DigitalImpl digital;
 
     public static DaqDevice searchByBoardName(String desiredBoardName) throws JMCCULException {
         Predicate<DaqDeviceDescriptor> boardNamePredicate = (DaqDeviceDescriptor descriptor) -> {
@@ -105,9 +103,7 @@ public class DaqDevice {
                 }
          */
 
-        // TODO merge DigitalInfo and DigitalImpl
-        digitalInfo = new DigitalInfo(this);
-        digitalImpl = new DigitalImpl(this);
+        digital = new DigitalImpl(this);
     }
 
     public final void release() throws JMCCULException {
