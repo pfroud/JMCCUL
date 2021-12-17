@@ -2,9 +2,10 @@ package jmccul.examples;
 
 import java.util.Arrays;
 import java.util.Optional;
-import jmccul.devices2.DaqDevice;
-import jmccul.devices2.DigitalPort;
-import jmccul.devices2.DigitalPortDirection;
+import jmccul.DaqDevice;
+import jmccul.DaqDeviceNotFoundException;
+import jmccul.digital.DigitalPort;
+import jmccul.digital.DigitalPortDirection;
 
 /**
  * https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/examples/console/digital_out.py
@@ -18,7 +19,14 @@ public class DigitalOutputExample {
 
         try {
 
-            DaqDevice device = DaqDevice.searchByBoardName("USB-1208FS");
+            final DaqDevice device;
+            try {
+                device = DaqDevice.searchByBoardName("USB-1208FS");
+            } catch (DaqDeviceNotFoundException ex) {
+                System.out.println("Couldn't find the specified DAQ device!");
+                return;
+
+            }
 
             System.out.println("Opened this device: " + device.toString());
 
@@ -27,11 +35,11 @@ public class DigitalOutputExample {
                 return;
             }
 
-            DigitalPort[] ports = device.digital.PORTS;
+            final DigitalPort[] ports = device.digital.PORTS;
 
             System.out.printf("There are %d port(s):\n", ports.length);
             for (int i = 0; i < ports.length; i++) {
-                DigitalPort port = ports[i];
+                final DigitalPort port = ports[i];
                 System.out.printf("Port %d / %d: %s\n", i + 1, ports.length, port.toString());
                 System.out.println("   NUM_BITS = " + port.NUM_BITS);
                 System.out.println("   INPUT_MASK = " + port.INPUT_MASK);
@@ -45,7 +53,7 @@ public class DigitalOutputExample {
                 System.out.println("   IS_OUTPUT_SCAN_SUPPORTED = " + port.IS_OUTPUT_SCAN_SUPPORTED);
             }
 
-            Optional<DigitalPort> optionalPortToUse = Arrays.stream(ports)
+            final Optional<DigitalPort> optionalPortToUse = Arrays.stream(ports)
                     .filter(port -> port.IS_OUTPUT_SUPPORTED).findAny();
 
             if (optionalPortToUse.isEmpty()) {
@@ -53,7 +61,7 @@ public class DigitalOutputExample {
                 return;
             }
 
-            DigitalPort portToUse = optionalPortToUse.get();
+            final DigitalPort portToUse = optionalPortToUse.get();
             System.out.println("Using this port: " + portToUse);
 
             device.digital.configurePort(portToUse.PORT_TYPE, DigitalPortDirection.OUTPUT);

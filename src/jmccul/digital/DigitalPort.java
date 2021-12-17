@@ -1,12 +1,12 @@
-package jmccul.devices2;
+package jmccul.digital;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import static jmccul.JMCCULUtils.checkError;
-import jmccul.enums.DigitalPortType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -17,8 +17,8 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 public class DigitalPort {
 
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
-    private final DaqDevice device;
-    private final int portIndex;
+    private final DaqDevice DAQ_DEVICE;
+    private final int PORT_INDEX;
     public final DigitalPortType PORT_TYPE;
     public final int NUM_BITS;
     public final int INPUT_MASK;
@@ -32,8 +32,8 @@ public class DigitalPort {
     public final boolean IS_OUTPUT_SCAN_SUPPORTED;
 
     DigitalPort(DaqDevice device, int portIndex) throws JMCCULException {
-        this.device = device;
-        this.portIndex = portIndex;
+        DAQ_DEVICE = device;
+        PORT_INDEX = portIndex;
         PORT_TYPE = getPortType();
         NUM_BITS = getNumBits();
         INPUT_MASK = getInputMask();
@@ -107,8 +107,8 @@ public class DigitalPort {
         checkError(
                 LIBRARY.cbGetConfig(
                         MeasurementComputingUniversalLibrary.DIGITALINFO,
-                        device.BOARD_NUMBER,
-                        portIndex,
+                        DAQ_DEVICE.BOARD_NUMBER,
+                        PORT_INDEX,
                         item,
                         buf)
         );
@@ -123,7 +123,7 @@ public class DigitalPort {
         compatibility with older digital peripherals.
          */
         int rv = 0;
-        if (portIndex == 0 && PORT_TYPE == DigitalPortType.FIRST_PORT_C_LOW) {
+        if (PORT_INDEX == 0 && PORT_TYPE == DigitalPortType.FIRST_PORT_C_LOW) {
             rv = 16;
         }
         return rv;
@@ -137,8 +137,8 @@ public class DigitalPort {
             if (PORT_TYPE == DigitalPortType.AUX_PORT) {
                 try {
                     // check if we can configure an individual bit in the port
-                    checkError(LIBRARY.cbDConfigBit(device.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.OUTPUT.VALUE));
-                    checkError(LIBRARY.cbDConfigBit(device.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.INPUT.VALUE));
+                    checkError(LIBRARY.cbDConfigBit(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.OUTPUT.VALUE));
+                    checkError(LIBRARY.cbDConfigBit(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.INPUT.VALUE));
                     rv = true;
                 } catch (JMCCULException ex) {
                     rv = false;
@@ -170,8 +170,8 @@ public class DigitalPort {
         if ((INPUT_MASK & OUTPUT_MASK) == 0) {
             try {
                 // check if we can configure the port
-                checkError(LIBRARY.cbDConfigPort(device.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.OUTPUT.VALUE));
-                checkError(LIBRARY.cbDConfigPort(device.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.INPUT.VALUE));
+                checkError(LIBRARY.cbDConfigPort(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.OUTPUT.VALUE));
+                checkError(LIBRARY.cbDConfigPort(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.INPUT.VALUE));
                 rv = true;
             } catch (JMCCULException ex) {
                 rv = false;
@@ -207,7 +207,7 @@ public class DigitalPort {
             checkError(
                     LIBRARY.cbGetIOStatus(
                             // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
-                            device.BOARD_NUMBER,
+                            DAQ_DEVICE.BOARD_NUMBER,
                             ShortBuffer.allocate(1),
                             new NativeLongByReference(new NativeLong(0)),
                             new NativeLongByReference(new NativeLong(0)),
@@ -237,7 +237,7 @@ public class DigitalPort {
             checkError(
                     // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                     LIBRARY.cbGetIOStatus(
-                            device.BOARD_NUMBER,
+                            DAQ_DEVICE.BOARD_NUMBER,
                             ShortBuffer.allocate(1),
                             new NativeLongByReference(new NativeLong(0)),
                             new NativeLongByReference(new NativeLong(0)),

@@ -1,12 +1,10 @@
-package jmccul.devices2;
+package jmccul;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.function.Predicate;
-import jmccul.DaqDeviceNotFoundException;
-import jmccul.JMCCULException;
-import jmccul.JMCCULUtils;
 import static jmccul.JMCCULUtils.checkError;
+import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
@@ -61,7 +59,7 @@ public class DaqDevice {
     private final static int CONFIG_ITEM_FACTORY_SERIAL_NUMBER = MeasurementComputingUniversalLibrary.BIDEVSERIALNUM;
     private final static int CONFIG_ITEM_USER_DEVICE_ID = MeasurementComputingUniversalLibrary.BIUSERDEVID;
 
-    protected final int BOARD_NUMBER;
+    public final int BOARD_NUMBER;
     public final String FACTORY_SERIAL_NUMBER;
     public final String BOARD_NAME;
 //    public final String USER_DEVICE_IDENTIFIER;
@@ -75,7 +73,7 @@ public class DaqDevice {
         try {
             return findFirstMatching(boardNamePredicate);
         } catch (DaqDeviceNotFoundException ex) {
-            throw new DaqDeviceNotFoundException("board name \"" + desiredBoardName + "\"", ex.FOUND_DEVICES);
+            throw new DaqDeviceNotFoundException("board name \"" + desiredBoardName + "\"", ex.FOUND_DEVICE_DESCRIPTORS);
         }
     }
 

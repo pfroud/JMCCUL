@@ -1,12 +1,12 @@
-package jmccul.devices2;
+package jmccul.digital;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import static jmccul.JMCCULUtils.checkError;
-import jmccul.enums.DigitalPortType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 import jmccul.jna.MeasurementComputingUniversalLibrary.HGLOBAL;
 

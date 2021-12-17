@@ -1,4 +1,4 @@
-package jmccul.enums;
+package jmccul.analog;
 
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 

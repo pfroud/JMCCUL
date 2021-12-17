@@ -1,4 +1,4 @@
-package jmccul.enums;
+package jmccul.temperature;
 
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 

@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
- */
-package jmccul.devices2;
+package jmccul.digital;
 
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
- * @author lumenetix
+ * @author Peter Froud
  */
 public enum DigitalPortDirection {
     OUTPUT(MeasurementComputingUniversalLibrary.DIGITALOUT),
