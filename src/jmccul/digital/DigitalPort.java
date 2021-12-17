@@ -2,8 +2,8 @@ package jmccul.digital;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
-import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import static jmccul.JMCCULUtils.checkError;
@@ -103,16 +103,11 @@ public class DigitalPort {
     }
 
     private int getConfigItem(int item) throws JMCCULException {
-        IntBuffer buf = IntBuffer.allocate(1);
-        checkError(
-                LIBRARY.cbGetConfig(
-                        MeasurementComputingUniversalLibrary.DIGITALINFO,
-                        DAQ_DEVICE.BOARD_NUMBER,
-                        PORT_INDEX,
-                        item,
-                        buf)
-        );
-        return buf.get(0);
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.DIGITALINFO,
+                DAQ_DEVICE.BOARD_NUMBER,
+                PORT_INDEX,
+                item);
     }
 
     private int getFirstBit() {

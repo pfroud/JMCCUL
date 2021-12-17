@@ -4,6 +4,7 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import static jmccul.JMCCULUtils.checkError;
@@ -41,16 +42,11 @@ public class DigitalImpl {
 
     private int getPortCount() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L29
-        IntBuffer buf = IntBuffer.allocate(1);
-        checkError(
-                LIBRARY.cbGetConfig(
-                        MeasurementComputingUniversalLibrary.BOARDINFO,
-                        DAQ_DEVICE.BOARD_NUMBER,
-                        0,
-                        MeasurementComputingUniversalLibrary.BIDINUMDEVS,
-                        buf)
-        );
-        return buf.get();
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                DAQ_DEVICE.BOARD_NUMBER,
+                0,
+                MeasurementComputingUniversalLibrary.BIDINUMDEVS);
     }
 
     public boolean isDigitalIOSupported() {

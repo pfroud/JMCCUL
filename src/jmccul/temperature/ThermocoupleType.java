@@ -9,7 +9,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  * @author Peter Froud
  */
 public enum ThermocoupleType {
-
+    // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Enumerations/MccDaq.TcType.htm
     J(MeasurementComputingUniversalLibrary.TC_TYPE_J),
     K(MeasurementComputingUniversalLibrary.TC_TYPE_K),
     S(MeasurementComputingUniversalLibrary.TC_TYPE_S),

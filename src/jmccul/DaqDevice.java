@@ -1,7 +1,6 @@
 package jmccul;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.function.Predicate;
 import static jmccul.JMCCULUtils.checkError;
 import jmccul.digital.DigitalImpl;
@@ -117,11 +116,15 @@ public class DaqDevice {
     }
 
     private String getFactorySerialNumber() throws JMCCULException {
-        final ByteBuffer buf = ByteBuffer.allocate(CONFIG_ITEM_LENGTH);
-        final IntBuffer maxConfigLen = IntBuffer.wrap(new int[]{CONFIG_ITEM_LENGTH});
         final int DEVICE_NUMBER_BASE_BOARD = 0; //set to 1 to get the factory serial number of an expansion board
-        checkError(LIBRARY.cbGetConfigString(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, DEVICE_NUMBER_BASE_BOARD, CONFIG_ITEM_FACTORY_SERIAL_NUMBER, buf, maxConfigLen));
-        return new String(buf.array(), 0, maxConfigLen.get(0));
+        return Configuration.getString(
+                CONFIG_TYPE_BOARD_INFO,
+                BOARD_NUMBER,
+                DEVICE_NUMBER_BASE_BOARD,
+                CONFIG_ITEM_FACTORY_SERIAL_NUMBER,
+                CONFIG_ITEM_LENGTH
+        );
+
     }
 
     private String getUserDeviceIdentifier() throws JMCCULException {
@@ -130,11 +133,14 @@ public class DaqDevice {
         In InstaCal you can only set the Identifier field to a number, so I think we need to use
         BIUSERDEVIDNUM.
          */
-        final ByteBuffer buf = ByteBuffer.allocate(CONFIG_ITEM_LENGTH);
-        final IntBuffer maxConfigLen = IntBuffer.wrap(new int[]{CONFIG_ITEM_LENGTH});
         final int DEVICE_NUMBER_DEFAULT = 0;
-        checkError(LIBRARY.cbGetConfigString(CONFIG_TYPE_BOARD_INFO, BOARD_NUMBER, DEVICE_NUMBER_DEFAULT, CONFIG_ITEM_USER_DEVICE_ID, buf, maxConfigLen));
-        return new String(buf.array(), 0, maxConfigLen.get(0));
+        return Configuration.getString(
+                CONFIG_TYPE_BOARD_INFO,
+                BOARD_NUMBER,
+                DEVICE_NUMBER_DEFAULT,
+                CONFIG_ITEM_USER_DEVICE_ID,
+                CONFIG_ITEM_LENGTH
+        );
     }
 
     @Override
