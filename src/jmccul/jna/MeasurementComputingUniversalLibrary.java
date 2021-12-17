@@ -4439,10 +4439,21 @@ public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
     int cbIgnoreInstaCal();
 
     /**
+     * The original is:<br>
+     * <code>int cbCreateDaqDevice(int BoardNum, DaqDeviceDescriptor deviceDescriptor)</code><br>
+     * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm
+     *
+     * JNAerator generated:<br>
+     * <code>int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor.ByValue DeviceDescriptor);</code>
+     *
+     * I am manually removing the ByValue part because that works. Allocating an array of structs in <br>
+     * Java is already pretty weird and I don't want to try changing it to ByValue. According to this <br>
+     * StackOverflow answer https://stackoverflow.com/a/17698870/7376577 you shouldn't use ByValue.
+     *
      * Original signature : <code>int cbCreateDaqDevice(int, DaqDeviceDescriptor)</code><br>
      * <i>native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1782</i>
      */
-    int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor.ByValue DeviceDescriptor);
+    int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor DeviceDescriptor);
 
     /**
      * Original signature : <code>int cbGetDaqDeviceInventory(DaqDeviceInterface, DaqDeviceDescriptor*, INT*)</code><br>
