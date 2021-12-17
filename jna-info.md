@@ -64,3 +64,44 @@ Should create these two Java files:
 And copes the DLL to here:
 
 * `outputDirectory\lib\win64\cbw64.dll`
+
+### Removing deprecated methods
+
+For some C functions, JNAerator produces two Java method declarations, one marked deprecated and one not. Here's an example of the Java output for the C function [`cbDIn()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm) :
+
+```java
+/**
+* Original signature: int cbDIn(int, int, USHORT*)
+* Native declaration: C:\...\cbw.h:1609
+* @deprecated Use the safer methods cbDIn(int, int, java.nio.ShortBuffer) and cbDIn(int, int, com.sun.jna.ptr.ShortByReference) instead.
+*/
+@Deprecated 
+int cbDIn(int BoardNum, int PortType, ShortByReference DataValue);
+
+/**
+* Original signature: int cbDIn(int, int, USHORT*)
+* Native declaration: C:\...\cbw.h:1609
+*/
+int cbDIn(int BoardNum, int PortType, ShortBuffer DataValue);
+```
+
+(Confusingly, the `@deprecated` Javadoc tag suggests using the same method which it is marking as deprecated.)
+
+I want to remove all the deprecated methods to streamline my IDE's code completion. According to the GitHub repo's Wiki page called [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables), this command-line option should work:
+
+> * -skipDeprecated
+>
+>   Don't generate members that would be tagged as @Deprecated
+
+But the JNAerator jar I'm using doesn't recognize that option and will not run if I add it.
+
+Instead, you can use this crazy regex to match the deprecated method declarations and replace them with empty strings:
+```
+\/\*\*\s+\*[\w\s:<>\(\),\*\/\\\.@\{\#\}]+@deprecated\s+int \w+\([\w ,\.]+\);
+```
+
+
+Link to play with it: https://regexr.com/6bokv
+
+
+
