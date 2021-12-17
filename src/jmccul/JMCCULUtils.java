@@ -14,7 +14,7 @@ public class JMCCULUtils {
 
     private static final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
 
-    private final static int INTERFACE_TYPE_USB = MeasurementComputingUniversalLibrary.DaqDeviceInterface.USB_IFC;
+    private final static int INTERFACE_TYPE_ANY = MeasurementComputingUniversalLibrary.DaqDeviceInterface.ANY_IFC;
 
     private final static int ERROR_STRING_LENGTH = MeasurementComputingUniversalLibrary.ERRSTRLEN;
 
@@ -66,7 +66,7 @@ public class JMCCULUtils {
 
         According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the array.
          */
-        checkError(LIBRARY.cbGetDaqDeviceInventory(INTERFACE_TYPE_USB, buffer[0], deviceCount));
+        checkError(LIBRARY.cbGetDaqDeviceInventory(INTERFACE_TYPE_ANY, buffer[0], deviceCount));
 
         // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
         final int devicesFoundCount = deviceCount.get(0);

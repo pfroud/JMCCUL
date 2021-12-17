@@ -17,34 +17,39 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 public class DigitalPort {
 
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
-    public final DaqDevice device;
-    public final int portIndex;
-    public final DigitalPortType portType;
-    public final int numBits;
-    public final int inputMask;
-    public final int outputMask;
-    public final int firstBit;
-    public final boolean isPortConfigurable;
-    public final boolean isOutputSupported;
-    public final boolean isInputSupported;
-    public final boolean isBitConfigurable;
-    public final boolean isInputScanSupported;
-    public final boolean isOutputScanSupported;
+    private final DaqDevice device;
+    private final int portIndex;
+    public final DigitalPortType PORT_TYPE;
+    public final int NUM_BITS;
+    public final int INPUT_MASK;
+    public final int OUTPUT_MASK;
+    public final int FIRST_BIT;
+    public final boolean IS_PORT_CONFIGURABLE;
+    public final boolean IS_OUTPUT_SUPPORTED;
+    public final boolean IS_INPUT_SUPPORTED;
+    public final boolean IS_BIT_CONFIGURABLE;
+    public final boolean IS_INPUT_SCAN_SUPPORTED;
+    public final boolean IS_OUTPUT_SCAN_SUPPORTED;
 
     DigitalPort(DaqDevice device, int portIndex) throws JMCCULException {
         this.device = device;
         this.portIndex = portIndex;
-        portType = getPortType();
-        numBits = getNumBits();
-        inputMask = getInputMask();
-        outputMask = getOutputMask();
-        firstBit = getFirstBit();
-        isPortConfigurable = isPortConfigurable();
-        isOutputSupported = isOutputSupported();
-        isInputSupported = isInputSupported();
-        isBitConfigurable = isBitConfigurable();
-        isInputScanSupported = isInputScanSupported();
-        isOutputScanSupported = isOutputScanSupported();
+        PORT_TYPE = getPortType();
+        NUM_BITS = getNumBits();
+        INPUT_MASK = getInputMask();
+        OUTPUT_MASK = getOutputMask();
+        FIRST_BIT = getFirstBit();
+        IS_PORT_CONFIGURABLE = isConfigurable();
+        IS_OUTPUT_SUPPORTED = isOutputSupported();
+        IS_INPUT_SUPPORTED = isInputSupported();
+        IS_BIT_CONFIGURABLE = isIndividualBitConfigurable();
+        IS_INPUT_SCAN_SUPPORTED = isInputScanSupported();
+        IS_OUTPUT_SCAN_SUPPORTED = isOutputScanSupported();
+    }
+
+    @Override
+    public String toString() {
+        return PORT_TYPE.name();
     }
 
     private DigitalPortType getPortType() throws JMCCULException {
@@ -58,10 +63,42 @@ public class DigitalPort {
     }
 
     private int getInputMask() throws JMCCULException {
+        /*
+        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
+        Use the DIINMASK and DIOUTMASK options to determine if an AUXPORT is configurable.
+        Execute cbGetConfig() twice to the same port – once using DIINMASK and once using DIOUTMASK.
+        If both of the ConfigValue arguments returned have input and output bits that overlap,
+        the port is not configurable.
+
+        You can determine overlapping bits by Anding both arguments.
+
+        Example: for a device with seven bits of digital I/O (four outputs and three inputs),
+        the ConfigValue returned by DIINMASK is always 7 (0000 0111),
+        while the ConfigValue argument returned by DIOUTMASK is always 15 (0000 1111).
+        When you And both ConfigValue arguments together, you get a non-zero number (7).
+        Any non-zero number indicates that input and output bits overlap for the specified port,
+        and the port is a non-configurable AUXPORT.
+         */
         return getConfigItem(MeasurementComputingUniversalLibrary.DIINMASK);
     }
 
     private int getOutputMask() throws JMCCULException {
+        /*
+        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
+        Use the DIINMASK and DIOUTMASK options to determine if an AUXPORT is configurable.
+        Execute cbGetConfig() twice to the same port – once using DIINMASK and once using DIOUTMASK.
+        If both of the ConfigValue arguments returned have input and output bits that overlap,
+        the port is not configurable.
+
+        You can determine overlapping bits by Anding both arguments.
+
+        Example: for a device with seven bits of digital I/O (four outputs and three inputs),
+        the ConfigValue returned by DIINMASK is always 7 (0000 0111),
+        while the ConfigValue argument returned by DIOUTMASK is always 15 (0000 1111).
+        When you And both ConfigValue arguments together, you get a non-zero number (7).
+        Any non-zero number indicates that input and output bits overlap for the specified port,
+        and the port is a non-configurable AUXPORT.
+         */
         return getConfigItem(MeasurementComputingUniversalLibrary.DIOUTMASK);
     }
 
@@ -86,22 +123,23 @@ public class DigitalPort {
         compatibility with older digital peripherals.
          */
         int rv = 0;
-        if (portIndex == 0 && portType == DigitalPortType.FIRST_PORT_C_LOW) {
+        if (portIndex == 0 && PORT_TYPE == DigitalPortType.FIRST_PORT_C_LOW) {
             rv = 16;
         }
         return rv;
     }
 
-    private boolean isBitConfigurable() {
+    private boolean isIndividualBitConfigurable() {
         //https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L113
         boolean rv = false;
-        if ((inputMask & outputMask) == 0) {
+        if ((INPUT_MASK & OUTPUT_MASK) == 0) {
             // AUXPORT might be configurable, check if we can configure it
-            if (portType == DigitalPortType.AUX_PORT) {
+            if (PORT_TYPE == DigitalPortType.AUX_PORT) {
                 try {
-                    // check if we can configure the port
-                    checkError(LIBRARY.cbDConfigBit(device.BOARD_NUMBER, portType.VALUE, firstBit, DigitalPortDirection.OUTPUT.VALUE));
-                    checkError(LIBRARY.cbDConfigBit(device.BOARD_NUMBER, portType.VALUE, firstBit, DigitalPortDirection.INPUT.VALUE));
+                    // check if we can configure an individual bit in the port
+                    checkError(LIBRARY.cbDConfigBit(device.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.OUTPUT.VALUE));
+                    checkError(LIBRARY.cbDConfigBit(device.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.INPUT.VALUE));
+                    rv = true;
                 } catch (JMCCULException ex) {
                     rv = false;
                 }
@@ -110,14 +148,31 @@ public class DigitalPort {
         return rv;
     }
 
-    private boolean isPortConfigurable() throws JMCCULException {
+    private boolean isConfigurable() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L130
         boolean rv = false;
-        if ((inputMask & outputMask) == 0) {
+        /*
+        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
+        Use the DIINMASK and DIOUTMASK options to determine if an AUXPORT is configurable.
+        Execute cbGetConfig() twice to the same port – once using DIINMASK and once using DIOUTMASK.
+        If both of the ConfigValue arguments returned have input and output bits that overlap,
+        the port is not configurable.
+
+        You can determine overlapping bits by Anding both arguments.
+
+        Example: for a device with seven bits of digital I/O (four outputs and three inputs),
+        the ConfigValue returned by DIINMASK is always 7 (0000 0111),
+        while the ConfigValue argument returned by DIOUTMASK is always 15 (0000 1111).
+        When you And both ConfigValue arguments together, you get a non-zero number (7).
+        Any non-zero number indicates that input and output bits overlap for the specified port,
+        and the port is a non-configurable AUXPORT.
+         */
+        if ((INPUT_MASK & OUTPUT_MASK) == 0) {
             try {
                 // check if we can configure the port
-                checkError(LIBRARY.cbDConfigPort(device.BOARD_NUMBER, portType.VALUE, DigitalPortDirection.OUTPUT.VALUE));
-                checkError(LIBRARY.cbDConfigPort(device.BOARD_NUMBER, portType.VALUE, DigitalPortDirection.INPUT.VALUE));
+                checkError(LIBRARY.cbDConfigPort(device.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.OUTPUT.VALUE));
+                checkError(LIBRARY.cbDConfigPort(device.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.INPUT.VALUE));
+                rv = true;
             } catch (JMCCULException ex) {
                 rv = false;
             }
@@ -127,21 +182,31 @@ public class DigitalPort {
 
     private boolean isInputSupported() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L87
-        return (inputMask > 0) || isPortConfigurable;
+        return (INPUT_MASK > 0) || IS_PORT_CONFIGURABLE;
     }
 
     private boolean isOutputSupported() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L109
-        return (outputMask > 0) || isPortConfigurable;
+        return (OUTPUT_MASK > 0) || IS_PORT_CONFIGURABLE;
     }
 
     private boolean isInputScanSupported() throws JMCCULException {
+        /*
+        TODO what does "scan" mean? Is it the same as "synchronous"?
+        Table of cbGetStatus()/cbGetIOStatus() arguments:
+            DIFUNCTION	Specifies digital input scans started with cbDInScan().
+            DOFUNCTION	Specifies digital output scans started with cbDOutScan().
+            DAQIFUNCTION	Specifies a synchronous input scan started with cbDaqInScan().
+            DAQOFUNCTION	Specifies a synchronous output scan started with cbDaqOutScan().
+        Blog post:
+        https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
+         */
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L91
         boolean rv = true;
         try {
-            // getIOStatus() has been renamed getStatus() in a newer version of Universal Library
             checkError(
                     LIBRARY.cbGetIOStatus(
+                            // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                             device.BOARD_NUMBER,
                             ShortBuffer.allocate(1),
                             new NativeLongByReference(new NativeLong(0)),
@@ -156,11 +221,21 @@ public class DigitalPort {
     }
 
     private boolean isOutputScanSupported() throws JMCCULException {
+        /*
+        TODO what does "scan" mean? Is it the same as "synchronous"?
+        Table of cbGetStatus()/cbGetIOStatus() arguments:
+            DIFUNCTION	Specifies digital input scans started with cbDInScan().
+            DOFUNCTION	Specifies digital output scans started with cbDOutScan().
+            DAQIFUNCTION	Specifies a synchronous input scan started with cbDaqInScan().
+            DAQOFUNCTION	Specifies a synchronous output scan started with cbDaqOutScan().
+        Blog post:
+        https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
+         */
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L100
         boolean rv = true;
         try {
-            // getIOStatus() has been renamed getStatus() in a newer version of Universal Library
             checkError(
+                    // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                     LIBRARY.cbGetIOStatus(
                             device.BOARD_NUMBER,
                             ShortBuffer.allocate(1),

@@ -94,7 +94,31 @@ public class DaqDeviceDescriptor extends Structure {
 
     @Override
     public String toString() {
-        return String.format("model %s, serial number %s", new String(ProductName), new String(UniqueID));
+        final String interfaceTypeString;
+        final String labelForUniqueID;
+        switch (InterfaceType) {
+            case MeasurementComputingUniversalLibrary.DaqDeviceInterface.USB_IFC:
+                interfaceTypeString = "USB";
+                labelForUniqueID = "factory serial number";
+                break;
+            case MeasurementComputingUniversalLibrary.DaqDeviceInterface.BLUETOOTH_IFC:
+                interfaceTypeString = "Bluetooth";
+                labelForUniqueID = "MAC address";
+                break;
+            case MeasurementComputingUniversalLibrary.DaqDeviceInterface.ETHERNET_IFC:
+                interfaceTypeString = "Ethernet";
+                labelForUniqueID = "MAC address";
+                break;
+            default:
+                interfaceTypeString = "(unknown)";
+                labelForUniqueID = "unknown";
+                break;
+        }
+
+        return "product name \"" + new String(ProductName).trim() + "\" (productID " + ProductID
+                + "); interface type " + interfaceTypeString + "; "
+                + labelForUniqueID + " \"" + new String(UniqueID).trim() + "\" (" + NUID + ")";
+
     }
 
     public static class ByReference extends DaqDeviceDescriptor implements Structure.ByReference {

@@ -10,19 +10,19 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  *
  * @author Peter Froud
  */
-final class DigitalInfo {
+public final class DigitalInfo {
 
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
     private final DaqDevice device;
-    final DigitalPort[] ports;
+    public final DigitalPort[] PORTS;
 
     DigitalInfo(DaqDevice device) throws JMCCULException {
         this.device = device;
-        ports = initPorts();
+        PORTS = initPorts();
 
     }
 
-    DigitalPort[] initPorts() throws JMCCULException {
+    private DigitalPort[] initPorts() throws JMCCULException {
         final int portCount = getPortCount();
         DigitalPort[] rv = new DigitalPort[portCount];
         for (int i = 0; i < portCount; i++) {
@@ -31,7 +31,8 @@ final class DigitalInfo {
         return rv;
     }
 
-    int getPortCount() throws JMCCULException {
+    private int getPortCount() throws JMCCULException {
+        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L29
         IntBuffer buf = IntBuffer.allocate(1);
         checkError(
                 LIBRARY.cbGetConfig(
@@ -44,9 +45,9 @@ final class DigitalInfo {
         return buf.get();
     }
 
-    boolean isSupported() {
+    public boolean isDigitalIOSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L39
-        return ports.length > 0;
+        return PORTS.length > 0;
     }
 
 }

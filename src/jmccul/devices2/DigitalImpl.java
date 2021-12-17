@@ -16,6 +16,9 @@ import jmccul.jna.MeasurementComputingUniversalLibrary.HGLOBAL;
  */
 public class DigitalImpl {
 
+    /*
+    TODO give these methods better names!!
+     */
     private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
     private final DaqDevice device;
 
@@ -24,7 +27,7 @@ public class DigitalImpl {
 
     }
 
-    boolean bitInput(DigitalPortType portType, int bitNumber) throws JMCCULException {
+    public boolean bitInput(DigitalPortType portType, int bitNumber) throws JMCCULException {
         ShortBuffer buf = ShortBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitIn.htm
         checkError(LIBRARY.cbDBitIn(
@@ -36,7 +39,7 @@ public class DigitalImpl {
         return buf.get() == 1;
     }
 
-    void bitOutput(DigitalPortType portType, int bitNumber, boolean value) throws JMCCULException {
+    public void bitOutput(DigitalPortType portType, int bitNumber, boolean value) throws JMCCULException {
         int zeroOrOne = value ? 1 : 0;
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitOut.htm
         checkError(LIBRARY.cbDBitOut(
@@ -47,7 +50,7 @@ public class DigitalImpl {
         );
     }
 
-    void configureBit(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
+    public void configureIndividualBit(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigBit.htm
         checkError(LIBRARY.cbDConfigBit(
                 device.BOARD_NUMBER,
@@ -57,7 +60,7 @@ public class DigitalImpl {
         );
     }
 
-    void configurePort(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
+    public void configurePort(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigPort.htm
         checkError(LIBRARY.cbDConfigPort(
                 device.BOARD_NUMBER,
@@ -66,7 +69,7 @@ public class DigitalImpl {
         );
     }
 
-    int portInput(DigitalPortType portType) throws JMCCULException {
+    public int portInput(DigitalPortType portType) throws JMCCULException {
         // TODO I think I need to check the resolution to see how many shorts I need
         ShortBuffer buf = ShortBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm
@@ -78,7 +81,7 @@ public class DigitalImpl {
         return buf.get();
     }
 
-    int portInput32(DigitalPortType portType) throws JMCCULException {
+    public int portInput32(DigitalPortType portType) throws JMCCULException {
         IntBuffer buf = IntBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn32.htm
         checkError(LIBRARY.cbDIn32(
@@ -89,7 +92,7 @@ public class DigitalImpl {
         return buf.get();
     }
 
-    int portInputArray(DigitalPortType lowPort, DigitalPortType highPort) throws JMCCULException {
+    public int portInputArray(DigitalPortType lowPort, DigitalPortType highPort) throws JMCCULException {
 
         /*
         This method will not work as written.
