@@ -5,11 +5,11 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 /**
  * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm#Misc/Supported_A_D_Ranges.htm
  *
- * Confusingly this enum is also used for digital-to-analog ranges (cbAOut and cbAOutScan).
+ * This enum is used for both digital-to-analog and analog-to-digital operations.
  *
  * @author Peter Froud
  */
-public enum AnalogToDigitalRange {
+public enum AnalogRange {
     BIPOLAR_60_VOLTS(MeasurementComputingUniversalLibrary.BIP60VOLTS),
     BIPOLAR_20_VOLTS(MeasurementComputingUniversalLibrary.BIP20VOLTS),
     BIPOLAR_15_VOLTS(MeasurementComputingUniversalLibrary.BIP15VOLTS),
@@ -61,7 +61,7 @@ public enum AnalogToDigitalRange {
 
     public final int VALUE;
 
-    private AnalogToDigitalRange(int value) {
+    private AnalogRange(int value) {
         VALUE = value;
     }
 
