@@ -11,7 +11,7 @@ public class PrintDiscoveredDevices {
 
     public static void main(String[] args) {
         try {
-            DaqDeviceDescriptor[] descriptors = JMCCULUtils.findDaqDevices();
+            DaqDeviceDescriptor[] descriptors = JMCCULUtils.findDaqDeviceDescriptors();
             if (descriptors.length == 0) {
                 System.out.println("No daq devices found!");
             } else {

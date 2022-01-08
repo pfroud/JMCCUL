@@ -1,6 +1,8 @@
 package jmccul;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Predicate;
 import static jmccul.JMCCULUtils.checkError;
 import jmccul.digital.DigitalImpl;
@@ -11,7 +13,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  *
  * @author Peter Froud
  */
-public class DaqDevice {
+public class DaqDevice implements AutoCloseable {
 
     static {
         /*
@@ -65,25 +67,38 @@ public class DaqDevice {
 
     public final DigitalImpl digital;
 
-    public static DaqDevice searchByBoardName(String desiredBoardName) throws JMCCULException {
+    public static Optional<DaqDevice> searchByBoardName(String desiredBoardName) throws JMCCULException {
         Predicate<DaqDeviceDescriptor> boardNamePredicate = (DaqDeviceDescriptor descriptor) -> {
             return (new String(descriptor.ProductName)).trim().equals(desiredBoardName);
         };
-        try {
-            return findFirstMatching(boardNamePredicate);
-        } catch (DaqDeviceNotFoundException ex) {
-            throw new DaqDeviceNotFoundException("board name \"" + desiredBoardName + "\"", ex.FOUND_DEVICE_DESCRIPTORS);
+
+        Optional<DaqDeviceDescriptor> descriptor = findFirstDescriptorMatching(boardNamePredicate);
+        if (descriptor.isPresent()) {
+            DaqDevice device = new DaqDevice(descriptor.get());
+            return Optional.of(device);
+        } else {
+            return Optional.empty();
         }
     }
 
-    public static DaqDevice findFirstMatching(Predicate<DaqDeviceDescriptor> predicate) throws JMCCULException {
-        final DaqDeviceDescriptor[] foundDevices = JMCCULUtils.findDaqDevices();
-        for (DaqDeviceDescriptor deviceDescriptor : foundDevices) {
-            if (predicate.test(deviceDescriptor)) {
-                return new DaqDevice(deviceDescriptor);
+    public static Optional<DaqDevice> findFirstDeviceMatching(Predicate<DaqDevice> predicate) throws JMCCULException {
+        // can't do this cleanly with stream because DaqDevice constructors throws a checked exception
+        DaqDeviceDescriptor[] descriptors = JMCCULUtils.findDaqDeviceDescriptors();
+        for (DaqDeviceDescriptor descriptor : descriptors) {
+            try {
+                DaqDevice device = new DaqDevice(descriptor);
+                if (predicate.test(device)) {
+                    return Optional.of(device);
+                }
+            } catch (JMCCULException ignore) {
+
             }
         }
-        throw new DaqDeviceNotFoundException("using Predicate<DaqDeviceDescriptor>", foundDevices);
+        return Optional.empty();
+    }
+
+    public static Optional<DaqDeviceDescriptor> findFirstDescriptorMatching(Predicate<DaqDeviceDescriptor> predicate) throws JMCCULException {
+        return Arrays.stream(JMCCULUtils.findDaqDeviceDescriptors()).filter(predicate).findFirst();
     }
 
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
@@ -146,6 +161,11 @@ public class DaqDevice {
     @Override
     public String toString() {
         return BOARD_NAME + " " + FACTORY_SERIAL_NUMBER;
+    }
+
+    @Override
+    public void close() throws Exception {
+        release();
     }
 
 }

@@ -2,10 +2,11 @@ package jmccul.examples;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Predicate;
 import jmccul.DaqDevice;
-import jmccul.DaqDeviceNotFoundException;
 import jmccul.digital.DigitalPort;
 import jmccul.digital.DigitalPortDirection;
+import jmccul.jna.DaqDeviceDescriptor;
 
 /**
  * https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/examples/console/digital_out.py
@@ -18,46 +19,30 @@ public class DigitalOutputExample {
     public static void main(String[] args) {
 
         try {
+            /*
+            In my setup for testing:
+            The device with serial number 1AC198E is doing digital input in DAQami.
+            So, we want to use the device with serial number 1AC1968 for digital output from this program.
+             */
+            Predicate<DaqDeviceDescriptor> predicate = desc -> desc.NUID == 0x1AC1968;
+            Optional<DaqDeviceDescriptor> optionalDesc = DaqDevice.findFirstDescriptorMatching(predicate);
 
-            final DaqDevice device;
-            try {
-                device = DaqDevice.searchByBoardName("USB-1208FS");
-            } catch (DaqDeviceNotFoundException ex) {
-                System.out.println("Couldn't find the specified DAQ device!");
+            if (optionalDesc.isEmpty()) {
+                System.out.println("No description found with that serial number");
                 return;
-
             }
+
+            DaqDevice device = new DaqDevice(optionalDesc.get());
 
             System.out.println("Opened this device: " + device.toString());
 
-            if (!device.digital.isDigitalIOSupported()) {
-                System.out.println("Digital IO is not supported");
-                return;
-            }
-
             final DigitalPort[] ports = device.digital.PORTS;
-
-            System.out.printf("There are %d port(s):\n", ports.length);
-            for (int i = 0; i < ports.length; i++) {
-                final DigitalPort port = ports[i];
-                System.out.printf("Port %d / %d: %s\n", i + 1, ports.length, port.toString());
-                System.out.println("   NUM_BITS = " + port.NUM_BITS);
-                System.out.println("   INPUT_MASK = " + port.INPUT_MASK);
-                System.out.println("   OUTPUT_MASK = " + port.OUTPUT_MASK);
-                System.out.println("   FIRST_BIT = " + port.FIRST_BIT);
-                System.out.println("   IS_OUTPUT_SUPPORTED  = " + port.IS_OUTPUT_SUPPORTED);
-                System.out.println("   IS_INPUT_SUPPORTED   = " + port.IS_INPUT_SUPPORTED);
-                System.out.println("   IS_PORT_CONFIGURABLE = " + port.IS_PORT_CONFIGURABLE);
-                System.out.println("   IS_BIT_CONFIGURABLE  = " + port.IS_BIT_CONFIGURABLE);
-                System.out.println("   IS_INPUT_SCAN_SUPPORTED  = " + port.IS_INPUT_SCAN_SUPPORTED);
-                System.out.println("   IS_OUTPUT_SCAN_SUPPORTED = " + port.IS_OUTPUT_SCAN_SUPPORTED);
-            }
 
             final Optional<DigitalPort> optionalPortToUse = Arrays.stream(ports)
                     .filter(port -> port.IS_OUTPUT_SUPPORTED).findAny();
 
             if (optionalPortToUse.isEmpty()) {
-                System.out.println("none of the ports support digital output!");
+                System.out.println("none of the ports support digital output");
                 return;
             }
 
@@ -66,8 +51,15 @@ public class DigitalOutputExample {
 
             device.digital.configurePort(portToUse.PORT_TYPE, DigitalPortDirection.OUTPUT);
 
-            device.digital.bitOutput(portToUse.PORT_TYPE, 0, true);
-            System.out.println("Success");
+            //                                            bits       76453210
+            device.digital.portOutput(portToUse.PORT_TYPE, (short) 0b10110110);
+
+            for (int bitIdx = 0; bitIdx < portToUse.NUM_BITS; bitIdx++) {
+                device.digital.bitOutput(portToUse.PORT_TYPE, bitIdx, true);
+            }
+
+            //                              bits               76543210
+            device.digital.portOutput32(portToUse.PORT_TYPE, 0b10110100);
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -35,7 +35,7 @@ public class JMCCULUtils {
         }
     }
 
-    public static DaqDeviceDescriptor[] findDaqDevices() throws JMCCULException {
+    public static DaqDeviceDescriptor[] findDaqDeviceDescriptors() throws JMCCULException {
 
         /*
         You can change the max device count to something bigger,

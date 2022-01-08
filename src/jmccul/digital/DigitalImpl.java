@@ -119,7 +119,7 @@ public class DigitalImpl {
         return buf.get();
     }
 
-    public int portInputArray(DigitalPortType lowPort, DigitalPortType highPort) throws JMCCULException {
+    private int portInputArray(DigitalPortType lowPort, DigitalPortType highPort) throws JMCCULException {
 
         /*
         This method will not work as written.
@@ -145,8 +145,9 @@ public class DigitalImpl {
         return 0;
     }
 
-    public short[] inputScan(DigitalPortType portType, int count, long rateHz) throws JMCCULException {
+    private short[] portInputScan(DigitalPortType portType, int count, long rateHz) throws JMCCULException {
         /*
+        I do not have hardware that supports this function so I cannot test it!
         TODO why does this return shorts? what about the port size / resolution?
          */
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbWinBufAlloc.htm
@@ -200,17 +201,21 @@ public class DigitalImpl {
         );
     }
 
-    public void portOutputArray(DigitalPortType lowPort, DigitalPortType highPort, long[] dataArray) throws JMCCULException {
+    private void portOutputArray(DigitalPortType lowPort, DigitalPortType highPort, long[] dataArray) throws JMCCULException {
 
-        /*
-        The C# function shows that the LowPort and HighPort arguments are port types
-        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DOutArray.htm
-        public MccDaq.ErrorInfo DOutArray(MccDaq.DigitalPortType lowPort, MccDaq.DigitalPortType highPort, out int[] dataArray)
-         */
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutArray.htm
+        // TODO figure out how to get a long[] into a NativeLongByReference!
         var nlbr = new NativeLongByReference(new NativeLong());
 
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDInArray.htm
+        /*
+        The C# function prototype is:
+            public MccDaq.ErrorInfo DOutArray(
+                MccDaq.DigitalPortType lowPort,
+                MccDaq.DigitalPortType highPort,
+                out int[] dataArray
+            );
+        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DOutArray.htm
+         */
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutArray.htm
         checkError(LIBRARY.cbDInArray(
                 DAQ_DEVICE.BOARD_NUMBER,
                 lowPort.VALUE,
@@ -219,7 +224,8 @@ public class DigitalImpl {
         );
     }
 
-    public void portOutputScan(DigitalPortType portType, int count, long rateHz, int[] data) throws JMCCULException {
+    private void portOutputScan(DigitalPortType portType, int count, long rateHz, int[] data) throws JMCCULException {
+        // I do not have hardware that supports this function so I cannot test it!
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbWinBufAlloc.htm
         final HGLOBAL windowsBuffer = LIBRARY.cbWinBufAlloc(new NativeLong(count));
@@ -228,7 +234,7 @@ public class DigitalImpl {
         final NativeLongByReference rateByReference = new NativeLongByReference(new NativeLong(rateHz));
 
         checkError(
-                // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDInScan.htm
+                // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutScan.htm
                 LIBRARY.cbDOutScan(
                         /* int BoardNum  */DAQ_DEVICE.BOARD_NUMBER,
                         /* int portType  */ portType.VALUE,
