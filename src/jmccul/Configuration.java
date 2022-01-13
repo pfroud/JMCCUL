@@ -12,7 +12,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 public class Configuration {
 
     public static int getInt(int infoType, int boardNumber, int deviceNumber, int configItem) throws JMCCULException {
-        IntBuffer buf = IntBuffer.allocate(1);
+        final IntBuffer buf = IntBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
         checkError(
                 MeasurementComputingUniversalLibrary.INSTANCE.cbGetConfig(

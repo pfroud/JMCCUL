@@ -52,14 +52,14 @@ public class DigitalOutputExample {
             device.digital.configurePort(portToUse.PORT_TYPE, DigitalPortDirection.OUTPUT);
 
             //                                            bits       76453210
-            device.digital.portOutput(portToUse.PORT_TYPE, (short) 0b10110110);
+            device.digital.outputPort(portToUse.PORT_TYPE, (short) 0b10110110);
 
             for (int bitIdx = 0; bitIdx < portToUse.NUM_BITS; bitIdx++) {
-                device.digital.bitOutput(portToUse.PORT_TYPE, bitIdx, true);
+                device.digital.outputBit(portToUse.PORT_TYPE, bitIdx, true);
             }
 
             //                              bits               76543210
-            device.digital.portOutput32(portToUse.PORT_TYPE, 0b10110100);
+            device.digital.outputPort32(portToUse.PORT_TYPE, 0b10110100);
 
         } catch (Exception ex) {
             ex.printStackTrace();

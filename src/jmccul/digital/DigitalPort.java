@@ -189,10 +189,10 @@ public class DigitalPort {
         /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
-            DIFUNCTION	Specifies digital input scans started with cbDInScan().
-            DOFUNCTION	Specifies digital output scans started with cbDOutScan().
-            DAQIFUNCTION	Specifies a synchronous input scan started with cbDaqInScan().
-            DAQOFUNCTION	Specifies a synchronous output scan started with cbDaqOutScan().
+            DIFUNCTION      Specifies digital input scans started with cbDInScan().
+            DOFUNCTION      Specifies digital output scans started with cbDOutScan().
+            DAQIFUNCTION    Specifies a synchronous input scan started with cbDaqInScan().
+            DAQOFUNCTION    Specifies a synchronous output scan started with cbDaqOutScan().
         Blog post:
         https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
          */
@@ -219,10 +219,10 @@ public class DigitalPort {
         /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
-            DIFUNCTION	Specifies digital input scans started with cbDInScan().
-            DOFUNCTION	Specifies digital output scans started with cbDOutScan().
-            DAQIFUNCTION	Specifies a synchronous input scan started with cbDaqInScan().
-            DAQOFUNCTION	Specifies a synchronous output scan started with cbDaqOutScan().
+            DIFUNCTION      Specifies digital input scans started with cbDInScan().
+            DOFUNCTION      Specifies digital output scans started with cbDOutScan().
+            DAQIFUNCTION    Specifies a synchronous input scan started with cbDaqInScan().
+            DAQOFUNCTION    Specifies a synchronous output scan started with cbDaqOutScan().
         Blog post:
         https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
          */
