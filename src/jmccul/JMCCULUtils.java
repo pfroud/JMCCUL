@@ -12,17 +12,15 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public class JMCCULUtils {
 
-    private static final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
-
     private final static int INTERFACE_TYPE_ANY = MeasurementComputingUniversalLibrary.DaqDeviceInterface.ANY_IFC;
 
     private final static int ERROR_STRING_LENGTH = MeasurementComputingUniversalLibrary.ERRSTRLEN;
 
-    public static String getErrorMessage(int errorCode) throws JMCCULException {
+    public static String getErrorMessage(int errorCodeToLookUp) throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(ERROR_STRING_LENGTH);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm
-        int errorCode2 = LIBRARY.cbGetErrMsg(errorCode, buf);
-        if (errorCode2 != 0) {
+        int errorCodeWhenGettingErrorMessage = MeasurementComputingUniversalLibrary.INSTANCE.cbGetErrMsg(errorCodeToLookUp, buf);
+        if (errorCodeWhenGettingErrorMessage != 0) {
             throw new JMCCULException("exception when looking up the error code!");
         }
         return new String(buf.array()).trim();
@@ -66,7 +64,8 @@ public class JMCCULUtils {
 
         According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the array.
          */
-        checkError(LIBRARY.cbGetDaqDeviceInventory(INTERFACE_TYPE_ANY, buffer[0], deviceCount));
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(INTERFACE_TYPE_ANY, buffer[0], deviceCount);
+        checkError(errorCode);
 
         // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
         final int devicesFoundCount = deviceCount.get(0);

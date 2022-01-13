@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
-import static jmccul.JMCCULUtils.checkError;
+import jmccul.JMCCULUtils;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -13,7 +13,6 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public class TemperatureImpl {
 
-    private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
     private final DaqDevice DAQ_DEVICE;
     public final int CHANNEL_COUNT;
 
@@ -50,14 +49,17 @@ public class TemperatureImpl {
 
     public float readTemperature(int channel, TemperatureScale scale) throws JMCCULException {
         final FloatBuffer temperatureFloat = FloatBuffer.allocate(1);
+
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm
-        checkError(LIBRARY.cbTIn(
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbTIn(
                 DAQ_DEVICE.BOARD_NUMBER,
                 channel,
                 scale.VALUE,
                 temperatureFloat,
                 0// TODO support options
-        ));
+        );
+
+        JMCCULUtils.checkError(errorCode);
         return temperatureFloat.get();
     }
 

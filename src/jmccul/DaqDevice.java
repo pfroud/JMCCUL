@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
-import static jmccul.JMCCULUtils.checkError;
 import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
@@ -43,7 +42,8 @@ public class DaqDevice implements AutoCloseable {
          Therefore we'll use boolean field to make sure we only call cbIgnoreInstaCal() once.
          */
         try {
-            checkError(MeasurementComputingUniversalLibrary.INSTANCE.cbIgnoreInstaCal());
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbIgnoreInstaCal();
+            JMCCULUtils.checkError(errorCode);
         } catch (Exception ex) {
             ex.printStackTrace();
             // I legitmetley do not know what to do if this function call fails. Throw a RuntimeException???
@@ -51,8 +51,6 @@ public class DaqDevice implements AutoCloseable {
     }
 
     private static int nextBoardNumber = 0;
-
-    private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
 
     private final static int BOARD_NAME_LENGTH = MeasurementComputingUniversalLibrary.BOARDNAMELEN;
     private final static int CONFIG_ITEM_LENGTH = MeasurementComputingUniversalLibrary.BOARDNAMELEN;
@@ -103,8 +101,11 @@ public class DaqDevice implements AutoCloseable {
 
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
         BOARD_NUMBER = nextBoardNumber;
+
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm
-        checkError(LIBRARY.cbCreateDaqDevice(BOARD_NUMBER, daqDeviceDescriptor));
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbCreateDaqDevice(BOARD_NUMBER, daqDeviceDescriptor);
+
+        JMCCULUtils.checkError(errorCode);
         nextBoardNumber++;
         BOARD_NAME = getBoardName();
         FACTORY_SERIAL_NUMBER = getFactorySerialNumber();
@@ -120,13 +121,17 @@ public class DaqDevice implements AutoCloseable {
 
     public final void release() throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm
-        checkError(LIBRARY.cbReleaseDaqDevice(BOARD_NUMBER));
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbReleaseDaqDevice(BOARD_NUMBER);
+        JMCCULUtils.checkError(errorCode);
     }
 
     private String getBoardName() throws JMCCULException {
         final ByteBuffer buf = ByteBuffer.allocate(BOARD_NAME_LENGTH);
+
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetBoardName.htm
-        checkError(LIBRARY.cbGetBoardName(BOARD_NUMBER, buf));
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardName(BOARD_NUMBER, buf);
+
+        JMCCULUtils.checkError(errorCode);
         return new String(buf.array()).trim();
     }
 

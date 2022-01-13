@@ -6,7 +6,7 @@ import java.nio.ShortBuffer;
 import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
-import static jmccul.JMCCULUtils.checkError;
+import jmccul.JMCCULUtils;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -16,7 +16,6 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public class DigitalPort {
 
-    private final MeasurementComputingUniversalLibrary LIBRARY = MeasurementComputingUniversalLibrary.INSTANCE;
     private final DaqDevice DAQ_DEVICE;
     private final int PORT_INDEX;
     public final DigitalPortType PORT_TYPE;
@@ -53,9 +52,8 @@ public class DigitalPort {
     }
 
     private DigitalPortType getPortType() throws JMCCULException {
-        return DigitalPortType.parseInt(
-                getConfigItem(MeasurementComputingUniversalLibrary.DIDEVTYPE)
-        );
+        final int portTypeInt = getConfigItem(MeasurementComputingUniversalLibrary.DIDEVTYPE);
+        return DigitalPortType.parseInt(portTypeInt);
     }
 
     private int getNumBits() throws JMCCULException {
@@ -107,7 +105,8 @@ public class DigitalPort {
                 MeasurementComputingUniversalLibrary.DIGITALINFO,
                 DAQ_DEVICE.BOARD_NUMBER,
                 PORT_INDEX,
-                item);
+                item
+        );
     }
 
     private int getFirstBit() {
@@ -118,7 +117,7 @@ public class DigitalPort {
         compatibility with older digital peripherals.
          */
         int rv = 0;
-        if (PORT_INDEX == 0 && PORT_TYPE == DigitalPortType.FIRST_PORT_C_LOW) {
+        if ((PORT_INDEX == 0) && (PORT_TYPE == DigitalPortType.FIRST_PORT_C_LOW)) {
             rv = 16;
         }
         return rv;
@@ -132,8 +131,13 @@ public class DigitalPort {
             if (PORT_TYPE == DigitalPortType.AUX_PORT) {
                 try {
                     // check if we can configure an individual bit in the port
-                    checkError(LIBRARY.cbDConfigBit(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.OUTPUT.VALUE));
-                    checkError(LIBRARY.cbDConfigBit(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.INPUT.VALUE));
+
+                    final int errorCode1 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.OUTPUT.VALUE);
+                    JMCCULUtils.checkError(errorCode1);
+
+                    final int errorCode2 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, FIRST_BIT, DigitalPortDirection.INPUT.VALUE);
+                    JMCCULUtils.checkError(errorCode2);
+
                     rv = true;
                 } catch (JMCCULException ex) {
                     rv = false;
@@ -165,8 +169,13 @@ public class DigitalPort {
         if ((INPUT_MASK & OUTPUT_MASK) == 0) {
             try {
                 // check if we can configure the port
-                checkError(LIBRARY.cbDConfigPort(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.OUTPUT.VALUE));
-                checkError(LIBRARY.cbDConfigPort(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.INPUT.VALUE));
+
+                final int errorCode1 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.OUTPUT.VALUE);
+                JMCCULUtils.checkError(errorCode1);
+
+                final int errorCode2 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(DAQ_DEVICE.BOARD_NUMBER, PORT_TYPE.VALUE, DigitalPortDirection.INPUT.VALUE);
+                JMCCULUtils.checkError(errorCode2);
+
                 rv = true;
             } catch (JMCCULException ex) {
                 rv = false;
@@ -199,16 +208,15 @@ public class DigitalPort {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L91
         boolean rv = true;
         try {
-            checkError(
-                    LIBRARY.cbGetIOStatus(
-                            // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
-                            DAQ_DEVICE.BOARD_NUMBER,
-                            ShortBuffer.allocate(1),
-                            new NativeLongByReference(new NativeLong(0)),
-                            new NativeLongByReference(new NativeLong(0)),
-                            MeasurementComputingUniversalLibrary.DIFUNCTION
-                    )
+            // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
+                    DAQ_DEVICE.BOARD_NUMBER,
+                    ShortBuffer.allocate(1),
+                    new NativeLongByReference(new NativeLong(0)),
+                    new NativeLongByReference(new NativeLong(0)),
+                    MeasurementComputingUniversalLibrary.DIFUNCTION
             );
+            JMCCULUtils.checkError(errorCode);
         } catch (JMCCULException ex) {
             rv = false;
         }
@@ -229,16 +237,15 @@ public class DigitalPort {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L100
         boolean rv = true;
         try {
-            checkError(
-                    // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
-                    LIBRARY.cbGetIOStatus(
-                            DAQ_DEVICE.BOARD_NUMBER,
-                            ShortBuffer.allocate(1),
-                            new NativeLongByReference(new NativeLong(0)),
-                            new NativeLongByReference(new NativeLong(0)),
-                            MeasurementComputingUniversalLibrary.DOFUNCTION
-                    )
+            // // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
+                    DAQ_DEVICE.BOARD_NUMBER,
+                    ShortBuffer.allocate(1),
+                    new NativeLongByReference(new NativeLong(0)),
+                    new NativeLongByReference(new NativeLong(0)),
+                    MeasurementComputingUniversalLibrary.DOFUNCTION
             );
+            JMCCULUtils.checkError(errorCode);
         } catch (JMCCULException ex) {
             rv = false;
         }
