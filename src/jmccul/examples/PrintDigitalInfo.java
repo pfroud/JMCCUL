@@ -3,6 +3,8 @@ package jmccul.examples;
 import java.util.Optional;
 import java.util.function.Predicate;
 import jmccul.DaqDevice;
+import jmccul.DeviceDiscovery;
+import jmccul.JMCCULException;
 import jmccul.digital.DigitalPort;
 
 /**
@@ -12,18 +14,16 @@ import jmccul.digital.DigitalPort;
  */
 public class PrintDigitalInfo {
 
-    @SuppressWarnings("ConvertToTryWithResources")
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JMCCULException {
 
-        try {
-            Predicate<DaqDevice> predicate = d -> d.digital.isDigitalIOSupported();
-            Optional<DaqDevice> optionalDevice = DaqDevice.findFirstDeviceMatching(predicate);
-            if (optionalDevice.isEmpty()) {
-                System.out.println("No device found which supports digital IO!");
-                return;
-            }
-            DaqDevice device = optionalDevice.get();
+        final Predicate<DaqDevice> predicate = d -> d.digital.isDigitalIOSupported();
+        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(predicate);
+        if (optionalDevice.isEmpty()) {
+            System.out.println("No device found which supports digital IO!");
+            return;
+        }
 
+        try (DaqDevice device = optionalDevice.get()) {
             System.out.println("Opened this device: " + device.toString());
 
             final DigitalPort[] ports = device.digital.PORTS;
@@ -43,9 +43,6 @@ public class PrintDigitalInfo {
                 System.out.println("   IS_INPUT_SCAN_SUPPORTED  = " + port.IS_INPUT_SCAN_SUPPORTED);
                 System.out.println("   IS_OUTPUT_SCAN_SUPPORTED = " + port.IS_OUTPUT_SCAN_SUPPORTED);
             }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
     }

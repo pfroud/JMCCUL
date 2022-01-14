@@ -2,69 +2,82 @@ package jmccul.examples;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Predicate;
 import jmccul.DaqDevice;
+import jmccul.DeviceDiscovery;
+import jmccul.JMCCULException;
 import jmccul.digital.DigitalPort;
 import jmccul.digital.DigitalPortDirection;
 import jmccul.jna.DaqDeviceDescriptor;
 
 /**
- * https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/examples/console/digital_out.py
  *
  * @author Peter Froud
  */
 public class DigitalOutputExample {
 
     @SuppressWarnings("ConvertToTryWithResources")
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JMCCULException {
 
-        try {
-            /*
-            In my setup for testing:
-            The device with serial number 1AC198E is doing digital input in DAQami.
-            So, we want to use the device with serial number 1AC1968 for digital output from this program.
-             */
-            Predicate<DaqDeviceDescriptor> predicate = desc -> desc.NUID == 0x1AC1968;
-            Optional<DaqDeviceDescriptor> optionalDesc = DaqDevice.findFirstDescriptorMatching(predicate);
+        Optional<DeviceAndPort> thing = findDeviceAndPortWhichSupportDigitalOutput();
 
-            if (optionalDesc.isEmpty()) {
-                System.out.println("No description found with that serial number");
-                return;
-            }
+        if (thing.isPresent()) {
+            DeviceAndPort dap = thing.get();
+            DaqDevice device = dap.device;
+            DigitalPort port = dap.port;
 
-            DaqDevice device = new DaqDevice(optionalDesc.get());
+            System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
+                    device.BOARD_NAME, device.FACTORY_SERIAL_NUMBER, port.PORT_TYPE);
 
-            System.out.println("Opened this device: " + device.toString());
-
-            final DigitalPort[] ports = device.digital.PORTS;
-
-            final Optional<DigitalPort> optionalPortToUse = Arrays.stream(ports)
-                    .filter(port -> port.IS_OUTPUT_SUPPORTED).findAny();
-
-            if (optionalPortToUse.isEmpty()) {
-                System.out.println("none of the ports support digital output");
-                return;
-            }
-
-            final DigitalPort portToUse = optionalPortToUse.get();
-            System.out.println("Using this port: " + portToUse);
-
-            device.digital.configurePort(portToUse.PORT_TYPE, DigitalPortDirection.OUTPUT);
-
-            //                                            bits       76453210
-            device.digital.outputPort(portToUse.PORT_TYPE, (short) 0b10110110);
-
-            for (int bitIdx = 0; bitIdx < portToUse.NUM_BITS; bitIdx++) {
-                device.digital.outputBit(portToUse.PORT_TYPE, bitIdx, true);
-            }
-
-            //                              bits               76543210
-            device.digital.outputPort32(portToUse.PORT_TYPE, 0b10110100);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            doDigitalOutput(device, port);
+            device.close();
+        } else {
+            System.out.println("didn't find a device supporting it");
         }
 
+    }
+
+    private static void doDigitalOutput(DaqDevice device, DigitalPort port) throws JMCCULException {
+
+        if (port.IS_PORT_CONFIGURABLE) {
+            device.digital.configurePort(port.PORT_TYPE, DigitalPortDirection.OUTPUT);
+        }
+
+        //                                      eight bits: 76453210
+        device.digital.outputPort(port.PORT_TYPE, (short) 0b10110110);
+
+        for (int bitIdx = 0; bitIdx < port.NUM_BITS; bitIdx++) {
+            device.digital.outputBit(port.PORT_TYPE, bitIdx, true);
+        }
+
+    }
+
+    private static class DeviceAndPort {
+
+        DaqDevice device;
+        DigitalPort port;
+
+    }
+
+    @SuppressWarnings("ConvertToTryWithResources")
+    private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportDigitalOutput() throws JMCCULException {
+        var descrs = DeviceDiscovery.findDaqDeviceDescriptors();
+        for (DaqDeviceDescriptor descr : descrs) {
+            DaqDevice device = new DaqDevice(descr);
+            if (device.digital.isDigitalIOSupported()) {
+                final Optional<DigitalPort> optionalPortToUse
+                        = Arrays.stream(device.digital.PORTS)
+                                .filter(port -> port.IS_OUTPUT_SUPPORTED)
+                                .findAny();
+                if (optionalPortToUse.isPresent()) {
+                    DeviceAndPort rv = new DeviceAndPort();
+                    rv.device = device;
+                    rv.port = optionalPortToUse.get();
+                    return Optional.of(rv);
+                }
+            }
+            device.close();
+        }
+        return Optional.empty();
     }
 
 }

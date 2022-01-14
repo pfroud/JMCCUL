@@ -1,9 +1,6 @@
 package jmccul;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.function.Predicate;
 import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
@@ -28,9 +25,8 @@ public class DaqDevice implements AutoCloseable {
 
         (2) Use the Universal Library to detect boards and assign a board number.
             This is better than using InstaCal because the whole thing is totally automatic.
-         */
-        //
-        /*
+
+
         https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbIgnoreInstaCal.htm
 
          The cbIgnoreInstaCal() function tell the MCDAQ driver to ignore the CB.CFG config file
@@ -44,9 +40,8 @@ public class DaqDevice implements AutoCloseable {
         try {
             final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbIgnoreInstaCal();
             JMCCULUtils.checkError(errorCode);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            // I legitmetley do not know what to do if this function call fails. Throw a RuntimeException???
+        } catch (JMCCULException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
@@ -64,40 +59,6 @@ public class DaqDevice implements AutoCloseable {
 //    public final String USER_DEVICE_IDENTIFIER;
 
     public final DigitalImpl digital;
-
-    public static Optional<DaqDevice> searchByBoardName(String desiredBoardName) throws JMCCULException {
-        Predicate<DaqDeviceDescriptor> boardNamePredicate = (DaqDeviceDescriptor descriptor) -> {
-            return (new String(descriptor.ProductName)).trim().equals(desiredBoardName);
-        };
-
-        Optional<DaqDeviceDescriptor> descriptor = findFirstDescriptorMatching(boardNamePredicate);
-        if (descriptor.isPresent()) {
-            DaqDevice device = new DaqDevice(descriptor.get());
-            return Optional.of(device);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public static Optional<DaqDevice> findFirstDeviceMatching(Predicate<DaqDevice> predicate) throws JMCCULException {
-        // can't do this cleanly with stream because DaqDevice constructors throws a checked exception
-        DaqDeviceDescriptor[] descriptors = JMCCULUtils.findDaqDeviceDescriptors();
-        for (DaqDeviceDescriptor descriptor : descriptors) {
-            try {
-                DaqDevice device = new DaqDevice(descriptor);
-                if (predicate.test(device)) {
-                    return Optional.of(device);
-                }
-            } catch (JMCCULException ignore) {
-
-            }
-        }
-        return Optional.empty();
-    }
-
-    public static Optional<DaqDeviceDescriptor> findFirstDescriptorMatching(Predicate<DaqDeviceDescriptor> predicate) throws JMCCULException {
-        return Arrays.stream(JMCCULUtils.findDaqDeviceDescriptors()).filter(predicate).findFirst();
-    }
 
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
         BOARD_NUMBER = nextBoardNumber;
@@ -117,12 +78,6 @@ public class DaqDevice implements AutoCloseable {
          */
 
         digital = new DigitalImpl(this);
-    }
-
-    public final void release() throws JMCCULException {
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm
-        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbReleaseDaqDevice(BOARD_NUMBER);
-        JMCCULUtils.checkError(errorCode);
     }
 
     private String getBoardName() throws JMCCULException {
@@ -169,8 +124,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
-        release();
+    public void close() throws JMCCULException {
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbReleaseDaqDevice(BOARD_NUMBER);
+        JMCCULUtils.checkError(errorCode);
     }
 
 }
