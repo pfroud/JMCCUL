@@ -24,7 +24,7 @@ public class JMCCULUtils {
     public static void checkError(int errorCode) throws JMCCULException {
         if (errorCode != MeasurementComputingUniversalLibrary.NOERRORS) {
             final String message = "code " + errorCode + ": " + JMCCULUtils.getErrorMessage(errorCode);
-            throw new JMCCULException(message);
+            throw new JMCCULException(message, errorCode);
         }
     }
 

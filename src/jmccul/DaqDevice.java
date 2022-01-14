@@ -1,6 +1,7 @@
 package jmccul;
 
 import java.nio.ByteBuffer;
+import jmccul.analog.AnalogOutputImpl;
 import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
@@ -59,6 +60,7 @@ public class DaqDevice implements AutoCloseable {
 //    public final String USER_DEVICE_IDENTIFIER;
 
     public final DigitalImpl digital;
+    public final AnalogOutputImpl analogOutput;
 
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
         BOARD_NUMBER = nextBoardNumber;
@@ -78,6 +80,7 @@ public class DaqDevice implements AutoCloseable {
          */
 
         digital = new DigitalImpl(this);
+        analogOutput = new AnalogOutputImpl(this);
     }
 
     private String getBoardName() throws JMCCULException {

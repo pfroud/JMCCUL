@@ -18,10 +18,10 @@ public class DigitalOutputExample {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        Optional<DeviceAndPort> thing = findDeviceAndPortWhichSupportDigitalOutput();
+        Optional<DeviceAndPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportsDigitalOutput();
 
-        if (thing.isPresent()) {
-            DeviceAndPort dap = thing.get();
+        if (optionalDeviceAndPort.isPresent()) {
+            DeviceAndPort dap = optionalDeviceAndPort.get();
             DaqDevice device = dap.device;
             DigitalPort port = dap.port;
 
@@ -59,7 +59,7 @@ public class DigitalOutputExample {
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
-    private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportDigitalOutput() throws JMCCULException {
+    private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportsDigitalOutput() throws JMCCULException {
         var descrs = DeviceDiscovery.findDaqDeviceDescriptors();
         for (DaqDeviceDescriptor descr : descrs) {
             DaqDevice device = new DaqDevice(descr);

@@ -184,12 +184,12 @@ public class DigitalPort {
         return rv;
     }
 
-    private boolean isInputSupported() throws JMCCULException {
+    private boolean isInputSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L87
         return (INPUT_MASK > 0) || IS_PORT_CONFIGURABLE;
     }
 
-    private boolean isOutputSupported() throws JMCCULException {
+    private boolean isOutputSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L109
         return (OUTPUT_MASK > 0) || IS_PORT_CONFIGURABLE;
     }

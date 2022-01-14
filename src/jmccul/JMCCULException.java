@@ -6,20 +6,16 @@ package jmccul;
  */
 public class JMCCULException extends Exception {
 
-    public JMCCULException() {
-        super();
-    }
+    public final int ERROR_CODE;
 
     public JMCCULException(String message) {
         super(message);
+        ERROR_CODE = Integer.MIN_VALUE;
     }
 
-    public JMCCULException(Throwable cause) {
-        super(cause);
-    }
-
-    public JMCCULException(String message, Throwable cause) {
-        super(message, cause);
+    public JMCCULException(String message, int errorCode) {
+        super(message);
+        ERROR_CODE = errorCode;
     }
 
 }

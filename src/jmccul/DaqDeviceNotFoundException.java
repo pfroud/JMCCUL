@@ -8,12 +8,10 @@ import jmccul.jna.DaqDeviceDescriptor;
  */
 public class DaqDeviceNotFoundException extends JMCCULException {
 
-    public final String MESSAGE;
     public final DaqDeviceDescriptor[] FOUND_DEVICE_DESCRIPTORS;
 
     public DaqDeviceNotFoundException(String message, DaqDeviceDescriptor[] foundDevices) {
-        super();
-        MESSAGE = message;
+        super(message);
         FOUND_DEVICE_DESCRIPTORS = foundDevices;
     }
 
