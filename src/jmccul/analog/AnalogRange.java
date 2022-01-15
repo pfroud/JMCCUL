@@ -1,5 +1,7 @@
 package jmccul.analog;
 
+import java.util.HashMap;
+import java.util.Map;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -60,6 +62,20 @@ public enum AnalogRange {
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED);
 
     public final int VALUE;
+
+    private static final Map<Integer, AnalogRange> valueMap;
+
+    static {
+        final AnalogRange[] allRanges = AnalogRange.values();
+        valueMap = new HashMap<>(allRanges.length, 1);
+        for (AnalogRange range : allRanges) {
+            valueMap.put(range.VALUE, range);
+        }
+    }
+
+    public static AnalogRange parseInt(int value) {
+        return valueMap.get(value);
+    }
 
     private AnalogRange(int value) {
         VALUE = value;

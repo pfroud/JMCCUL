@@ -76,10 +76,10 @@ public class AnalogOutputImpl {
         List<AnalogRange> rv = new ArrayList<>();
 
         // Check if the range is ignored by passing a bogus range in
-        boolean temp = false; //java compiler can't handle try/catch with final variable
+        boolean isRangeIgnored = false;
         try {
-            // cal cbAOut() with a bogus range
-
+            // cal cbAOut() with a bogus range.
+            // If the D/A board does not have programmable ranges then the range argument will be ignored.
             final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAOut(
                     DAQ_DEVICE.BOARD_NUMBER,
                     0,
@@ -88,24 +88,24 @@ public class AnalogOutputImpl {
             );
             JMCCULUtils.checkError(errorCode);
 
-            temp = true;
+            isRangeIgnored = true;
         } catch (JMCCULException ex) {
             if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSE
                     || ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSEBYANOTHERPROC) {
                 throw ex;
             }
         }
-        final boolean isRangeIgnored = temp;
 
         if (isRangeIgnored) {
             // Try and get the range configured in InstaCal
             try {
-                Configuration.getInt(
+                int range = Configuration.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         DAQ_DEVICE.BOARD_NUMBER,
                         0,
                         MeasurementComputingUniversalLibrary.BIDACRANGE
                 );
+                rv.add(AnalogRange.parseInt(range));
             } catch (JMCCULException ex) {
                 if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSE
                         || ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSEBYANOTHERPROC) {
@@ -113,10 +113,8 @@ public class AnalogOutputImpl {
                 }
             }
         } else {
-
-            AnalogRange[] allAnalogRanges = AnalogRange.values();
-
-            for (AnalogRange rangeToCheck : allAnalogRanges) {
+            // try all possible analog ranges
+            for (AnalogRange rangeToCheck : AnalogRange.values()) {
                 try {
                     analogOutput(0, rangeToCheck, (short) 0);
                     rv.add(rangeToCheck);
