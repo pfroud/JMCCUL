@@ -1,4 +1,4 @@
-package jmccul.examples;
+package jmccul.examples.digital;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -8,7 +8,6 @@ import jmccul.JMCCULException;
 import jmccul.digital.DigitalPort;
 
 /**
- * https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/examples/console/digital_out.py
  *
  * @author Peter Froud
  */
@@ -24,7 +23,7 @@ public class PrintDigitalInfo {
         }
 
         try (DaqDevice device = optionalDevice.get()) {
-            System.out.println("Opened this device: " + device.toString());
+            System.out.println("Digital I/O info for this device: " + device.toString());
 
             final DigitalPort[] ports = device.digital.PORTS;
 
@@ -32,10 +31,10 @@ public class PrintDigitalInfo {
             for (int i = 0; i < ports.length; i++) {
                 final DigitalPort port = ports[i];
                 System.out.printf("Port %d / %d: %s\n", i + 1, ports.length, port.toString());
-                System.out.println("   NUM_BITS = " + port.NUM_BITS);
-                System.out.println("   INPUT_MASK = " + port.INPUT_MASK);
+                System.out.println("   NUM_BITS    = " + port.NUM_BITS);
+                System.out.println("   INPUT_MASK  = " + port.INPUT_MASK);
                 System.out.println("   OUTPUT_MASK = " + port.OUTPUT_MASK);
-                System.out.println("   FIRST_BIT = " + port.FIRST_BIT);
+                System.out.println("   FIRST_BIT   = " + port.FIRST_BIT);
                 System.out.println("   IS_OUTPUT_SUPPORTED  = " + port.IS_OUTPUT_SUPPORTED);
                 System.out.println("   IS_INPUT_SUPPORTED   = " + port.IS_INPUT_SUPPORTED);
                 System.out.println("   IS_PORT_CONFIGURABLE = " + port.IS_PORT_CONFIGURABLE);

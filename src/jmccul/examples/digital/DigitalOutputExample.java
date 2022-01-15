@@ -1,4 +1,4 @@
-package jmccul.examples;
+package jmccul.examples.digital;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -60,14 +60,18 @@ public class DigitalOutputExample {
 
     @SuppressWarnings("ConvertToTryWithResources")
     private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportsDigitalOutput() throws JMCCULException {
-        var descrs = DeviceDiscovery.findDaqDeviceDescriptors();
-        for (DaqDeviceDescriptor descr : descrs) {
-            DaqDevice device = new DaqDevice(descr);
+        final DaqDeviceDescriptor[] deviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+
+        for (DaqDeviceDescriptor descr : deviceDescriptors) {
+            final DaqDevice device = new DaqDevice(descr);
+
             if (device.digital.isDigitalIOSupported()) {
+
                 final Optional<DigitalPort> optionalPortToUse
                         = Arrays.stream(device.digital.PORTS)
                                 .filter(port -> port.IS_OUTPUT_SUPPORTED)
                                 .findAny();
+
                 if (optionalPortToUse.isPresent()) {
                     DeviceAndPort rv = new DeviceAndPort();
                     rv.device = device;
@@ -77,6 +81,7 @@ public class DigitalOutputExample {
             }
             device.close();
         }
+
         return Optional.empty();
     }
 

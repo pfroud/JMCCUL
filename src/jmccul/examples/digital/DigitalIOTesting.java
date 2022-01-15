@@ -1,4 +1,4 @@
-package jmccul.examples;
+package jmccul.examples.digital;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -11,7 +11,6 @@ import jmccul.digital.DigitalPortDirection;
 import jmccul.jna.DaqDeviceDescriptor;
 
 /**
- * https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/examples/console/digital_out.py
  *
  * @author Peter Froud
  */

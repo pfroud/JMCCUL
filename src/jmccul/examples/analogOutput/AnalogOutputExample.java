@@ -1,4 +1,4 @@
-package jmccul.examples;
+package jmccul.examples.analogOutput;
 
 import java.util.Optional;
 import jmccul.DaqDevice;
@@ -16,7 +16,7 @@ public class AnalogOutputExample {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        Optional<DaqDevice> thing = findDeviceAndPortWhichSupportsAnalogOutput();
+        Optional<DaqDevice> thing = findDeviceWhichSupportsAnalogOutput();
 
         if (thing.isPresent()) {
             DaqDevice device = thing.get();
@@ -40,16 +40,19 @@ public class AnalogOutputExample {
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
-    private static Optional<DaqDevice> findDeviceAndPortWhichSupportsAnalogOutput() throws JMCCULException {
-        var descrs = DeviceDiscovery.findDaqDeviceDescriptors();
-        for (DaqDeviceDescriptor descr : descrs) {
-            DaqDevice device = new DaqDevice(descr);
+    private static Optional<DaqDevice> findDeviceWhichSupportsAnalogOutput() throws JMCCULException {
+        final DaqDeviceDescriptor[] deviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+
+        for (DaqDeviceDescriptor descriptor : deviceDescriptors) {
+            final DaqDevice device = new DaqDevice(descriptor);
+
             if (device.analogOutput.isAnalogOutputSupported()) {
                 return Optional.of(device);
             } else {
                 device.close();
             }
         }
+
         return Optional.empty();
     }
 
