@@ -147,7 +147,7 @@ public class AnalogOutputImpl {
     }
 
     public void analogOutput(int channel, AnalogRange range, short value) throws JMCCULException {
-
+        // The value must be between zero and 2^(resolution)-1.
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/CBAOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAOut(
                 DAQ_DEVICE.BOARD_NUMBER,

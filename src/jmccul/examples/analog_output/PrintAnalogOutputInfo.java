@@ -1,4 +1,4 @@
-package jmccul.examples.analogOutput;
+package jmccul.examples.analog_output;
 
 import java.util.Optional;
 import java.util.function.Predicate;
