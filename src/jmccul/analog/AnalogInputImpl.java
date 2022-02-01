@@ -2,9 +2,12 @@ package jmccul.analog;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
@@ -23,6 +26,13 @@ public class AnalogInputImpl {
     private final DaqDevice DAQ_DEVICE;
     public final int CHANNEL_COUNT;
     public final int RESOLUTION;
+    public final int PACKET_SIZE;
+    public final int TRIGGER_RESOLUTION;
+    public final boolean IS_VOLTAGE_INPUT_SUPPORTED;
+    public final AnalogRange ANALOG_TRIGGER_RANGE;
+    public final boolean IS_ANALOG_TRIGGER_SUPPORTED;
+    public final boolean IS_GAIN_QUEUE_SUPPORTED;
+    public final boolean IS_SCAN_SUPPORTED;
     public final List<AnalogRange> SUPPORTED_RANGES;
 
     public AnalogInputImpl(DaqDevice device) throws JMCCULException {
@@ -30,6 +40,13 @@ public class AnalogInputImpl {
         CHANNEL_COUNT = getChannelCount();
         RESOLUTION = getResolution();
         SUPPORTED_RANGES = getSupportedRanges();
+        PACKET_SIZE = getPacketSize();
+        IS_VOLTAGE_INPUT_SUPPORTED = isVoltageInputSupported();
+        ANALOG_TRIGGER_RANGE = getAnalogTriggerRange();
+        TRIGGER_RESOLUTION = getAnalogTriggerResolution();
+        IS_GAIN_QUEUE_SUPPORTED = isGainQueueSupported();
+        IS_SCAN_SUPPORTED = isScanSupported();
+        IS_ANALOG_TRIGGER_SUPPORTED = isAnalogTriggerSupported();
 
     }
 
@@ -58,8 +75,24 @@ public class AnalogInputImpl {
         );
     }
 
-    void isScanSupported() {
+    private boolean isScanSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L59
+
+        boolean rv = true;
+        try {
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
+                    DAQ_DEVICE.BOARD_NUMBER,
+                    ShortBuffer.allocate(1),
+                    new NativeLongByReference(new NativeLong(0)),
+                    new NativeLongByReference(new NativeLong(0)),
+                    MeasurementComputingUniversalLibrary.AIFUNCTION
+            );
+            JMCCULUtils.checkError(errorCode);
+        } catch (JMCCULException ex) {
+            rv = false;
+        }
+        return rv;
+
     }
 
     private List<AnalogRange> getSupportedRanges() throws JMCCULException {
@@ -97,14 +130,13 @@ public class AnalogInputImpl {
         return rv;
     }
 
-    int getPacketSize() {
+    private int getPacketSize() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L93
         /*
-         The hardware in the following table will return a packet size.
+        The hardware in the following table will return a packet size.
         This hardware must use an integer multiple of the packet size as
-        the total_count for a_in_scan when using the
-        :const:`~mcculw.enums.CONTINUOUS` option in
-        :const:`~mcculw.enums.BLOCKIO` mode.
+        the total_count for a_in_scan when using the CONTINUOUS option
+        in BLOCKIO mode.
 
         For all other hardware, this method will return 1.
 
@@ -117,38 +149,115 @@ public class AnalogInputImpl {
         USB-7204    240         31
         ==========  ==========  ===========
          */
- /*
-        int boardType = -1
+
         int packet_size = 1;
-        if (board_type == 122) {
+        if (DAQ_DEVICE.PRODUCT_ID == 122) {
             packet_size = 64;
-        } else if (board_type in[130, 161, 240]){
+        } else if (DAQ_DEVICE.PRODUCT_ID == 130
+                || DAQ_DEVICE.PRODUCT_ID == 161
+                || DAQ_DEVICE.PRODUCT_ID == 240) {
             packet_size = 31;
         }
-         */
 
-//        return packet_size;
-        return -1;
+        return packet_size;
     }
 
-    void isVoltageInputSupported() {
+    private boolean isVoltageInputSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L121
+
+        boolean rv = true;
+        if (SUPPORTED_RANGES.isEmpty()) {
+            rv = false;
+        } else {
+            try {
+                voltageInput(0, SUPPORTED_RANGES.get(0));
+            } catch (JMCCULException ex) {
+                rv = false;
+            }
+        }
+        return rv;
     }
 
-    void analogTriggerResolution() {
+    private int getAnalogTriggerResolution() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L134
+
+
+        /*
+        PCI-DAS6030, 6031, 6032, 6033, 6052
+        USB-1602HS, 1602HS-2AO, 1604HS, 1604HS-2AO
+        PCI-2511, 2513, 2515, 2517, USB-2523, 2527, 2533, 2537
+        USB-1616HS, 1616HS-2, 1616HS-4, 1616HS-BNC
+         */
+        Set<Integer> trig_res_12_bit_types = Set.of(95, 96, 97, 98, 102, 165, 166, 167, 168, 177,
+                178, 179, 180, 203, 204, 205, 213, 214, 215,
+                216, 217);
+
+        // PCI-DAS6040, 6070, 6071
+        Set<Integer> trig_res_8_bit_types = Set.of(101, 103, 104);
+
+        int rv = 0;
+        if (trig_res_12_bit_types.contains(DAQ_DEVICE.PRODUCT_ID)) {
+            rv = 12;
+        } else if (trig_res_8_bit_types.contains(DAQ_DEVICE.PRODUCT_ID)) {
+            rv = 8;
+        }
+        return rv;
+
     }
 
-    void analogTriggerRange() {
+    private AnalogRange getAnalogTriggerRange() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L155
+
+        int trigSource;
+        try {
+            trigSource = Configuration.getInt(MeasurementComputingUniversalLibrary.BOARDINFO, DAQ_DEVICE.BOARD_NUMBER, 0, MeasurementComputingUniversalLibrary.BIADTRIGSRC);
+        } catch (Exception ex) {
+            trigSource = 0;
+        }
+
+        if (TRIGGER_RESOLUTION > 0 && trigSource <= 0) {
+            return AnalogRange.BIPOLAR_10_VOLTS;
+        } else {
+            return AnalogRange.UNKNOWN;
+        }
+
     }
 
-    void isAnalogTriggerSupported() {
+    private boolean isAnalogTriggerSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L172
+
+        boolean rv = true;
+        try {
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbSetTrigger(
+                    DAQ_DEVICE.BOARD_NUMBER,
+                    MeasurementComputingUniversalLibrary.TRIGABOVE,
+                    (short) 0,
+                    (short) 0
+            );
+            JMCCULUtils.checkError(errorCode);
+        } catch (JMCCULException ex) {
+            rv = false;
+        }
+        return rv;
     }
 
-    void isGainQueueSupported() {
+    private boolean isGainQueueSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L190
+
+        boolean rv = true;
+        try {
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbALoadQueue(
+                    DAQ_DEVICE.BOARD_NUMBER,
+                    ShortBuffer.allocate(0),
+                    ShortBuffer.allocate(0),
+                    0
+            );
+            JMCCULUtils.checkError(errorCode);
+        } catch (JMCCULException ex) {
+            rv = false;
+        }
+        return rv;
+
     }
 
     public short analogInput(int channel, AnalogRange range) throws JMCCULException {
@@ -182,6 +291,38 @@ public class AnalogInputImpl {
         );
         JMCCULUtils.checkError(errorCode);
         return nlbr.getValue().longValue();
+    }
+
+    public float voltageInput(int channel, AnalogRange range) throws JMCCULException {
+
+        final FloatBuffer buf = FloatBuffer.allocate(1);
+
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVIn(
+                DAQ_DEVICE.BOARD_NUMBER,
+                channel,
+                range.VALUE,
+                buf,
+                0
+        );
+        JMCCULUtils.checkError(errorCode);
+        return buf.get();
+    }
+
+    public double voltageInput32(int channel, AnalogRange range) throws JMCCULException {
+
+        final DoubleBuffer buf = DoubleBuffer.allocate(1);
+
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVIn32(
+                DAQ_DEVICE.BOARD_NUMBER,
+                channel,
+                range.VALUE,
+                buf,
+                0
+        );
+        JMCCULUtils.checkError(errorCode);
+        return buf.get();
     }
 
 }

@@ -62,7 +62,8 @@ public enum AnalogRange {
     MILLIAMPS_0_TO_20(MeasurementComputingUniversalLibrary.MA0TO20, 0, 20),
     BIPOLAR_ZERO_POINT_025_AMPS(MeasurementComputingUniversalLibrary.BIPPT025AMPS, RangeType.BIPOLAR, 0.025),
     ////////////////////////////////////////////////////////
-    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED, -1, -1);
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED, -1, -1),
+    UNKNOWN(Integer.MIN_VALUE, -1, -1);
 
     public final int VALUE;
     public final double MINIMUM, MAXIMUM;

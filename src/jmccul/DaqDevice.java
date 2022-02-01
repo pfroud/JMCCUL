@@ -58,6 +58,7 @@ public class DaqDevice implements AutoCloseable {
     public final int BOARD_NUMBER;
     public final String FACTORY_SERIAL_NUMBER;
     public final String BOARD_NAME;
+    public final int PRODUCT_ID;
 //    public final String USER_DEVICE_IDENTIFIER;
 
     public final DigitalImpl digital;
@@ -74,6 +75,7 @@ public class DaqDevice implements AutoCloseable {
         nextBoardNumber++;
         BOARD_NAME = getBoardName();
         FACTORY_SERIAL_NUMBER = getFactorySerialNumber();
+        PRODUCT_ID = daqDeviceDescriptor.ProductID;
 //        USER_DEVICE_IDENTIFIER = getUserDeviceIdentifier();
         /*
                 if (debugPrintouts) {
