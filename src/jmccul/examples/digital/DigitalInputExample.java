@@ -13,12 +13,12 @@ import jmccul.jna.DaqDeviceDescriptor;
  *
  * @author Peter Froud
  */
-public class DigitalOutputExample {
+public class DigitalInputExample {
 
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        Optional<DeviceAndPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportsDigitalOutput();
+        Optional<DeviceAndPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportsDigitalInput();
 
         if (optionalDeviceAndPort.isPresent()) {
             DeviceAndPort dap = optionalDeviceAndPort.get();
@@ -28,29 +28,32 @@ public class DigitalOutputExample {
             System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
                     device.BOARD_NAME, device.FACTORY_SERIAL_NUMBER, port.PORT_TYPE);
 
-            doDigitalOutput(device, port);
+            doDigitalInput(device, port);
             device.close();
         } else {
-            System.out.println("Didn't find a device supporting digital output.");
+            System.out.println("didn't find a device supporting it");
         }
 
     }
 
-    private static void doDigitalOutput(DaqDevice device, DigitalPort port) throws JMCCULException {
+    private static void doDigitalInput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
         if (port.IS_PORT_CONFIGURABLE) {
-            device.digital.configurePort(port.PORT_TYPE, DigitalPortDirection.OUTPUT);
+            device.digital.configurePort(port.PORT_TYPE, DigitalPortDirection.INPUT);
         }
 
-        //                       eight bits: 76453210
-        final short valueToWrite = (short) 0b10110110;
-        System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(valueToWrite));
-        device.digital.outputPort(port.PORT_TYPE, valueToWrite);
+        System.out.println("Reading the whole port:");
+        final short portInput = device.digital.inputPort(port.PORT_TYPE);
+        System.out.println("0b" + Integer.toBinaryString(portInput));
 
-        System.out.println("Now setting each bit on individually");
-        for (int bitIdx = 0; bitIdx < port.NUM_BITS; bitIdx++) {
-            device.digital.outputBit(port.PORT_TYPE, bitIdx, true);
+        System.out.println("Reading one bit at a time:");
+        System.out.print("0b");
+        for (int bitIndex = port.NUM_BITS - 1; bitIndex >= 0; bitIndex--) {
+            boolean bitInput = device.digital.inputBit(port.PORT_TYPE, bitIndex);
+            final char zeroOrOne = bitInput ? '1' : '0';
+            System.out.print(zeroOrOne);
         }
+        System.out.println();
 
     }
 
@@ -62,7 +65,7 @@ public class DigitalOutputExample {
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
-    private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportsDigitalOutput() throws JMCCULException {
+    private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportsDigitalInput() throws JMCCULException {
         final DaqDeviceDescriptor[] deviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
 
         for (DaqDeviceDescriptor descr : deviceDescriptors) {
@@ -72,7 +75,7 @@ public class DigitalOutputExample {
 
                 final Optional<DigitalPort> optionalPortToUse
                         = Arrays.stream(device.digital.PORTS)
-                                .filter(port -> port.IS_OUTPUT_SUPPORTED)
+                                .filter(port -> port.IS_INPUT_SUPPORTED)
                                 .findAny();
 
                 if (optionalPortToUse.isPresent()) {
