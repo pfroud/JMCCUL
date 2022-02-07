@@ -1,6 +1,8 @@
 package jmccul;
 
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -26,6 +28,31 @@ public class JMCCULUtils {
             final String message = "code " + errorCode + ": " + JMCCULUtils.getErrorMessage(errorCode);
             throw new JMCCULException(message, errorCode);
         }
+    }
+
+    public static int getBoardNumberForDescriptor(DaqDeviceDescriptor descriptor) {
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm
+        // the returned value is the board number. no error codes.
+        return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(descriptor);
+    }
+
+    public static float getDLLRevision() throws JMCCULException {
+        /*
+        VXD apparently is an old devide driver system for Windows 2, 3, and 9x.
+        Since nobody cares about that anymore I will only return the DLL version.
+        https://en.wikipedia.org/wiki/VxD
+         */
+
+        final FloatBuffer dllRevisionNumber = FloatBuffer.allocate(1);
+        final FloatBuffer vxdRevisionNumber = FloatBuffer.allocate(1);
+
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions/cbGetRevision.htm
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetRevision(
+                dllRevisionNumber,
+                vxdRevisionNumber
+        );
+        checkError(errorCode);
+        return dllRevisionNumber.get();
     }
 
 }

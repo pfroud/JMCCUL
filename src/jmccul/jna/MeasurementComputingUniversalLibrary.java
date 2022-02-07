@@ -4439,7 +4439,7 @@ public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
     int cbIgnoreInstaCal();
 
     /**
-     * The original is:<br>
+     * The original C/C++ function prototype is:<br>
      * <code>int cbCreateDaqDevice(int BoardNum, DaqDeviceDescriptor deviceDescriptor)</code><br>
      * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm
      *
@@ -4468,10 +4468,20 @@ public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
     int cbReleaseDaqDevice(int BdNum);
 
     /**
+     * The original C/C++ function prototype is:<br>
+     * <code>int cbGetBoardNumber(DaqDeviceDescriptor DeviceDescriptor)</code><br>
+     * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm
+     *
+     * JNAerator generated:<br>
+     * <code>int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);</doce>
+     *
+     * I am manually removing the ByValue part becasue I don't know how to get a <br>
+     * DaqDeviceDescriptor.ByValue from a DaqDeviceDescriptor.
+     *
      * Original signature : <code>int cbGetBoardNumber(DaqDeviceDescriptor)</code><br>
      * <i>native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1785</i>
      */
-    int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);
+    int cbGetBoardNumber(DaqDeviceDescriptor DeviceDescriptor);
 
     /**
      * Original signature : <code>int cbGetNetDeviceDescriptor(CHAR*, INT, DaqDeviceDescriptor*, INT)</code><br>
