@@ -34,7 +34,7 @@ public class AnalogOutputExample {
 
         System.out.println("Opened this device: " + device.toString());
 
-//        doAnalogOutput(device);
+        doAnalogOutput(device);
         doVoltageOutput(device);
 
         device.close();

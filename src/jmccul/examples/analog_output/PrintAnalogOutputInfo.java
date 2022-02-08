@@ -16,7 +16,7 @@ public class PrintAnalogOutputInfo {
         final Predicate<DaqDevice> predicate = d -> d.analogOutput.isAnalogOutputSupported();
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(predicate);
         if (optionalDevice.isEmpty()) {
-            System.out.println("No device found which supports analog out!");
+            System.out.println("No device found which supports analog output!");
             return;
         }
 
