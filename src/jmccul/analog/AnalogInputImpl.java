@@ -24,29 +24,35 @@ public class AnalogInputImpl {
     https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ai_info.py
      */
     private final DaqDevice DAQ_DEVICE;
+
     public final int CHANNEL_COUNT;
     public final int RESOLUTION;
     public final int PACKET_SIZE;
     public final int TRIGGER_RESOLUTION;
-    public final boolean IS_VOLTAGE_INPUT_SUPPORTED;
+
+    public final List<AnalogRange> SUPPORTED_RANGES;
     public final AnalogRange ANALOG_TRIGGER_RANGE;
+
+    public final boolean IS_VOLTAGE_INPUT_SUPPORTED;
     public final boolean IS_ANALOG_TRIGGER_SUPPORTED;
     public final boolean IS_GAIN_QUEUE_SUPPORTED;
     public final boolean IS_SCAN_SUPPORTED;
-    public final List<AnalogRange> SUPPORTED_RANGES;
 
     public AnalogInputImpl(DaqDevice device) throws JMCCULException {
         DAQ_DEVICE = device;
+
         CHANNEL_COUNT = getChannelCount();
         RESOLUTION = getResolution();
-        SUPPORTED_RANGES = getSupportedRanges();
         PACKET_SIZE = getPacketSize();
-        IS_VOLTAGE_INPUT_SUPPORTED = isVoltageInputSupported();
-        ANALOG_TRIGGER_RANGE = getAnalogTriggerRange();
         TRIGGER_RESOLUTION = getAnalogTriggerResolution();
+
+        SUPPORTED_RANGES = getSupportedRanges();
+        ANALOG_TRIGGER_RANGE = getAnalogTriggerRange();
+
+        IS_VOLTAGE_INPUT_SUPPORTED = isVoltageInputSupported();
+        IS_ANALOG_TRIGGER_SUPPORTED = isAnalogTriggerSupported();
         IS_GAIN_QUEUE_SUPPORTED = isGainQueueSupported();
         IS_SCAN_SUPPORTED = isScanSupported();
-        IS_ANALOG_TRIGGER_SUPPORTED = isAnalogTriggerSupported();
 
     }
 
@@ -210,7 +216,12 @@ public class AnalogInputImpl {
 
         int trigSource;
         try {
-            trigSource = Configuration.getInt(MeasurementComputingUniversalLibrary.BOARDINFO, DAQ_DEVICE.BOARD_NUMBER, 0, MeasurementComputingUniversalLibrary.BIADTRIGSRC);
+            trigSource = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.BOARD_NUMBER,
+                    0,
+                    MeasurementComputingUniversalLibrary.BIADTRIGSRC
+            );
         } catch (Exception ex) {
             trigSource = 0;
         }
