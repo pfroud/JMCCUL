@@ -1,4 +1,4 @@
-# Information about JNA
+# Information about Java Native Access
 
 JNA stands for [Java Native Access](https://github.com/java-native-access/jna).
 

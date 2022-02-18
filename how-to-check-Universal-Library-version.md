@@ -1,6 +1,8 @@
-# SHow to check UL version numbers
+# How to check Universal Library version numbers
 
 ## How to check what version of UL is currently installed
+
+Here are two ways:
 
 ### Check in header file 
 

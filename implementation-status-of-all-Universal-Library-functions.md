@@ -1,6 +1,6 @@
 # Implementation status of all Universal Library functions
 
-See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
+This is a lsit of all Universal Library functions from https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 
 ## Analog I/O functions
 
@@ -10,16 +10,16 @@ See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 | [ `cbAConvertData()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAConvertData.htm)         |  Not written  |
 | [ `cbAConvertPreTrigData()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAConvertPreTrigData.htm)  |  Not written  |
 | [ `cbAIn()`                 ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn.htm)                  |  ✅ Written & tested  |
-| [ `cbAIn32()`               ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn32.htm)                |  Not written  |
+| [ `cbAIn32()`               ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn32.htm)                |  ✅ Written & tested  |
 | [ `cbAInScan()`             ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAInScan.htm)              |  Not written  |
 | [ `cbALoadQueue()`          ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbALoadQueue.htm)           |  Not written  |
-| [ `cbAOut()`                ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOut.htm)                 |  Not written  |
+| [ `cbAOut()`                ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOut.htm)                 |  ✅ Written & tested  |
 | [ `cbAOutScan()`            ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOutScan.htm)             |  Not written  |
 | [ `cbAPretrig()`            ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAPretrig.htm)             |  Not written  |
 | [ `cbATrig()`               ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbATrig.htm)                |  Not written  |
-| [ `cbVIn()`                 ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm)                  |  Not written  |
-| [ `cbVIn32()`               ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm)                |  Not written  |
-| [ `cbVOut()`                ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm)                 |  Not written  |
+| [ `cbVIn()`                 ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm)                  |  ✅ Written & tested  |
+| [ `cbVIn32()`               ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm)                |  ✅ Written & tested  |
+| [ `cbVOut()`                ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm)                 |  ✅ Written & tested  |
 
 ## Configuration functions
 
@@ -29,7 +29,7 @@ See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 | [ `cbAInputMode()`      ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbAInputMode.htm)       |  Not written  |
 | [ `cbGetConfig()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm)        |  ✅ Written & tested  |
 | [ `cbGetConfigString()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfigString.htm)  |  ✅ Written & tested  |
-| [ `cbGetSignal()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetSignal.htm)        |  Not written  |
+| [ `cbGetSignal()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetSignal.htm)        |  ❌ Won't implement  |
 | [ `cbSelectSignal()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSelectSignal.htm)     |  ❌ Won't implement  |
 | [ `cbSetConfig()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm)        |  Written but not tested yet  |
 | [ `cbSetConfigString()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfigString.htm)  |  Written but not tested yet  |
@@ -66,31 +66,31 @@ See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 
 | UL function | Status |
 | ------------| --------|
-| [ `cbLogConvertFile()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogConvertFile.htm)        |  ❌ Won't implement  |
-| [ `cbLogGetAIChannelCount()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetAIChannelCount.htm)  |  ❌ Won't implement  |
-| [ `cbLogGetAIInfo()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetAIInfo.htm)          |  ❌ Won't implement  |
-| [ `cbLogGetCJCInfo()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetCJCInfo.htm)         |  ❌ Won't implement  |
-| [ `cbLogGetDIOInfo()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetDIOInfo.htm)         |  ❌ Won't implement  |
-| [ `cbLogGetFileInfo()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetFileInfo.htm)        |  ❌ Won't implement  |
-| [ `cbLogGetFileName()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetFileName.htm)        |  ❌ Won't implement  |
-| [ `cbLogGetPreferences()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetPreferences.htm)     |  ❌ Won't implement  |
-| [ `cbLogGetSampleInfo()`     ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogGetSampleInfo.htm)      |  ❌ Won't implement  |
-| [ `cbLogReadAIChannels()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogReadAIChannels.htm)     |  ❌ Won't implement  |
-| [ `cbLogReadCJCChannels()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogReadCJCChannels.htm)    |  ❌ Won't implement  |
-| [ `cbLogReadDIOChannels()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogReadDIOChannels.htm)    |  ❌ Won't implement  |
-| [ `cbLogReadTimeTags()`      ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogReadTimeTags.htm)       |  ❌ Won't implement  |
-| [ `cbLogSetPreferences()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Data_Logger_Functions/cbLogSetPreferences.htm)     |  ❌ Won't implement  |
+| [ `cbLogConvertFile()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogConvertFile.htm)        |  ❌ Won't implement  |
+| [ `cbLogGetAIChannelCount()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetAIChannelCount.htm)  |  ❌ Won't implement  |
+| [ `cbLogGetAIInfo()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetAIInfo.htm)          |  ❌ Won't implement  |
+| [ `cbLogGetCJCInfo()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetCJCInfo.htm)         |  ❌ Won't implement  |
+| [ `cbLogGetDIOInfo()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetDIOInfo.htm)         |  ❌ Won't implement  |
+| [ `cbLogGetFileInfo()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetFileInfo.htm)        |  ❌ Won't implement  |
+| [ `cbLogGetFileName()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetFileName.htm)        |  ❌ Won't implement  |
+| [ `cbLogGetPreferences()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetPreferences.htm)     |  ❌ Won't implement  |
+| [ `cbLogGetSampleInfo()`     ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetSampleInfo.htm)      |  ❌ Won't implement  |
+| [ `cbLogReadAIChannels()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogReadAIChannels.htm)     |  ❌ Won't implement  |
+| [ `cbLogReadCJCChannels()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogReadCJCChannels.htm)    |  ❌ Won't implement  |
+| [ `cbLogReadDIOChannels()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogReadDIOChannels.htm)    |  ❌ Won't implement  |
+| [ `cbLogReadTimeTags()`      ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogReadTimeTags.htm)       |  ❌ Won't implement  |
+| [ `cbLogSetPreferences()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogSetPreferences.htm)     |  ❌ Won't implement  |
 
 ## Device Discovery functions
 
 | UL function | Status |
 | ------------| --------|
-| [ `cbCreateDaqDevice()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device_Discovery_Functions/cbCreateDaqDevice.htm)         |  ✅ Written & tested  |
-| [ `cbGetBoardNumber()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device_Discovery_Functions/cbGetBoardNumber.htm)          |  ✅ Written & tested  |
-| [ `cbGetDaqDeviceInventory()`  ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device_Discovery_Functions/cbGetDaqDeviceInventory.htm)   |  ✅ Written & tested  |
-| [ `cbGetNetDeviceDescriptor()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device_Discovery_Functions/cbGetNetDeviceDescriptor.htm)  | ❔ Not written - don't have hardware |
-| [ `cbIgnoreInstaCal()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device_Discovery_Functions/cbIgnoreInstaCal.htm)          |  ✅ Written & tested  |
-| [ `cbReleaseDaqDevice()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device_Discovery_Functions/cbReleaseDaqDevice.htm)        |  ✅ Written & tested  |
+| [ `cbCreateDaqDevice()`        ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm)         |  ✅ Written & tested  |
+| [ `cbGetBoardNumber()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm)          |  ✅ Written & tested  |
+| [ `cbGetDaqDeviceInventory()`  ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm)   |  ✅ Written & tested  |
+| [ `cbGetNetDeviceDescriptor()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetNetDeviceDescriptor.htm)  | ❔ Not written - don't have hardware |
+| [ `cbIgnoreInstaCal()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbIgnoreInstaCal.htm)          |  ✅ Written & tested  |
+| [ `cbReleaseDaqDevice()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm)        |  ✅ Written & tested  |
 
 ## Digital I/O functions
 
@@ -138,10 +138,10 @@ See https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 
 | UL function | Status |
 | ------------| --------|
-| [ `cbFileAInScan()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileAInScan.htm)  |  Won't implement  |
-| [ `cbFileGetInfo()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileGetInfo.htm)  |  Won't implement  |
-| [ `cbFilePretrig()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFilePretrig.htm)  |  Won't implement  |
-| [ `cbFileRead()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileRead.htm)     |  Won't implement  |
+| [ `cbFileAInScan()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileAInScan.htm)  |  ❌ Won't implement  |
+| [ `cbFileGetInfo()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileGetInfo.htm)  |  ❌ Won't implement  |
+| [ `cbFilePretrig()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFilePretrig.htm)  |  ❌ Won't implement  |
+| [ `cbFileRead()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileRead.htm)     |  ❌ Won't implement  |
 
 ## Synchronous I/O functions
 
