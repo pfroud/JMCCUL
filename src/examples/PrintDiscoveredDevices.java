@@ -1,4 +1,4 @@
-package jmccul.examples;
+package examples;
 
 import jmccul.DeviceDiscovery;
 import jmccul.JMCCULException;

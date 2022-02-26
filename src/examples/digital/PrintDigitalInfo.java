@@ -1,4 +1,4 @@
-package jmccul.examples.digital;
+package examples.digital;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -16,9 +16,9 @@ public class PrintDigitalInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Predicate<DaqDevice> predicate = d -> d.digital.isDigitalIOSupported();
-        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(predicate);
+        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findDeviceMatchingPredicate(predicate);
         if (optionalDevice.isEmpty()) {
-            System.out.println("No device found which supports digital IO!");
+            System.out.println("Didn't find a device which supports digital I/O.");
             return;
         }
 
@@ -27,7 +27,7 @@ public class PrintDigitalInfo {
 
             final DigitalPort[] ports = device.digital.PORTS;
 
-            System.out.printf("There are %d port(s):\n", ports.length);
+            System.out.printf("There are %d digital port(s):\n", ports.length);
             for (int i = 0; i < ports.length; i++) {
                 final DigitalPort port = ports[i];
                 System.out.printf("Port %d / %d: %s\n", i + 1, ports.length, port.toString());

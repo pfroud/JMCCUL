@@ -1,4 +1,4 @@
-package jmccul.examples.analog_output;
+package examples.analog_output;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -6,7 +6,6 @@ import jmccul.DaqDevice;
 import jmccul.DeviceDiscovery;
 import jmccul.JMCCULException;
 import jmccul.analog.AnalogRange;
-import jmccul.jna.DaqDeviceDescriptor;
 
 /**
  *
@@ -17,23 +16,18 @@ public class AnalogOutputExample {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        /*
-        In my test setup:
-        I am using the device with serial number 1AC198E as analog input in Daqami.
-        So, I need to use the device with serial number 1AC1968 to do analog output in this java program.
-         */
-        Predicate<DaqDeviceDescriptor> predicate = desc -> desc.NUID == 0x1AC1968;
-        Optional<DaqDeviceDescriptor> optionalDesc = DeviceDiscovery.findFirstDescriptorMatching(predicate);
-
-        if (optionalDesc.isEmpty()) {
-            System.out.println("No description found with that serial number");
+        final Predicate<DaqDevice> predicate = d -> d.analogOutput.isAnalogOutputSupported();
+        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findDeviceMatchingPredicate(predicate);
+        if (optionalDevice.isEmpty()) {
+            System.out.println("Didn't find a device which supports analog output.");
             return;
         }
 
-        DaqDevice device = new DaqDevice(optionalDesc.get());
+        final DaqDevice device = optionalDevice.get();
 
         System.out.println("Opened this device: " + device.toString());
 
+        // TODO set differential vs single-ended!!
         doAnalogOutput(device);
         doVoltageOutput(device);
 
@@ -83,23 +77,6 @@ public class AnalogOutputExample {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
-    }
-
-    @SuppressWarnings("ConvertToTryWithResources")
-    private static Optional<DaqDevice> findDeviceWhichSupportsAnalogOutput() throws JMCCULException {
-        final DaqDeviceDescriptor[] deviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
-
-        for (DaqDeviceDescriptor descriptor : deviceDescriptors) {
-            final DaqDevice device = new DaqDevice(descriptor);
-
-            if (device.analogOutput.isAnalogOutputSupported()) {
-                return Optional.of(device);
-            } else {
-                device.close();
-            }
-        }
-
-        return Optional.empty();
     }
 
 }

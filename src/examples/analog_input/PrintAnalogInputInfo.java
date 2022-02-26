@@ -1,4 +1,4 @@
-package jmccul.examples.analog_input;
+package examples.analog_input;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -14,9 +14,9 @@ public class PrintAnalogInputInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Predicate<DaqDevice> predicate = d -> d.analogInput.isAnalogInputSupported();
-        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(predicate);
+        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findDeviceMatchingPredicate(predicate);
         if (optionalDevice.isEmpty()) {
-            System.out.println("No device found which supports analog input!");
+            System.out.println("Didn't find a device which supports analog input.");
             return;
         }
 

@@ -1,4 +1,4 @@
-package jmccul.examples.analog_input;
+package examples.analog_input;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -6,7 +6,6 @@ import jmccul.DaqDevice;
 import jmccul.DeviceDiscovery;
 import jmccul.JMCCULException;
 import jmccul.analog.AnalogRange;
-import jmccul.jna.DaqDeviceDescriptor;
 
 /**
  *
@@ -17,23 +16,16 @@ public class AnalogInputExample {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        /*
-        In my test setup:
-        I am using the device with serial number 1AC198E as analog input in Daqami.
-        So, I need to use the device with serial number 1AC1968 to do analog output in this java program.
-         */
-        Predicate<DaqDeviceDescriptor> predicate = desc -> desc.NUID == 0x1AC1968;
-        Optional<DaqDeviceDescriptor> optionalDesc = DeviceDiscovery.findFirstDescriptorMatching(predicate);
-
-        if (optionalDesc.isEmpty()) {
-            System.out.println("No description found with that serial number");
+        final Predicate<DaqDevice> predicate = d -> d.analogInput.isAnalogInputSupported();
+        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findDeviceMatchingPredicate(predicate);
+        if (optionalDevice.isEmpty()) {
+            System.out.println("Didn't find a device which supports analog input.");
             return;
         }
 
-        DaqDevice device = new DaqDevice(optionalDesc.get());
-
+        final DaqDevice device = optionalDevice.get();
         System.out.println("Opened this device: " + device.toString());
-
+        // TODO set differential vs single-ended!!
         doAnalogInput(device);
 
         device.close();

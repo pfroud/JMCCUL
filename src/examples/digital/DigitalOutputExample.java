@@ -1,4 +1,4 @@
-package jmccul.examples.digital;
+package examples.digital;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -18,12 +18,12 @@ public class DigitalOutputExample {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        Optional<DeviceAndPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportsDigitalOutput();
+        final Optional<DeviceAndPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportsDigitalOutput();
 
         if (optionalDeviceAndPort.isPresent()) {
-            DeviceAndPort dap = optionalDeviceAndPort.get();
-            DaqDevice device = dap.device;
-            DigitalPort port = dap.port;
+            final DeviceAndPort deviceAndPort = optionalDeviceAndPort.get();
+            final DaqDevice device = deviceAndPort.device;
+            final DigitalPort port = deviceAndPort.port;
 
             System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
                     device.BOARD_NAME, device.FACTORY_SERIAL_NUMBER, port.PORT_TYPE);
@@ -31,7 +31,7 @@ public class DigitalOutputExample {
             doDigitalOutput(device, port);
             device.close();
         } else {
-            System.out.println("Didn't find a device supporting digital output.");
+            System.out.println("Didn't find a device which supports digital output.");
         }
 
     }
@@ -63,17 +63,17 @@ public class DigitalOutputExample {
 
     @SuppressWarnings("ConvertToTryWithResources")
     private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportsDigitalOutput() throws JMCCULException {
-        final DaqDeviceDescriptor[] deviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+        final DaqDeviceDescriptor[] allDeviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
 
-        for (DaqDeviceDescriptor descr : deviceDescriptors) {
-            final DaqDevice device = new DaqDevice(descr);
+        for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
+            final DaqDevice device = new DaqDevice(descriptor);
 
             if (device.digital.isDigitalIOSupported()) {
 
                 final Optional<DigitalPort> optionalPortToUse
                         = Arrays.stream(device.digital.PORTS)
                                 .filter(port -> port.IS_OUTPUT_SUPPORTED)
-                                .findAny();
+                                .findFirst();
 
                 if (optionalPortToUse.isPresent()) {
                     DeviceAndPort rv = new DeviceAndPort();
