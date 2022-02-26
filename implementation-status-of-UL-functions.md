@@ -2,6 +2,12 @@
 
 This is a lsit of all Universal Library functions from https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 
+To get there, look in the left sidebar and expand Universal Library Function Reference > UL for Windows.
+
+The Status column means whether the JNA wrapper has been written.
+
+TODO for rows which have been written, say what the Java method is.
+
 ## Analog I/O functions
 
 | UL function | Status |

@@ -1,39 +1,39 @@
-# Information about Java Native Access
+# Information about JNA and JNAerator
 
-JNA stands for [Java Native Access](https://github.com/java-native-access/jna).
+JNA stands for [Java Native Access](https://github.com/java-native-access/jna). It lets you use native shared libraries (DLL files) from Java.
 
-I used [JNAerator](https://github.com/nativelibs4java/JNAerator) to generate the bindings.
+[JNAerator](https://github.com/nativelibs4java/JNAerator) is a tool to generate bindings for JNA.
 
-It appears JNAerator was originally hosted on Google Code and was been partly migrated to GitHub.
+It appears JNAerator was originally hosted on Google Code and was been partly migrated to GitHub. To download a ready-to-use jar file, go to https://code.google.com/archive/p/jnaerator/downloads. It appears the latest version is “jnaerator-0.12-SNAPSHOT-20130727.jar”, even though it says deprecated.
 
-To download a ready-to-use jar file, go to https://code.google.com/archive/p/jnaerator/downloads. It appears the latest version is “jnaerator-0.12-SNAPSHOT-20130727.jar”, even though it says deprecated.
+![](C:\Users\lumenetix\OneDrive - ERP Power LLC\Documents\JMCCUL\img\screenshot-of-google-code-jnaerator.png)
 
 ## How to run JNAerator
 
-Assuming you installed Universal Library with the default settings, on a 64-bit OS, this is the command to run:
+Assuming you installed Universal Library with the default settings, on 64-bit Windows, this is the command to run:
 ```
 java -jar jnaerator-0.12-SNAPSHOT-20130727.jar -library MeasurementComputingUniversal -mode Directory -runtime JNA -package jmccul -o outputDirectory -f "C:\Program Files (x86)\Measurement Computing\DAQ\cbw64.dll" "C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h"
 ```
-Explanation of JNAerator options:
+Explanation of the JNAerator options used:
 
 * `-library MeasurementComputingUniversal`
   Names the generated file `MeasurementComputingUniversalLibrary.java`.
 * `-mode Directory`
   Outputs a a directory of .java files instead of compiling them into a .jar.
 * `-runtime JNA`
-  Use JNA instead of [BridJ](https://github.com/nativelibs4java/BridJ). I’ve never used BridJ, and I know JNA works.
+  Use JNA instead of [BridJ](https://github.com/nativelibs4java/BridJ).
 * `-package jmccul`
-  Sets the package of the generated .java files. This puts a package declaration at the top of the java files, and creates a subfolder for the package name.
+  Sets the package name of the generated .java files. This puts a package declaration at the top of the java files, and creates a subfolder for the package name.
 * `-o outputDirectory`
   Put all the output in a folder called `outputDirectory`.
 * `-f`
   Overwrite existing files. Without this flag, if the Java files already exists, JNAerator will crash with an IOException.
 
-See https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables.
+For the list of all available JNAerator options, visit the wiki page on GitHub called [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables).
 
 ## Output
 
-Expected output is something like this:
+Expected console output is something like this:
 ```
 Auto-configuring parser...
 Parsing native headers...
@@ -86,7 +86,7 @@ int cbDIn(int BoardNum, int PortType, ShortBuffer DataValue);
 
 (Confusingly, the `@deprecated` Javadoc tag includes the method it is deprecating as a suggested alternative.)
 
-I want to remove all the deprecated methods to streamline my IDE's code completion. According to [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables), this command-line option should work:
+I want to remove all the deprecated methods to streamline my IDE's code completion. According to [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables), this option should work:
 
 > * -skipDeprecated
 >

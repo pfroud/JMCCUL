@@ -19,7 +19,7 @@ Open file explorer and navigate to "C:\Program Files (x86)\Measurement Computing
 
 ![](img/product-version-of-cbw64-dot-dll.png)
 
-Or open PowerShell and paste this command:
+Or, open PowerShell and paste this command:
 
 ```powershell
 (Get-Item "C:\Program Files (x86)\Measurement Computing\DAQ\cbw64.dll").VersionInfo.ProductVersion
@@ -43,16 +43,16 @@ Screenshot:
 
 ## How to check what version of UL is in an mccdaq.exe installer
 
-Open the mccdaq.exe file in 7-Zip. Here are two ways to do that:
+Open the mccdaq.exe file in [7-Zip](https://www.7-zip.org/). Here are two ways to do that:
 
 * Right-click on mccdaq.exe then choose 7-Zip > Open Archive.
-* Open "&-Zip File Manager" from the Start Menu. Navigate to mccdaq.exe right-click and choose "Open Inside".
+* Open "7-Zip File Manager" from the Start Menu. Navigate to mccdaq.exe then right-click on it and choose "Open Inside".
 
 Once you've got the file open in 7-Zip:
 
 1. Go into the folder called ICalUL.
 2. Right-click on file ICalUL.msi and choose 'Open Inside'.
-3. Right-click on Data1.cab and choose 'Open Inside'.
+3. Right-click on file Data1.cab and choose 'Open Inside'.
 4. Then you can:
-   * Right-click on cbw.h and choose View, and look for `CURRENTREVNUM` as described above.
-   * To view the Product Version field of cbw64.dll, I think you need to copy the dll file out of the cab.
+   * Right-click on cbw.h and choose View, then look for `CURRENTREVNUM` as described above.
+   * Copy cbw64.dll out of the cab, view the properties as described above.
