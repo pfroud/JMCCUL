@@ -5,6 +5,7 @@ import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import jmccul.JMCCULUtils;
+import jmccul.ThermocoupleSensorType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -37,7 +38,7 @@ public class TemperatureImpl {
         return CHANNEL_COUNT > 0;
     }
 
-    public void setThermocoupleType(int channel, ThermocoupleType tc) throws JMCCULException {
+    public void setThermocoupleType(int channel, ThermocoupleSensorType tc) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 DAQ_DEVICE.BOARD_NUMBER,

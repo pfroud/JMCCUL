@@ -72,7 +72,7 @@ public class DeviceDiscovery {
         }
     }
 
-    public static Optional<DaqDevice> findFirstDeviceMatching(Predicate<DaqDevice> predicate) throws JMCCULException {
+    public static Optional<DaqDevice> findDeviceMatchingPredicate(Predicate<DaqDevice> predicate) throws JMCCULException {
         // can't do this cleanly with stream because DaqDevice constructors throws a checked exception
         DaqDeviceDescriptor[] descriptors = findDaqDeviceDescriptors();
         for (DaqDeviceDescriptor descriptor : descriptors) {

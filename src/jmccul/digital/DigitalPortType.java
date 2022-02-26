@@ -72,7 +72,7 @@ public enum DigitalPortType {
 
     public final int VALUE;
 
-    DigitalPortType(int value) {
+    private DigitalPortType(int value) {
         VALUE = value;
 
     }

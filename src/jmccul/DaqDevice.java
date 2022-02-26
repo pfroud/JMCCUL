@@ -6,6 +6,7 @@ import jmccul.analog.AnalogOutputImpl;
 import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
+import jmccul.temperature.TemperatureImpl;
 
 /**
  *
@@ -64,6 +65,7 @@ public class DaqDevice implements AutoCloseable {
     public final DigitalImpl digital;
     public final AnalogOutputImpl analogOutput;
     public final AnalogInputImpl analogInput;
+    public final TemperatureImpl temperature;
 
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
         BOARD_NUMBER = nextBoardNumber;
@@ -86,6 +88,7 @@ public class DaqDevice implements AutoCloseable {
         digital = new DigitalImpl(this);
         analogOutput = new AnalogOutputImpl(this);
         analogInput = new AnalogInputImpl(this);
+        temperature = new TemperatureImpl(this);
     }
 
     private String getBoardName() throws JMCCULException {
