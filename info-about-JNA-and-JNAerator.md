@@ -6,7 +6,7 @@ JNA stands for [Java Native Access](https://github.com/java-native-access/jna). 
 
 It appears JNAerator was originally hosted on Google Code and was been partly migrated to GitHub. To download a ready-to-use jar file, go to https://code.google.com/archive/p/jnaerator/downloads. It appears the latest version is “jnaerator-0.12-SNAPSHOT-20130727.jar”, even though it says deprecated.
 
-![](C:\Users\lumenetix\OneDrive - ERP Power LLC\Documents\JMCCUL\img\screenshot-of-google-code-jnaerator.png)
+![](img/for-jnaerator-info/jnaerator-on-google-code.png)
 
 ## How to run JNAerator
 

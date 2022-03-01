@@ -17,7 +17,9 @@ Open file "C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h" and look
 
 Open file explorer and navigate to "C:\Program Files (x86)\Measurement Computing\DAQ". Right click on cbw64.dll and click Properties. Go to the Details tab and check the 'Product version' field:
 
-![](img/product-version-of-cbw64-dot-dll.png)
+<p align="center">
+  <img src="img/for-checking-UL-version/product-version-of-cbw64-dot-dll.png"/>
+</p>
 
 Or, open PowerShell and paste this command:
 
@@ -29,7 +31,7 @@ Source for the PowerShell command: https://stackoverflow.com/a/13118517/7376577
 
 Screenshot:
 
-![](img/check-dll-version-using-powershell.png)
+![](img/for-checking-UL-version/get-dll-version-using-powershell.png)
 
 ## How to check what the newest version of UL is
 
@@ -39,7 +41,7 @@ Go to https://www.mccdaq.com/Software-Downloads. Under the "MCC DAQ Software" he
 
 Screenshot:
 
-![](img/check-neweset-version-online.png)
+![](img/for-checking-UL-version/newest-version-online.png)
 
 ## How to check what version of UL is in an mccdaq.exe installer
 
