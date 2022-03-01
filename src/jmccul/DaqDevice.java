@@ -3,6 +3,7 @@ package jmccul;
 import java.nio.ByteBuffer;
 import jmccul.analog.AnalogInputImpl;
 import jmccul.analog.AnalogOutputImpl;
+import jmccul.counter.CounterImpl;
 import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
@@ -66,6 +67,7 @@ public class DaqDevice implements AutoCloseable {
     public final AnalogOutputImpl analogOutput;
     public final AnalogInputImpl analogInput;
     public final TemperatureImpl temperature;
+    public final CounterImpl counter;
 
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
         BOARD_NUMBER = nextBoardNumber;
@@ -79,16 +81,17 @@ public class DaqDevice implements AutoCloseable {
         FACTORY_SERIAL_NUMBER = getFactorySerialNumber();
         PRODUCT_ID = daqDeviceDescriptor.ProductID;
 //        USER_DEVICE_IDENTIFIER = getUserDeviceIdentifier();
-        /*
-                if (debugPrintouts) {
-                System.out.printf("model=%s, SN=%s assigned to BOARD_NUMBER %d. nextBoardNumber is now %d.\n", desiredBoardName, FACTORY_SERIAL_NUMBER, BOARD_NUMBER, nextBoardNumber);
-                }
-         */
 
+        /*
+        if (debugPrintouts) {
+        System.out.printf("model=%s, SN=%s assigned to BOARD_NUMBER %d. nextBoardNumber is now %d.\n", desiredBoardName, FACTORY_SERIAL_NUMBER, BOARD_NUMBER, nextBoardNumber);
+        }
+         */
         digital = new DigitalImpl(this);
         analogOutput = new AnalogOutputImpl(this);
         analogInput = new AnalogInputImpl(this);
         temperature = new TemperatureImpl(this);
+        counter = new CounterImpl(this);
     }
 
     private String getBoardName() throws JMCCULException {
