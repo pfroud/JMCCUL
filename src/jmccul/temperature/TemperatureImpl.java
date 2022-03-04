@@ -5,6 +5,7 @@ import jmccul.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import jmccul.JMCCULUtils;
+import jmccul.TemperatureScale;
 import jmccul.ThermocoupleSensorType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 

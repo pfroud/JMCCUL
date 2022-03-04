@@ -176,7 +176,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum is ignores
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BICINUMDEVS
         );
     }
@@ -294,120 +294,122 @@ public class BoardConfig {
          */
     }
 
-    public int getOpenThermocoupleDetectEnable() throws JMCCULException {
+    public boolean getOpenThermocoupleDetectEnable() throws JMCCULException {
         ///////////////////// resume here //////////////////////
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //DevNum is either ignored or specifies a base or expansion board; refer to device-specific information.
                 MeasurementComputingUniversalLibrary.BIDETECTOPENTC
-        );
+        ) == 1;
     }
 
     public int getDigitalDeviceCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDINUMDEVS
         );
     }
 
-    public int getAdcFilter() throws JMCCULException {
+    public boolean getACFilter(int bitNumber) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                bitNumber,
                 MeasurementComputingUniversalLibrary.BIDISOFILTER
-        );
+        ) == 1;
     }
 
     public int getDigitalInputTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDITRIGCOUNT
         );
     }
 
     public int getDmaChannel() throws JMCCULException {
+        // direct memory access
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDMACHAN
         );
     }
 
-    public int getDigital_Out_Trigger_Count() throws JMCCULException {
+    public int getDigitalOutTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDOTRIGCOUNT
         );
     }
 
     public int getDtBoardNumber() throws JMCCULException {
+        // Data Translation, acquired by Measurement Computing in 2015
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0,//devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDTBOARD
         );
     }
 
-    public int getExternalClockType() throws JMCCULException {
-        return Configuration.getInt(
+    public ExternalClockType getExternalClockType() throws JMCCULException {
+        return ExternalClockType.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devnum is ignored`
                 MeasurementComputingUniversalLibrary.BIEXTCLKTYPE
-        );
+        ));
     }
 
-    public int getInputScanClockEdge() throws JMCCULException {
-        return Configuration.getInt(
+    public ExternalPacerClockEdge getInputPacerClockEdge() throws JMCCULException {
+        return ExternalPacerClockEdge.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0,
                 MeasurementComputingUniversalLibrary.BIEXTINPACEREDGE
-        );
+        ));
     }
 
-    public int getOutputScanClockEdge() throws JMCCULException {
-        return Configuration.getInt(
+    public ExternalPacerClockEdge getOutputPacerClockEdge() throws JMCCULException {
+        return ExternalPacerClockEdge.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0,
                 MeasurementComputingUniversalLibrary.BIEXTOUTPACEREDGE
-        );
+        ));
     }
 
-    public int getInputPacerClockState() throws JMCCULException {
+    public boolean getInputPacerClockState() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIINPUTPACEROUT
-        );
+        ) == 1;
     }
 
-    public int getInterruptEdge() throws JMCCULException {
-        return Configuration.getInt(
+    public InterruptClockEdge getInterruptEdge() throws JMCCULException {
+        return InterruptClockEdge.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIINTEDGE
-        );
+        ));
     }
 
     public int getInterruptLevel() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIINTLEVEL
         );
     }
@@ -416,7 +418,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINETCONNECTCODE
         );
     }
@@ -425,7 +427,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINETIOTIMEOUT
         );
     }
@@ -434,7 +436,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINUMADCHANS
         );
     }
@@ -443,7 +445,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINUMDACHANS
         );
     }
@@ -452,7 +454,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINUMIOPORTS
         );
     }
@@ -461,16 +463,17 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINUMTEMPCHANS
         );
     }
 
     public int getPanId() throws JMCCULException {
+        // Personal Area Network
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIPANID
         );
     }
@@ -479,7 +482,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIPATTERNTRIGPORT
         );
     }
@@ -488,7 +491,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIRANGE
         );
     }
@@ -497,7 +500,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIRFCHANNEL
         );
     }
@@ -506,7 +509,7 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIRSS
         );
     }
@@ -515,16 +518,17 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BISERIALNUM
         );
     }
 
     public int getSyncMode() throws JMCCULException {
+        //TODO find lines in cbw.h for enum
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BISYNCMODE
         );
     }
@@ -533,61 +537,62 @@ public class BoardConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BITEMPAVG
         );
     }
 
-    public int getTemperatureScale() throws JMCCULException {
-        return Configuration.getInt(
+    public TemperatureScale getTemperatureScale() throws JMCCULException {
+        return TemperatureScale.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BITEMPSCALE
-        );
+        ));
     }
 
     public int getTemperatureRejectionFrequency() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //DevNum is either ignored or specifies a base or expansion board.
                 MeasurementComputingUniversalLibrary.BITEMPREJFREQ
         );
     }
 
-    public int getTerminalCountOutputStatus() throws JMCCULException {
+    public boolean getTerminalCountOutputStatus(int bitNumber) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                bitNumber,
                 MeasurementComputingUniversalLibrary.BITERMCOUNTSTATBIT
-        );
+        ) == 1;
     }
 
-    public int getWaitStateJumper() throws JMCCULException {
+    public boolean getWaitStateJumper() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIWAITSTATE
-        );
+        ) == 1;
     }
 
-    public int getExpansionBoardSupported() throws JMCCULException {
+    public boolean getExpansionBoardSupported() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIUSESEXPS
-        );
+        ) == 1;
     }
 
     public int getUserSpecifiedString() throws JMCCULException {
+        //todo this should probably use the getString instead of getInt
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIUSERDEVIDNUM
         );
     }
