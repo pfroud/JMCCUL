@@ -1,6 +1,6 @@
 package jmccul.counter;
 
-import jmccul.Configuration;
+import jmccul.config.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import jmccul.jna.MeasurementComputingUniversalLibrary;

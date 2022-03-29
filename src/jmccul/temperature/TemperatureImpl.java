@@ -1,12 +1,12 @@
 package jmccul.temperature;
 
 import java.nio.FloatBuffer;
-import jmccul.Configuration;
+import jmccul.config.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import jmccul.JMCCULUtils;
-import jmccul.TemperatureScale;
-import jmccul.ThermocoupleSensorType;
+import jmccul.enums.TemperatureScale;
+import jmccul.enums.ThermocoupleSensorType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**

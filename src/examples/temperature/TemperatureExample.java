@@ -5,8 +5,8 @@ import java.util.function.Predicate;
 import jmccul.DaqDevice;
 import jmccul.DeviceDiscovery;
 import jmccul.JMCCULException;
+import jmccul.enums.TemperatureScale;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
-import jmccul.temperature.TemperatureScale;
 
 /**
  *

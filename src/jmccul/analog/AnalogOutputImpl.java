@@ -1,11 +1,12 @@
 package jmccul.analog;
 
+import jmccul.enums.AnalogRange;
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import jmccul.Configuration;
+import jmccul.config.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import jmccul.JMCCULUtils;

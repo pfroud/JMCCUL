@@ -1,7 +1,9 @@
-package jmccul;
+package jmccul.config;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import jmccul.JMCCULException;
+import jmccul.JMCCULUtils;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**

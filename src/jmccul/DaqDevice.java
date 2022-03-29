@@ -1,5 +1,6 @@
 package jmccul;
 
+import jmccul.config.Configuration;
 import java.nio.ByteBuffer;
 import jmccul.analog.AnalogInputImpl;
 import jmccul.analog.AnalogOutputImpl;

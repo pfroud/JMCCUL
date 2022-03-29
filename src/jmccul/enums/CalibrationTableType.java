@@ -1,4 +1,4 @@
-package jmccul;
+package jmccul.enums;
 
 import java.util.HashMap;
 import java.util.Map;

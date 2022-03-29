@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import jmccul.DaqDevice;
 import jmccul.DeviceDiscovery;
 import jmccul.JMCCULException;
-import jmccul.analog.AnalogRange;
+import jmccul.enums.AnalogRange;
 
 /**
  *

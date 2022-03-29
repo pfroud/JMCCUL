@@ -4,7 +4,7 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import jmccul.Configuration;
+import jmccul.config.Configuration;
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
 import jmccul.JMCCULUtils;
