@@ -8,7 +8,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  *
  * @author Peter Froud
  */
-public enum A2DTimingMode {
+public enum AdcTimingMode {
 
     /*
     BoardInfo
@@ -19,23 +19,23 @@ public enum A2DTimingMode {
     FIFTY_HERTZ_REJECTION(9),
     HIGH_RESOLUTION(15);
 
-    private static final Map<Integer, A2DTimingMode> valueMap;
+    private static final Map<Integer, AdcTimingMode> valueMap;
 
     static {
-        final A2DTimingMode[] allEnumValues = A2DTimingMode.values();
+        final AdcTimingMode[] allEnumValues = AdcTimingMode.values();
         valueMap = new HashMap<>(allEnumValues.length, 1);
-        for (A2DTimingMode type : allEnumValues) {
+        for (AdcTimingMode type : allEnumValues) {
             valueMap.put(type.VALUE, type);
         }
     }
 
-    public static A2DTimingMode parseInt(int value) {
+    public static AdcTimingMode parseInt(int value) {
         return valueMap.get(value);
     }
 
     public final int VALUE;
 
-    private A2DTimingMode(int value) {
+    private AdcTimingMode(int value) {
         VALUE = value;
     }
 

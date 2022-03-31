@@ -16,6 +16,11 @@ public class DigitalOutputConfig {
         BOARD_NUMBER = device.BOARD_NUMBER;
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDOTRIGCOUNT -> BI DO TRIG COUNT -> boardInfo digitalOutput trigger count
+     Readable? yes
+     Writabale? yes
+     */
     public int getDigitalOutTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,

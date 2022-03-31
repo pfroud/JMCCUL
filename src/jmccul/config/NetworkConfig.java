@@ -16,31 +16,17 @@ public class NetworkConfig {
         BOARD_NUMBER = device.BOARD_NUMBER;
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BINETCONNECTCODE -> BI NET CONNECT CODE -> boardInfo network connection code
+     Readable? yes
+     Writabale? yes
+     */
     public int getNetworkConnectionCode() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINETCONNECTCODE
-        );
-    }
-
-    public int getNetworkIoTimeoutMillisec() throws JMCCULException {
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BINETIOTIMEOUT
-        );
-    }
-
-    public void setDeviceLogin() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIHIDELOGINDLG,
-                0 //new value
         );
     }
 
@@ -54,12 +40,43 @@ public class NetworkConfig {
         );
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BINETIOTIMEOUT -> BI NET IO TIMEOUT -> boardInfo network I/O timeout
+     Readable? yes
+     Writabale? yes
+     */
+    public int getNetworkIoTimeoutMillisec() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BINETIOTIMEOUT
+        );
+    }
+
     public void setNetIoTimeout() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BINETIOTIMEOUT,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
+     Readable? yes
+     Writabale? yes
+
+    this is not actually a netowrk specific one
+     */
+    public void setDeviceLogin() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIHIDELOGINDLG,
                 0 //new value
         );
     }

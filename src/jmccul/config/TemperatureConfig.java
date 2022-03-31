@@ -2,6 +2,7 @@ package jmccul.config;
 
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
+import jmccul.enums.RtdSensorType;
 import jmccul.enums.TemperatureScale;
 import jmccul.enums.ThermocoupleSensorType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
@@ -18,6 +19,11 @@ public class TemperatureConfig {
         BOARD_NUMBER = device.BOARD_NUMBER;
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BITEMPAVG -> BI TEMP AVG -> boardInfo temperature average
+     Readable? yes
+     Writabale? yes
+     */
     public int getTemperatureScansToAverage() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -27,6 +33,21 @@ public class TemperatureConfig {
         );
     }
 
+    public void setTemperatureAverageCount() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BITEMPAVG,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BITEMPSCALE -> BI TEMP SCALE -> boardInfo temperature scale
+     Readable? yes
+     Writabale? yes
+     */
     public TemperatureScale getTemperatureScale() throws JMCCULException {
         return TemperatureScale.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -36,6 +57,21 @@ public class TemperatureConfig {
         ));
     }
 
+    public void setTemperatureScale() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BITEMPSCALE,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BITEMPREJFREQ -> BI TEMP REJ FREQ -> boardInfo temperature rejection frequency
+     Readable? yes
+     Writabale? yes
+     */
     public int getTemperatureRejectionFrequency() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -45,6 +81,21 @@ public class TemperatureConfig {
         );
     }
 
+    public void setRejectionFrequency() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BITEMPREJFREQ,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDETECTOPENTC  -> BI DETECT OPEN TC -> boardInfo detect open thermocouople
+     Readable? yes
+     Writabale? yes
+     */
     public boolean getOpenThermocoupleDetectEnable() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -54,6 +105,21 @@ public class TemperatureConfig {
         ) == 1;
     }
 
+    public void setOpenThermocoupleDetection() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIDETECTOPENTC,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BINUMTEMPCHANS -> BI NUM TEMP CHANS -> boardInfo number of temperature channels
+     Readable? yes
+     Writabale? NO
+     */
     public int getTemperatureChannelCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -63,6 +129,11 @@ public class TemperatureConfig {
         );
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BICHANTCTYPE -> BI CHAN TC TYPE  -> boardInfo channel thermocouple type
+     Readable? yes
+     Writabale? yes
+     */
     public ThermocoupleSensorType getThermocoupleSensorType(int channel) throws JMCCULException {
         return ThermocoupleSensorType.parseInt(
                 Configuration.getInt(
@@ -84,33 +155,29 @@ public class TemperatureConfig {
         );
     }
 
-    public void setOpenThermocoupleDetection() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIDETECTOPENTC,
-                0 //new value
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BICHANRTDTYPE -> BI CHAN RTD TYPE  -> boardInfo channel resistanceTemperatureDetector type
+     Readable? yes
+     Writabale? yes
+     */
+    public RtdSensorType getRtdSensorType(int channel) throws JMCCULException {
+        return RtdSensorType.parseInt(
+                Configuration.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        channel,
+                        MeasurementComputingUniversalLibrary.BICHANRTDTYPE
+                )
         );
     }
 
-    public void setTemperatureAverageCount() throws JMCCULException {
+    public void setRtdSensorType(RtdSensorType rtdSensor) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
-                MeasurementComputingUniversalLibrary.BITEMPAVG,
-                0 //new value
-        );
-    }
-
-    public void setTemperatureScale() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BITEMPSCALE,
-                0 //new value
+                MeasurementComputingUniversalLibrary.BICHANRTDTYPE,
+                rtdSensor.VALUE
         );
     }
 

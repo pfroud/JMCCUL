@@ -7,6 +7,7 @@ import jmccul.enums.DacUpdateMode;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
+ * Analog output = digital to analog = "DAC"
  *
  * @author Peter Froud
  */
@@ -14,13 +15,15 @@ public class AnalogOutputConfig {
 
     private final int BOARD_NUMBER;
 
-    /*
-    Analog output = digital to analog = "DAC"
-     */
     public AnalogOutputConfig(DaqDevice device) {
         BOARD_NUMBER = device.BOARD_NUMBER;
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACFORCESENSE -> BI DAC FORCE SENSE -> boardInfo
+     Readable? yes
+     Writabale? yes
+     */
     public boolean isDacForceSense(int channel) throws JMCCULException {
         /*
         The remote sensing feature compensates for the voltage
@@ -40,6 +43,21 @@ public class AnalogOutputConfig {
         ) == 1;
     }
 
+    public void setDacForceSense() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIDACFORCESENSE,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACRANGE  -> BI DAC RANGE -> boardInfo DAC range
+     Readable? yes
+     Writabale? yes
+     */
     public AnalogRange getDacRange(int channel) throws JMCCULException {
         return AnalogRange.parseInt(
                 Configuration.getInt(
@@ -51,7 +69,22 @@ public class AnalogOutputConfig {
         );
     }
 
-    public int getD2AResolution() throws JMCCULException {
+    public void setDacRange() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIDACRANGE,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACRES -> BI DAC RES -> boardInfo DAC resolution
+     Readable? yes
+     Writabale? no
+     */
+    public int getDacResolution() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -60,6 +93,11 @@ public class AnalogOutputConfig {
         );
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACSTARTUP -> BI DAC STARTUP -> boardInfo DAC startup
+     Readable?
+     Writabale?
+     */
     public int getDacStartup(int channel) throws JMCCULException {
         /*
         Use the BIDACSTARTUP option to determine whether a board's
@@ -82,6 +120,21 @@ public class AnalogOutputConfig {
         );
     }
 
+    public void setDacStartup() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIDACSTARTUP,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACTRIGCOUNT -> BI DAC TRIG COUNT -> boardInfo DAC trigger count
+     Readable? yes
+     Writabale? yes
+     */
     public int getDacTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -91,6 +144,21 @@ public class AnalogOutputConfig {
         );
     }
 
+    public void setDacTrigerCount() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIDACTRIGCOUNT,
+                0 //new value
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACUPDATEMODE -> BI DAC UPDATE MODE  -> boardInfo DAC update mode
+     Readable? yes
+     Writabale? yes
+     */
     public DacUpdateMode getDacUpdateMode() throws JMCCULException {
         return DacUpdateMode.parseInt(
                 Configuration.getInt(
@@ -116,45 +184,6 @@ public class AnalogOutputConfig {
          */
     }
 
-    public int getD2AChannelCount() throws JMCCULException {
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BINUMDACHANS
-        );
-    }
-
-    public void setDacForceSense() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIDACFORCESENSE,
-                0 //new value
-        );
-    }
-
-    public void setDacStartup() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIDACSTARTUP,
-                0 //new value
-        );
-    }
-
-    public void setUpdateAnalogOutput() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIDACUPDATECMD,
-                0 //new value
-        );
-    }
-
     public void setDacUpdateMode() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -165,22 +194,27 @@ public class AnalogOutputConfig {
         );
     }
 
-    public void setRange() throws JMCCULException {
-        Configuration.setInt(
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BINUMDACHANS -> BI NUM DA CHANS -> boardInfo number of DA channels
+     Readable? yes
+     Writabale? no
+     */
+    public int getDacChannelCount() throws JMCCULException {
+        return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIDACRANGE,
-                0 //new value
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BINUMDACHANS
         );
     }
 
-    public void setTrigerCount() throws JMCCULException {
+    ///////////////////////////////////////////////////////////////////////////////
+    public void updateAnalogOutput() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
-                MeasurementComputingUniversalLibrary.BIDACTRIGCOUNT,
+                MeasurementComputingUniversalLibrary.BIDACUPDATECMD,
                 0 //new value
         );
     }

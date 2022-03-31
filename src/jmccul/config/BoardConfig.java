@@ -6,7 +6,6 @@ import jmccul.enums.CalibrationTableType;
 import jmccul.enums.InterruptClockEdge;
 import jmccul.enums.ExternalPacerClockEdge;
 import jmccul.enums.ExternalClockType;
-import jmccul.enums.RtdSensorType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -47,17 +46,6 @@ public class BoardConfig {
                         BOARD_NUMBER,
                         0, //DevNum is either ignored or specifies a base or expansion board.
                         MeasurementComputingUniversalLibrary.BICALTABLETYPE
-                )
-        );
-    }
-
-    public RtdSensorType getRtdSensorType(int channel) throws JMCCULException {
-        return RtdSensorType.parseInt(
-                Configuration.getInt(
-                        MeasurementComputingUniversalLibrary.BOARDINFO,
-                        BOARD_NUMBER,
-                        channel,
-                        MeasurementComputingUniversalLibrary.BICHANRTDTYPE
                 )
         );
     }
@@ -270,16 +258,6 @@ public class BoardConfig {
         );
     }
 
-    public void setRtdSensorType(RtdSensorType rtdSensor) throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BICHANRTDTYPE,
-                rtdSensor.VALUE
-        );
-    }
-
     public void setClockFrequencyMegahertz() throws JMCCULException {
         // todo only supports 1, 4,6 or 10
         Configuration.setInt(
@@ -437,16 +415,6 @@ public class BoardConfig {
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BISYNCMODE,
-                0 //new value
-        );
-    }
-
-    public void setRejectionFrequency() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BITEMPREJFREQ,
                 0 //new value
         );
     }

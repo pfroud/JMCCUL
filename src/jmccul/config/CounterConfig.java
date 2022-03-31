@@ -16,6 +16,11 @@ public class CounterConfig {
         BOARD_NUMBER = device.BOARD_NUMBER;
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BICINUMDEVS -> BI CI NUM DEVS -> boardInfo counterInfo number of devices
+     Readable? yes
+     Writabale? NO
+     */
     public int getCounterDeviceCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -25,6 +30,11 @@ public class CounterConfig {
         );
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BICTRTRIGCOUNT -> BI CTR TRIG COUNT -> boardInfo counter trigger count
+     Readable? yes
+     Writabale? NO
+     */
     public int getCoutnerTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -44,4 +54,31 @@ public class CounterConfig {
         );
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     CICTRNUM -> CI CTR NUM -> counterInfo counter number
+     Readable? yes
+     Writabale? NO
+     */
+    public int getCounterNumber() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.COUNTERINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.CICTRNUM
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     CICTRTYPE -> CI CTR TYPE -> counterInfo counter type
+     Readable? yes
+     Writabale? NO
+     */
+    public int getCountertYPE() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.COUNTERINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.CICTRTYPE
+        );
+    }
 }

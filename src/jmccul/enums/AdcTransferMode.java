@@ -8,7 +8,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  *
  * @author Peter Froud
  */
-public enum A2DTransferMode {
+public enum AdcTransferMode {
 
     /*
     BoardInfo
@@ -17,23 +17,23 @@ public enum A2DTransferMode {
     KERNEL(MeasurementComputingUniversalLibrary.XFER_KERNEL),
     USER(MeasurementComputingUniversalLibrary.XFER_USER);
 
-    private static final Map<Integer, A2DTransferMode> valueMap;
+    private static final Map<Integer, AdcTransferMode> valueMap;
 
     static {
-        final A2DTransferMode[] allEnumValues = A2DTransferMode.values();
+        final AdcTransferMode[] allEnumValues = AdcTransferMode.values();
         valueMap = new HashMap<>(allEnumValues.length, 1);
-        for (A2DTransferMode type : allEnumValues) {
+        for (AdcTransferMode type : allEnumValues) {
             valueMap.put(type.VALUE, type);
         }
     }
 
-    public static A2DTransferMode parseInt(int value) {
+    public static AdcTransferMode parseInt(int value) {
         return valueMap.get(value);
     }
 
     public final int VALUE;
 
-    private A2DTransferMode(int value) {
+    private AdcTransferMode(int value) {
         VALUE = value;
     }
 
