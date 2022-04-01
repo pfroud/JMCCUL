@@ -16,12 +16,27 @@ public class WirelessConfig {
         BOARD_NUMBER = device.BOARD_NUMBER;
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIRFCHANNEL -> BI RF channel
+     Readable? yes
+     Writabale? yes
+     */
     public int getRfChannel() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIRFCHANNEL
+        );
+    }
+
+    public void setRfChannel() throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum
+                MeasurementComputingUniversalLibrary.BIRFCHANNEL,
+                0 //new value
         );
     }
 

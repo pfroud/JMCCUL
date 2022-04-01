@@ -65,19 +65,16 @@ public class NetworkConfig {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
-     BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
+     BIDEVMACADDR -> BI DEV MAC ADDR -> boardInfo device MAC address
      Readable? yes
      Writabale? yes
-
-    this is not actually a netowrk specific one
      */
-    public void setDeviceLogin() throws JMCCULException {
-        Configuration.setInt(
+    public int getMacAddress() throws JMCCULException {
+        return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIHIDELOGINDLG,
-                0 //new value
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIDEVMACADDR
         );
     }
 

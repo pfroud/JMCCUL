@@ -57,6 +57,8 @@ public class AnalogOutputConfig {
      BIDACRANGE  -> BI DAC RANGE -> boardInfo DAC range
      Readable? yes
      Writabale? yes
+
+    TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
      */
     public AnalogRange getDacRange(int channel) throws JMCCULException {
         return AnalogRange.parseInt(

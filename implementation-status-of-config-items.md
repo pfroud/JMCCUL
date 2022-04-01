@@ -57,14 +57,14 @@ What the columns mean in the tables below:
 | `BIADTRIGCOUNT`      | `BI AD TRIG COUNT      ` | integer           | Number of analog input samples to acquire per trigger.      | yes AnalogInputConfig | yes AnalogInputConfig    |
 | `BIADTRIGSRC`        | `BI AD TRIG SRC        ` | integer           | A/D trigger source.                                          | yes AnalogInputConfig | yes AnalogInputConfig    |
 | `BIADXFERMODE`       | `BI AD XFER MODE       ` | integer           | Data transfer mode.                                          | yes AnalogInputConfig | yes AnalogInputConfig    |
-| `BIBASEADR`          | `BI BASE ADR           ` | integer           | Base address of the device.                                  | yes  | yes                      |
-| `BIBOARDTYPE`        | `BI BOARD TYPE         ` | integer           | Unique number from 0 to 0x8000 which describes the type of board installed. | yes  | no                       |
-| `BICALOUTPUT`        | `BI CAL OUTPUT`          | integer           | Cal pin voltage on supported USB devices. | no | yes |
-| `BICALTABLETYPE`     | `BI CAL TABLE TYPE     ` | integer           | The coefficients table used for calibration.                | yes  | yes                      |
+| `BIBASEADR`          | `BI BASE ADR           ` | integer           | Base address of the device.                                  | yes BoardConfig | yes BoardConfig          |
+| `BIBOARDTYPE`        | `BI BOARD TYPE         ` | integer           | Unique number from 0 to 0x8000 which describes the type of board installed. | yes BoardConfig | NO                     |
+| `BICALOUTPUT`        | `BI CAL OUTPUT`          | integer           | Cal pin voltage on supported USB devices. | NO | yes BoardConfig |
+| `BICALTABLETYPE`     | `BI CAL TABLE TYPE     ` | integer           | The coefficients table used for calibration.                | yes BoardConfig | yes BoardConfig          |
 | `BICHANRTDTYPE`      | `BI CHAN RTD TYPE      ` | integer           | RTD (resistance temperature detector) sensor type.    | yes TemperatureConfig | yes TemperatureConfig    |
 | `BICHANTCTYPE`       | `BI CHAN TC TYPE       ` | integer           | Thermocouple sensor type.                                   | yes TemperatureConfig | yes TemperatureConfig    |
 | `BICINUMDEVS`        | `BI CI NUM DEVS        ` | integer           | Number of counter devices.                                  | yes CounterConfig | NO                   |
-| `BICLOCK`            | `BI CLOCK              ` | integer           | Clock frequency in megahertz.                               | yes  | yes                      |
+| `BICLOCK`            | `BI CLOCK              ` | integer           | Clock frequency in megahertz.                               | yes BoardConfig | yes BoardConfig          |
 | `BICTRTRIGCOUNT`     | `BI CTR TRIG COUNT     ` | integer           | Number of counter samples to acquire per trigger.           | yes CounterConfig | yes CounterConfig        |
 | `BIDACFORCESENSE`    | `BI DAC FORCE SENSE    ` | integer           | Remote sensing state of an analog output channel.           | yes AnalogOutputConfig | yes AnalogOutputConfig   |
 | `BIDACRANGE`         | `BI DAC RANGE          ` | integer           | Analog output voltage range.                                | yes AnalogOutputConfig | yes AnalogOutputConfig   |
@@ -74,47 +74,47 @@ What the columns mean in the tables below:
 | `BIDACUPDATECMD`     | `BI DAC UPDATE CMD`      | integer (void)    | Updates all analog output channels. | NO | yes AnalogOutputConfig |
 | `BIDACUPDATEMODE`    | `BI DAC UPDATE MODE    ` | integer           | Update mode for a digital-to-analog converter.        | yes AnalogOutputConfig | yes AnalogOutputConfig   |
 | `BIDETECTOPENTC`     | `BI DETECT OPEN TC     ` | integer (Boolean) | Open thermocouple detection setting.                        | yes TemperatureConfig | yes TemperatureConfig    |
-| `BIDEVMACADDR`       | `BI DEV MAC ADDR`        | string            | MAC address of an Ethernet device. | yes | no |
+| `BIDEVMACADDR`       | `BI DEV MAC ADDR`        | string            | MAC address of an Ethernet device. | yes NetworkConfig | NO |
 | `BIDEVSERIALNUM`     | `BI DEV SERIAL NUM`      | string            | Factory serial number of a USB or Bluetooth device. | yes | no |
 | `BIDEVUNIQUEID`      | `BI DEV UNIQUE ID`       | string            | Unique identifier of a discoverable device, such as the serial number of a USB device or MAC address of an Ethernet device. | yes | no |
-| `BIDEVVERSION`       | `BI DEV VERSION`         | string            | Firmware version and FPGA version installed on a device. | yes | no |
+| `BIDEVVERSION`       | `BI DEV VERSION`         | string            | Firmware version and FPGA version installed on a device. | yes BoardConfig | NO |
 | `BIDIDEBOUNCESTATE`  | `BI DI DEBOUNCE STATE`   | integer           | State of the digital inputs when debounce timing is set. | NO | yes  DigitalInputConfig |
 | `BIDIDEBOUNCETIME`   | `BI DI DEBOUNCE TIME`    | integer           | Debounce time of digital inputs. | NO | yes DigitalInputConfig |
 | `BIDINUMDEVS`        | `BI DI NUM DEVS        ` | integer           | Number of digital devices.                                  | yes DigitalInputConfig | NO                     |
 | `BIDISOFILTER`       | `BI DI ISO FILTER (??) ` | integer (Boolean) | AC filter setting.                                          | yes DigitalInputConfig | yes DigitalInputConfig   |
 | `BIDITRIGCOUNT`      | `BI DI TRIG COUNT      ` | integer           | Number of digital input samples to acquire per trigger.     | yes DigitalInputConfig | yes DigitalInputConfig |
-| `BIDMACHAN`          | `BI DMA CHAN           ` | integer           | DMA (direct memory access?) channel.                        | yes  | yes |
+| `BIDMACHAN`          | `BI DMA CHAN           ` | integer           | DMA (direct memory access?) channel.                        | yes BoardConfig | yes BoardConfig |
 | `BIDOTRIGCOUNT`      | `BI DO TRIG COUNT      ` | integer           | Number of digital output samples to generate per trigger.   | yes DigitalOutputConfig | yes DigitalOutputConfig |
-| `BIDTBOARD`          | `BI DT BOARD           ` | integer           | Board number of the connected Data Translation board.       | yes  | no |
-| `BIEXTCLKTYPE`       | `BI EXT CLK TYPE       ` | integer (enum)    | External clock type.                                        | yes  | yes |
-| `BIEXTINPACEREDGE`   | `BI EXT IN PACER EDGE  ` | integer           | Input scan clock edge.                                      | yes  | yes |
-| `BIEXTOUTPACEREDGE`  | `BI EXT OUT PACER EDGE ` | integer           | Output scan clock edge.                                     | yes  | yes |
-| `BIHIDELOGINDLG`     | `BI HIDE LOGIN DLG`      | integer           | Enables or disables the Device Login dialog. | no | yes |
-| `BIINPUTPACEROUT`    | `BI INPUT PACER OUT    ` | integer           | Input pacer clock state.                                    | yes  | yes |
-| `BIINTEDGE`          | `BI INT EDGE           ` | integer           | Interrupt edge.                    | yes  | yes |
-| `BIINTLEVEL`         | `BI INT LEVEL          ` | integer           | Interrupt level.                    | yes  | yes |
+| `BIDTBOARD`          | `BI DT BOARD           ` | integer           | Board number of the connected Data Translation board.       | yes BoardConfig | NO |
+| `BIEXTCLKTYPE`       | `BI EXT CLK TYPE       ` | integer (enum)    | External clock type.                                        | yes BoardInfo | yes BoardInfo |
+| `BIEXTINPACEREDGE`   | `BI EXT IN PACER EDGE  ` | integer           | Input scan clock edge.                                      | yes BoardInfo | yes BoardInfo |
+| `BIEXTOUTPACEREDGE`  | `BI EXT OUT PACER EDGE ` | integer           | Output scan clock edge.                                     | yes BoardInfo | yes BoardInfo |
+| `BIHIDELOGINDLG`     | `BI HIDE LOGIN DLG`      | integer           | Enables or disables the Device Login dialog. | NO | yes BoardInfo |
+| `BIINPUTPACEROUT`    | `BI INPUT PACER OUT    ` | integer           | Input pacer clock state.                                    | yes BoardInfo | yes BoardInfo |
+| `BIINTEDGE`          | `BI INT EDGE           ` | integer           | Interrupt edge.                    | yes BoardInfo | yes BoardInfo |
+| `BIINTLEVEL`         | `BI INT LEVEL          ` | integer           | Interrupt level.                    | yes BoardInfo | yes BoardInfo |
 | `BINETCONNECTCODE` | `BI NET CONNECT CODE   ` | integer           | Code used to connect with a device over a network connection. | yes NetworkConfig | yes NetworkConfig |
 | `BINETIOTIMEOUT`     | `BI NET IO TIMEOUT     ` | integer           | Amount of time to wait for a web device to acknowledge a command or query sent over a network connection. | yes NetworkConfig | yes NetworkConfig        |
 | `BINUMADCHANS`       | `BI NUM AD CHANS       ` | integer           | Number of A/D channels.                                     | yes AnalogInputConfig | yes?? TODO             |
-| `BINUMDACHANS`       | `BI NUM DA CHANS       ` | integer           | Number of D/A channels.                                     | yes AnalogOutputConfig | no                       |
-| `BINUMIOPORTS`       | `BI NUM IO PORTS       ` | integer           | Number of I/O ports used by the device.                     | yes  | no                       |
+| `BINUMDACHANS`       | `BI NUM DA CHANS       ` | integer           | Number of D/A channels.                                     | yes AnalogOutputConfig | NO                     |
+| `BINUMIOPORTS`       | `BI NUM IO PORTS       ` | integer           | Number of I/O ports used by the device.                     | yes BoardConfig | NO                     |
 | `BINUMTEMPCHANS`     | `BI NUM TEMP CHANS     ` | integer           | Number of temperature channels.                             | yes TemperatureConfig | NO                     |
-| `BIOUTPUTPACEROUT`   | `BI OUTPUT PACER OUT`    | integer           | Enables or disables the output pacer clock signal. | no??? | yes |
-| `BIPANID`            | `BI PAN ID             ` | integer           | Personal Area Network (PAN) identifier for a USB device that supports wireless communication. | yes  | yes                      |
-| `BIPATTERNTRIGPORT`  | `BI PATTERN TRIG PORT  ` | integer           | Pattern trigger port.                                       | yes  | yes                      |
-| `BIRANGE`            | `BI RANGE              ` | integer           | Selected voltage range.                                     | yes  | yes                      |
-| `BIRFCHANNEL`        | `BI RF CHANNEL         ` | integer           | RF channel number used to transmit/receive data by a USB device that supports wireless communication. | yes  | yes                      |
+| `BIOUTPUTPACEROUT`   | `BI OUTPUT PACER OUT`    | integer           | Enables or disables the output pacer clock signal. | no??? | yes BoardConfig |
+| `BIPANID`            | `BI PAN ID             ` | integer           | Personal Area Network (PAN) identifier for a USB device that supports wireless communication. | yes BoardConfig | yes BoardConfig          |
+| `BIPATTERNTRIGPORT`  | `BI PATTERN TRIG PORT  ` | integer           | Pattern trigger port.                                       | yes BoardConfig | yes BoardConfig          |
+| `BIRANGE`            | `BI RANGE              ` | integer           | Selected voltage range.                                     | yes - what about BIDACRANGE | yes - what about BIDACRANGE |
+| `BIRFCHANNEL`        | `BI RF CHANNEL         ` | integer           | RF channel number used to transmit/receive data by a USB device that supports wireless communication. | yes WirelessConfig | yes WirelessConfig     |
 | `BIRSS`              | `BI RSS                ` | integer           | Received signal strength in dBm of a remote device.         | yes  | yes???                   |
 | `BISERIALNUM`        | `BI SERIAL NUM         ` | integer           | Custom serial number assigned by a user to a USB device.    | yes  | yes |
-| `BISYNCMODE`         | `BI SYNC MODE          ` | integer           | Simultaneous mode setting.                                  | yes  | yes                      |
+| `BISYNCMODE`         | `BI SYNC MODE          ` | integer           | Simultaneous mode setting.                                  | yes BoardConfig | yes BoardConfig          |
 | `BITEMPAVG`          | `BI TEMP AVG           ` | integer           | Number of temperature samples per average.                  | yes TemperatureConfig | yes TemperatureConfig    |
 | `BITEMPREJFREQ`      | `BI TEMP REJ FREQ      ` | integer           | Temperature rejection frequency.                            | yes TemperatureConfig | yes TemperatureConfig    |
 | `BITEMPSCALE`        | `BI TEMP SCALE         ` | integer           | Temperature scale.                                          | yes TemperatureConfig | yes TemperatureConfig    |
-| `BITERMCOUNTSTATBIT` | `BI TERM COUNT STAT BIT` | integer           | Terminal count output status for a specified bit.           | yes  | yes                      |
+| `BITERMCOUNTSTATBIT` | `BI TERM COUNT STAT BIT` | integer           | Terminal count output status for a specified bit.           | yes BoardConfig | yes BoardConfig          |
 | `BIUSERDEVIDNUM`     | `BI USER DEV ID NUM    ` | integer???        | User-configured string that identifies a USB device.        | yes  | no?? |
 | `BIUSERDEVID`        | `BI USER DEV ID`         | string            | User-configured string identifier from an Ethernet, Bluetooth, or USB device. | yes | yes |
-| `BIUSESEXPS`         | `BI USES EXOS         P` | integer (Boolean) | Expansion board support.                                    | yes  | no |
-| `BIWAITSTATE`        | `BI WAIT STATE         ` | integer           | Wait State jumper setting.                                  | yes  | yes                      |
+| `BIUSESEXPS`         | `BI USES EXOS         P` | integer (Boolean) | Expansion board support.                                    | yes ExpansionConfig | NO |
+| `BIWAITSTATE`        | `BI WAIT STATE         ` | integer           | Wait State jumper setting.                                  | yes BoardConfig | yes BoardConfig          |
 
 ## Digital info
 
