@@ -1,28 +1,39 @@
 package jmccul.config;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import jmccul.DaqDevice;
 
 /**
  *
  * @author Peter Froud
  */
-public class ConfigTestGui extends javax.swing.JFrame {
+public final class ConfigTestGui extends javax.swing.JFrame {
+
+    private DaqDevice seletedDevice;
 
     /**
      * Creates new form ConfigTestGui
      */
     public ConfigTestGui() {
         initComponents();
-        setSize(400, 800);
+        setSize(500, 850);
+
+        // TODO look for daq devices and show them in a dropdown or something
         for (Class theClass : new Class[]{BoardConfig.class}) {
             createTabForClass(theClass);
         }
@@ -108,21 +119,90 @@ public class ConfigTestGui extends javax.swing.JFrame {
 
             gbc.gridx = 1;
             if (gas.getter == null) {
-                contentPanel.add(new JLabel("no"), gbc);
+                contentPanel.add(new JLabel("Write-only(??)"), gbc);
             } else {
-                contentPanel.add(new JLabel("yes"), gbc);
+
+                final JLabel resultLabel = new JLabel("-");
+
+                final JButton getButton = new JButton("Get");
+                getButton.addActionListener((e) -> {
+                    try {
+                        Object rv = gas.getter.invoke(seletedDevice);
+                        resultLabel.setText(rv.toString());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+                JPanel flowLayoutPanel = new JPanel();
+                flowLayoutPanel.add(getButton);
+                flowLayoutPanel.add(resultLabel);
+                contentPanel.add(flowLayoutPanel, gbc);
             }
 
             gbc.gridx = 2;
             if (gas.setter == null) {
-                contentPanel.add(new JLabel("no"), gbc);
+                contentPanel.add(new JLabel("Read-only"), gbc);
             } else {
-                contentPanel.add(new JLabel("yes"), gbc);
+
+                final Parameter[] params = gas.setter.getParameters();
+                switch (params.length) {
+                    case 0:
+                        final JLabel jLabel = new JLabel("no params!!!!!!!!!!!!!");
+                        jLabel.setForeground(Color.red);
+                        contentPanel.add(jLabel, gbc);
+                        break;
+                    case 1: {
+                        // devNum is ignored
+                        JPanel flowLayoutPanel = new JPanel();
+                        final Parameter theParam = params[0];
+                        final Class<?> paramType = theParam.getType();
+                        if (paramType.isEnum()) {
+                            try {
+                                final Object invoke = paramType.getMethod("values").invoke(null);
+                                final Object castToArrayType = paramType.arrayType().cast(invoke);
+                                final Object[] objArray = (Object[]) castToArrayType;
+                                final JComboBox comboBox = new JComboBox(objArray);
+                                comboBox.setPreferredSize(new Dimension(100, 20));
+                                flowLayoutPanel.add(comboBox);
+                            } catch (ReflectiveOperationException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            // TODO check for boolean, int, string
+                            JTextField textField = new JTextField(5);
+                            flowLayoutPanel.add(textField);
+                        }
+
+                        JButton button = new JButton("Set");
+                        flowLayoutPanel.add(button);
+                        contentPanel.add(flowLayoutPanel, gbc);
+                        break;
+                    }
+
+                    case 2: {
+                        // devNum is used
+                        JTextField textFieldDevNum = new JTextField(2);
+                        JTextField textFieldValueToWrite = new JTextField(2);
+                        JButton button = new JButton("Set");
+
+                        JPanel flowLayoutPanel = new JPanel();
+                        flowLayoutPanel.add(textFieldDevNum);
+                        flowLayoutPanel.add(textFieldValueToWrite);
+                        flowLayoutPanel.add(button);
+                        contentPanel.add(flowLayoutPanel, gbc);
+                        break;
+                    }
+                    default:
+                        contentPanel.add(new JLabel("param count is " + params.length), gbc);
+                        break;
+                }
+
             }
 
         }
         final JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(50);
         jTabbedPane1.add(scrollPane, theClass.getSimpleName());
 
     }

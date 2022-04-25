@@ -98,14 +98,14 @@ public class BoardConfig {
         );
     }
 
-    public void setClockFrequencyMegahertz() throws JMCCULException {
+    public void setClockFrequencyMegahertz(int channel, int clockFrequency) throws JMCCULException {
         // todo only supports 1, 4,6 or 10
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                channel,
                 MeasurementComputingUniversalLibrary.BICLOCK,
-                0 //new value
+                clockFrequency
         );
     }
 
@@ -128,7 +128,7 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDMACHAN,
                 dmaChannel
         );
@@ -215,9 +215,9 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIEXTOUTPACEREDGE,
-                0 //new value
+                externalPacerClockEdge.VALUE //new value
         );
     }
 
@@ -226,13 +226,13 @@ public class BoardConfig {
      Readable? no but that is probably a typo
      Writabale? yes
      */
-    public void setOutputPacerEnable() throws JMCCULException {
+    public void setOutputPacerEnable(boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIOUTPUTPACEROUT,
-                0 //new value
+                (enable ? 1 : 0) //new value
         );
     }
 
@@ -250,13 +250,13 @@ public class BoardConfig {
         ) == 1;
     }
 
-    public void setInputPacerClockEnable() throws JMCCULException {
+    public void setInputPacerClockEnable(boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIINPUTPACEROUT,
-                0 //new value
+                (enable ? 1 : 0) //new value
         );
     }
 
@@ -274,13 +274,13 @@ public class BoardConfig {
         ));
     }
 
-    public void setInterruptEdge() throws JMCCULException {
+    public void setInterruptEdge(InterruptClockEdge edge) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIINTEDGE,
-                0 //new value
+                edge.VALUE //new value
         );
     }
 
@@ -298,13 +298,14 @@ public class BoardConfig {
         );
     }
 
-    public void setInterruptLevel() throws JMCCULException {
+    public void setInterruptLevel(int level) throws JMCCULException {
+        // 0 for none, or 1 to 15.
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIINTLEVEL,
-                0 //new value
+                level //new value
         );
     }
 
@@ -337,13 +338,13 @@ public class BoardConfig {
         );
     }
 
-    public void setPanId() throws JMCCULException {
+    public void setPanId(int panID) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIPANID,
-                0 //new value
+                panID //new value
         );
     }
 
@@ -361,13 +362,13 @@ public class BoardConfig {
         );
     }
 
-    public void setPatternTriggerPort() throws JMCCULException {
+    public void setPatternTriggerPort(int port) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIPATTERNTRIGPORT,
-                0 //new value
+                port //new value
         );
     }
 
@@ -375,7 +376,7 @@ public class BoardConfig {
      setAdc  -> BI RANGE -> boardInfo range
      Readable? yes
      Writabale? yes
-    
+
     TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
      */
     public int getRange() throws JMCCULException {
@@ -450,13 +451,13 @@ public class BoardConfig {
         ) == 1;
     }
 
-    public void setTerminalCountOutputStatus() throws JMCCULException {
+    public void setTerminalCountOutputStatus(boolean status) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BITERMCOUNTSTATBIT,
-                0 //new value
+                (status ? 1 : 0) //new value
         );
     }
 
@@ -474,17 +475,21 @@ public class BoardConfig {
         ) == 1;
     }
 
-    public void setWaitStateJumper() throws JMCCULException {
+    public void setWaitStateJumper(boolean jumper) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIWAITSTATE,
-                0 //new value
+                (jumper ? 1 : 0) //new value
         );
     }
 
-
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIUSERDEVIDNUM -> BI USER DEV ID NUM -> boardInfo user device ID number
+     Readable?
+     Writabale?
+     */
     public int getUserSpecifiedString() throws JMCCULException {
         //todo this should probably use the getString instead of getInt
         return Configuration.getInt(
@@ -537,14 +542,18 @@ public class BoardConfig {
      */
 
 
-
-    public void setUserConfigurableIdentifier() throws JMCCULException {
+ /* /////////////////////////////////////////////////////////////////////////////////
+     BISERIALNUM -> BI SERIAL NUM-> boardInfo serial number
+     Readable? yes
+     Writabale? yes
+     */
+    public void setUserConfigurableIdentifier(int identifier) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BISERIALNUM,
-                0 //new value
+                identifier //new value
         );
     }
 
@@ -552,16 +561,14 @@ public class BoardConfig {
      BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
      Readable? yes
      Writabale? yes
-
-    this is not actually a netowrk specific one
      */
-    public void setDeviceLogin() throws JMCCULException {
+    public void setDeviceLogin(boolean hide) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum
                 MeasurementComputingUniversalLibrary.BIHIDELOGINDLG,
-                0 //new value
+                (hide ? 1 : 0) //new value
         );
 
     }
