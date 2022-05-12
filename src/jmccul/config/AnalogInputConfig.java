@@ -6,6 +6,7 @@ import jmccul.enums.AdcTimingMode;
 import jmccul.enums.AdcTransferMode;
 import jmccul.enums.AdcSettlingTime;
 import jmccul.enums.AnalogInputChannelType;
+import jmccul.enums.AnalogRange;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -22,9 +23,37 @@ public class AnalogInputConfig {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
+     BIRANGE -> BI RANGE -> boardInfo range
+     Readable? yes
+     Writabale? yes
+
+    TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
+     */
+    public AnalogRange getRange() throws JMCCULException {
+        return AnalogRange.parseInt(
+                Configuration.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        0, //devNum is ignored
+                        MeasurementComputingUniversalLibrary.BIRANGE
+                )
+        );
+    }
+
+    public void setRange(AnalogRange range) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIRANGE,
+                range.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
      BINUMADCHANS -> BI NUM AD CHANS -> boardInfo number of ADC channels
      Readable? yes
-     Writabale? NO
+     Writabale? yes??
      */
     public int getAdcChannelCount() throws JMCCULException {
         return Configuration.getInt(
@@ -32,6 +61,17 @@ public class AnalogInputConfig {
                 BOARD_NUMBER,
                 0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINUMADCHANS
+        );
+    }
+
+    public void setAdcChannelCount(int n) throws JMCCULException {
+        // this probably does not work
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BINUMADCHANS,
+                n
         );
     }
 
@@ -49,13 +89,13 @@ public class AnalogInputConfig {
         );
     }
 
-    public void setAdcDataRate() throws JMCCULException {
+    public void setAdcDataRate(int channel, int dataRate) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                channel,
                 MeasurementComputingUniversalLibrary.BIADDATARATE,
-                0 //new value
+                dataRate
         );
     }
 
@@ -74,13 +114,13 @@ public class AnalogInputConfig {
                 ));
     }
 
-    public void setDataTransferMode() throws JMCCULException {
+    public void setDataTransferMode(AdcTransferMode transferMode) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIADXFERMODE,
-                0 //new value
+                transferMode.VALUE
         );
     }
 
@@ -101,7 +141,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADCSETTLETIME -> BI ADC SETTLE TIME -> boardInfo ADC settle  time
      Readable? yes
-     Writabale? yse
+     Writabale? yes
      */
     public AdcSettlingTime getAdcSettlingTime() throws JMCCULException {
         return AdcSettlingTime.parseInt(
@@ -109,17 +149,17 @@ public class AnalogInputConfig {
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, //devNum is ignored
-                        MeasurementComputingUniversalLibrary.BIADCSETTLETIME //
+                        MeasurementComputingUniversalLibrary.BIADCSETTLETIME
                 ));
     }
 
-    public void setAdcSettlingTime() throws JMCCULException {
+    public void setAdcSettlingTime(AdcSettlingTime settleTime) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIADCSETTLETIME,
-                0 //new value
+                settleTime.VALUE
         );
     }
 
@@ -127,8 +167,6 @@ public class AnalogInputConfig {
      BIADTIMINGMODE -> BI AD TIMING MODE -> boardInfo ADC timing mode
      Readable? yes
      Writabale? yes
-
-    TODO why is devNum ignored when getting but used when setting??
      */
     public AdcTimingMode getAdcTimingMode() throws JMCCULException {
         return AdcTimingMode.parseInt(
@@ -144,7 +182,7 @@ public class AnalogInputConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIADTIMINGMODE,
                 newTimingMode.VALUE
         );
@@ -164,13 +202,13 @@ public class AnalogInputConfig {
         );
     }
 
-    public void setAdcTriggerCount() throws JMCCULException {
+    public void setAdcTriggerCount(int triggerCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIADTRIGCOUNT,
-                0 //new value
+                triggerCount
         );
     }
 
@@ -196,13 +234,13 @@ public class AnalogInputConfig {
         );
     }
 
-    public void setAdcTriggerSource() throws JMCCULException {
+    public void setAdcTriggerSource(int channel, int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                channel,
                 MeasurementComputingUniversalLibrary.BIADTRIGSRC,
-                0 //new value
+                n
         );
     }
 
@@ -222,23 +260,23 @@ public class AnalogInputConfig {
         );
     }
 
-    public void setAnalogInputChannelType() throws JMCCULException {
+    public void setAnalogInputChannelType(int channel, AnalogInputChannelType channelType) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                channel,
                 MeasurementComputingUniversalLibrary.BIADCHANTYPE,
-                0 //new value
+                channelType.VALUE
         );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public int getAnalogInputChannelMode() throws JMCCULException {
+    public int getAnalogInputChannelMode(int channel) throws JMCCULException {
         // you set this with cbAChanInputMode() I think
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                channel,
                 MeasurementComputingUniversalLibrary.BIADCHANAIMODE //BI AD CHAN AI MODE
         );
     }

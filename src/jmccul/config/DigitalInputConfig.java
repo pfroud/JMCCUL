@@ -30,13 +30,13 @@ public class DigitalInputConfig {
         );
     }
 
-    public void setDigitalInputTriggerCount() throws JMCCULException {
+    public void setDigitalInputTriggerCount(int count) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDITRIGCOUNT,
-                0 //new value
+                count
         );
     }
 
@@ -45,13 +45,13 @@ public class DigitalInputConfig {
      Readable? NO
      Writabale? yes
      */
-    public void setDigitalInputDebounceState() throws JMCCULException {
+    public void setDigitalInputDebounceState(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDIDEBOUNCESTATE,
-                0 //new value
+                n
         );
     }
 
@@ -60,13 +60,13 @@ public class DigitalInputConfig {
      Readable? NO
      Writabale? yes
      */
-    public void setDigitalInputDebounceTime() throws JMCCULException {
+    public void setDigitalInputDebounceTime(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDIDEBOUNCETIME,
-                0 //new value
+                n
         );
     }
 
@@ -75,7 +75,7 @@ public class DigitalInputConfig {
      Readable? yes
      Writabale? yes
      */
-    public boolean getGititalInputAcFilter(int bitNumber) throws JMCCULException {
+    public boolean getDigitalInputAcFilter(int bitNumber) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -84,13 +84,13 @@ public class DigitalInputConfig {
         ) == 1;
     }
 
-    public void setDigitalInputAcFilter() throws JMCCULException {
+    public void setDigitalInputAcFilter(int bitNumber, boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                bitNumber,
                 MeasurementComputingUniversalLibrary.BIDISOFILTER,
-                0 //new value
+                (enable ? 1 : 0)
         );
     }
 

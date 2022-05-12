@@ -30,13 +30,13 @@ public class NetworkConfig {
         );
     }
 
-    public void setNetConnectionCode() throws JMCCULException {
+    public void setNetworkConnectionCode(int code) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINETCONNECTCODE,
-                0 //new value
+                code
         );
     }
 
@@ -54,13 +54,13 @@ public class NetworkConfig {
         );
     }
 
-    public void setNetIoTimeout() throws JMCCULException {
+    public void setNetworkIoTimeoutMillisec(int timeoutMillisec) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BINETIOTIMEOUT,
-                0 //new value
+                timeoutMillisec
         );
     }
 
@@ -69,12 +69,13 @@ public class NetworkConfig {
      Readable? yes
      Writabale? yes
      */
-    public int getMacAddress() throws JMCCULException {
-        return Configuration.getInt(
+    public String getMacAddress() throws JMCCULException {
+        return Configuration.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BIDEVMACADDR
+                MeasurementComputingUniversalLibrary.BIDEVMACADDR,
+                1024
         );
     }
 

@@ -2,10 +2,12 @@ package jmccul.config;
 
 import jmccul.DaqDevice;
 import jmccul.JMCCULException;
+import jmccul.enums.BaseOrExpansionBoard;
 import jmccul.enums.CalibrationTableType;
 import jmccul.enums.InterruptClockEdge;
 import jmccul.enums.ExternalPacerClockEdge;
 import jmccul.enums.ExternalClockType;
+import jmccul.enums.FirmwareVersion;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -63,22 +65,22 @@ public class BoardConfig {
      Readable? yes
      Writabale? yes
      */
-    public CalibrationTableType getCalibrationTableType() throws JMCCULException {
+    public CalibrationTableType getCalibrationTableType(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return CalibrationTableType.parseInt(
                 Configuration.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
-                        0, //DevNum is either ignored or specifies a base or expansion board.
+                        baseOrExpansionBoard.VALUE,
                         MeasurementComputingUniversalLibrary.BICALTABLETYPE
                 )
         );
     }
 
-    public void setCalibrationTable(CalibrationTableType calTable) throws JMCCULException {
+    public void setCalibrationTableType(CalibrationTableType calTable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BICALTABLETYPE,
                 calTable.VALUE
         );
@@ -89,11 +91,11 @@ public class BoardConfig {
      Readable? yes
      Writabale? yes
      */
-    public int getClockFrequenceMegahertz(int channel) throws JMCCULException {
+    public int getClockFrequencyMegahertz() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                channel,
+                0, //devNum is ignored when getting
                 MeasurementComputingUniversalLibrary.BICLOCK
         );
     }
@@ -103,7 +105,7 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                channel,
+                channel, //devNum is the channel when setting
                 MeasurementComputingUniversalLibrary.BICLOCK,
                 clockFrequency
         );
@@ -115,7 +117,6 @@ public class BoardConfig {
      Writabale? yes
      */
     public int getDmaChannel() throws JMCCULException {
-        // direct memory access
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -125,6 +126,7 @@ public class BoardConfig {
     }
 
     public void setDmaChannel(int dmaChannel) throws JMCCULException {
+        // todo can only be 0, 1, or 3
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -139,7 +141,7 @@ public class BoardConfig {
      Readable? yes
      Writabale? NO
      */
-    public int getDtBoardNumber() throws JMCCULException {
+    public int getDataTranslationBoardNumber() throws JMCCULException {
         // Data Translation, acquired by Measurement Computing in 2015
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -167,7 +169,7 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIEXTCLKTYPE,
                 externalClockType.VALUE
         );
@@ -182,7 +184,7 @@ public class BoardConfig {
         return ExternalPacerClockEdge.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIEXTINPACEREDGE
         ));
     }
@@ -191,7 +193,7 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIEXTINPACEREDGE,
                 externalPacerClockEdge.VALUE
         );
@@ -206,7 +208,7 @@ public class BoardConfig {
         return ExternalPacerClockEdge.parseInt(Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0,
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIEXTOUTPACEREDGE
         ));
     }
@@ -217,22 +219,22 @@ public class BoardConfig {
                 BOARD_NUMBER,
                 0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIEXTOUTPACEREDGE,
-                externalPacerClockEdge.VALUE //new value
+                externalPacerClockEdge.VALUE
         );
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIOUTPUTPACEROUT -> BI OUTPUT PACER OUT -> boardInfo output pacer output
-     Readable? no but that is probably a typo
+     Readable? no but that is probably a mistake in the docs
      Writabale? yes
      */
     public void setOutputPacerEnable(boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //they don't say whether devnum is ignored
                 MeasurementComputingUniversalLibrary.BIOUTPUTPACEROUT,
-                (enable ? 1 : 0) //new value
+                (enable ? 1 : 0)
         );
     }
 
@@ -254,9 +256,9 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIINPUTPACEROUT,
-                (enable ? 1 : 0) //new value
+                (enable ? 1 : 0)
         );
     }
 
@@ -278,9 +280,9 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIINTEDGE,
-                edge.VALUE //new value
+                edge.VALUE
         );
     }
 
@@ -303,9 +305,9 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIINTLEVEL,
-                level //new value
+                level
         );
     }
 
@@ -342,9 +344,9 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIPANID,
-                panID //new value
+                panID
         );
     }
 
@@ -363,52 +365,13 @@ public class BoardConfig {
     }
 
     public void setPatternTriggerPort(int port) throws JMCCULException {
+        // it can only be AUXPORT0 or AUXPORT1
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIPATTERNTRIGPORT,
-                port //new value
-        );
-    }
-
-    /* /////////////////////////////////////////////////////////////////////////////////
-     setAdc  -> BI RANGE -> boardInfo range
-     Readable? yes
-     Writabale? yes
-
-    TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
-     */
-    public int getRange() throws JMCCULException {
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BIRANGE
-        );
-    }
-
-    public void setA2DRange() throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum
-                MeasurementComputingUniversalLibrary.BIRANGE,
-                0 //new value
-        );
-    }
-
-    /* /////////////////////////////////////////////////////////////////////////////////
-     BISERIALNUM -> BI SERIAL NUM -> boardInfo serial number
-     Readable?
-     Writabale?
-     */
-    public int getUserSpecifiedSerialNumber() throws JMCCULException {
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BISERIALNUM
+                port
         );
     }
 
@@ -427,18 +390,18 @@ public class BoardConfig {
         );
     }
 
-    public void setSyncMode() throws JMCCULException {
+    public void setSyncMode(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //don't know what devNum does
                 MeasurementComputingUniversalLibrary.BISYNCMODE,
-                0 //new value
+                n
         );
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
-     setAdc -> BI TERM COUNT STAT BIT -> boardInfo terminal count status bit
+     setAdc -> BI TERM COUNT STAT BIT -> boardInfo terminal count output status bit
      Readable? yes
      Writabale? yes
      */
@@ -451,13 +414,13 @@ public class BoardConfig {
         ) == 1;
     }
 
-    public void setTerminalCountOutputStatus(boolean status) throws JMCCULException {
+    public void setTerminalCountOutputStatus(int bitNumber, boolean status) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                bitNumber,
                 MeasurementComputingUniversalLibrary.BITERMCOUNTSTATBIT,
-                (status ? 1 : 0) //new value
+                (status ? 1 : 0)
         );
     }
 
@@ -479,24 +442,9 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //not specified whether devNum is ignored
                 MeasurementComputingUniversalLibrary.BIWAITSTATE,
-                (jumper ? 1 : 0) //new value
-        );
-    }
-
-    /* /////////////////////////////////////////////////////////////////////////////////
-     BIUSERDEVIDNUM -> BI USER DEV ID NUM -> boardInfo user device ID number
-     Readable?
-     Writabale?
-     */
-    public int getUserSpecifiedString() throws JMCCULException {
-        //todo this should probably use the getString instead of getInt
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BIUSERDEVIDNUM
+                (jumper ? 1 : 0)
         );
     }
 
@@ -510,7 +458,7 @@ public class BoardConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BICALOUTPUT,
                 calPinVoltage
         );
@@ -521,39 +469,126 @@ public class BoardConfig {
      Readable? yes
      Writabale? NO
      */
-    public String getVersion() throws JMCCULException {
+    public String getVersion(FirmwareVersion version) throws JMCCULException {
         return Configuration.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                version.VALUE,
                 MeasurementComputingUniversalLibrary.BIDEVVERSION,
                 1024
         );
     }
 
 
-    /*
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDEVSERIALNUM -> BI DEV SERIAL NUM -> boardInfo device serial number
 
-    BIDEVSERIALNUM = factory serial number of USB or Bluetooth device
-    BIDEVUNIQUEID = unique ID, suck as sn of usb or mac addr of ethernet
-    BISERIALNUM = custom serial number assigned by user to a usb device
-    BIUSERDEVIDNUM = user configured string that identifies a usb device
-    BIUSERDEVID = user configured string from an ethernet, bluetooth, or usb device
+    Factory serial number of a USB or Bluetooth device.
+
+
+     Readable? yes
+     Writabale? no
      */
+    public String getFactorySerialNumber(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
+        return Configuration.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                baseOrExpansionBoard.VALUE,
+                MeasurementComputingUniversalLibrary.BIDEVSERIALNUM,
+                1024
+        );
+    }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDEVUNIQUEID -> BI DEV UNIQUE ID -> boardInfo device unique identifier
 
- /* /////////////////////////////////////////////////////////////////////////////////
-     BISERIALNUM -> BI SERIAL NUM-> boardInfo serial number
+    Unique identifier of a discoverable device, such as the serial number of a USB device or MAC address of an Ethernet device.
+
+     Readable? yes
+     Writabale? no
+     */
+    public String getUniqueID() throws JMCCULException {
+        return Configuration.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //not specified what DevNum does
+                MeasurementComputingUniversalLibrary.BIDEVUNIQUEID,
+                1024
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BISERIALNUM -> BI SERIAL NUM -> boardInfo serial number
+
+    User-configured identifier of a supported USB device.
+    Custom serial number assigned by a user to a USB device.
+
      Readable? yes
      Writabale? yes
      */
-    public void setUserConfigurableIdentifier(int identifier) throws JMCCULException {
+    public int getUserSpecifiedSerialNumber() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BISERIALNUM
+        );
+    }
+
+    public void setUserSpecifiedSerialNumber(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BISERIALNUM,
-                identifier //new value
+                n
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIUSERDEVID -> BI USER DEV ID -> boardInfo user device ID
+
+    User-configured string of up to maxConfigLen character/bytes to an Ethernet, Bluetooth, or USB device.
+
+     Readable? yes
+     Writabale? yes
+     */
+    public String getUserSpecifiedID() throws JMCCULException {
+        return Configuration.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIUSERDEVID,
+                1024
+        );
+    }
+
+    public void setUserSpecifiedID(String str) throws JMCCULException {
+        Configuration.setString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIUSERDEVID,
+                str
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIUSERDEVIDNUM -> BI USER DEV ID NUM -> boardInfo user device ID number3
+
+    User-configured string that identifies a USB device.
+
+
+     Readable?
+     Writabale? no
+     */
+    public int getUserSpecifiedString() throws JMCCULException {
+        //todo the docs are probably wrong, this should probably use the getString instead of getInt
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIUSERDEVIDNUM
         );
     }
 
@@ -562,17 +597,15 @@ public class BoardConfig {
      Readable? yes
      Writabale? yes
      */
-    public void setDeviceLogin(boolean hide) throws JMCCULException {
+    public void setHideLoginDialog(boolean hide) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIHIDELOGINDLG,
-                (hide ? 1 : 0) //new value
+                (hide ? 1 : 0)
         );
 
     }
-
-
 
 }

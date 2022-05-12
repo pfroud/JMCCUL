@@ -24,7 +24,7 @@ public class AnalogOutputConfig {
      Readable? yes
      Writabale? yes
      */
-    public boolean isDacForceSense(int channel) throws JMCCULException {
+    public boolean getDacForceSense(int channel) throws JMCCULException {
         /*
         The remote sensing feature compensates for the voltage
         drop error that occurs in applications where the analog
@@ -43,13 +43,13 @@ public class AnalogOutputConfig {
         ) == 1;
     }
 
-    public void setDacForceSense() throws JMCCULException {
+    public void setDacForceSense(int channel, boolean sense) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                channel,
                 MeasurementComputingUniversalLibrary.BIDACFORCESENSE,
-                0 //new value
+                (sense ? 1 : 0)
         );
     }
 
@@ -59,25 +59,26 @@ public class AnalogOutputConfig {
      Writabale? yes
 
     TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
+    TODO why is channel used when setting but ignored when getting?
      */
-    public AnalogRange getDacRange(int channel) throws JMCCULException {
+    public AnalogRange getDacRange() throws JMCCULException {
         return AnalogRange.parseInt(
                 Configuration.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
-                        channel,
+                        0, // devNum is ignored - probably wrong though
                         MeasurementComputingUniversalLibrary.BIDACRANGE
                 )
         );
     }
 
-    public void setDacRange() throws JMCCULException {
+    public void setDacRange(int channel, AnalogRange range) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                channel,
                 MeasurementComputingUniversalLibrary.BIDACRANGE,
-                0 //new value
+                range.VALUE
         );
     }
 
@@ -90,7 +91,7 @@ public class AnalogOutputConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum is ignores
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDACRES
         );
     }
@@ -100,7 +101,7 @@ public class AnalogOutputConfig {
      Readable?
      Writabale?
      */
-    public int getDacStartup(int channel) throws JMCCULException {
+    public boolean getDacStartup(int channel) throws JMCCULException {
         /*
         Use the BIDACSTARTUP option to determine whether a board's
         DAC values before the last power down are stored.
@@ -117,18 +118,18 @@ public class AnalogOutputConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                channel,
+                channel, //devNum is the channel when getting
                 MeasurementComputingUniversalLibrary.BIDACSTARTUP
-        );
+        ) == 1;
     }
 
-    public void setDacStartup() throws JMCCULException {
+    public void setDacStartup(boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored when setting
                 MeasurementComputingUniversalLibrary.BIDACSTARTUP,
-                0 //new value
+                (enable ? 1 : 0)
         );
     }
 
@@ -146,13 +147,13 @@ public class AnalogOutputConfig {
         );
     }
 
-    public void setDacTrigerCount() throws JMCCULException {
+    public void setDacTriggerCount(int triggerCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDACTRIGCOUNT,
-                0 //new value
+                triggerCount
         );
     }
 
@@ -186,13 +187,13 @@ public class AnalogOutputConfig {
          */
     }
 
-    public void setDacUpdateMode() throws JMCCULException {
+    public void setDacUpdateMode(DacUpdateMode updateMode) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDACUPDATEMODE,
-                0 //new value
+                updateMode.VALUE
         );
     }
 
@@ -210,18 +211,23 @@ public class AnalogOutputConfig {
         );
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIDACUPDATECMD -> BI DAC UPDATE CMD -> boardInfo DAC update command
+
+    TODO move this out of AnalogOutputConfig.java
+     */
     public void updateAnalogOutput() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is not used
                 MeasurementComputingUniversalLibrary.BIDACUPDATECMD,
-                0 //new value
+                0 //configVal is not used
         );
     }
 
     /*
+    // BIDACSETTLETIME is not in my JNA thing
     public void setDacSettlingTime() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,

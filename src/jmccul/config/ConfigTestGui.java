@@ -2,11 +2,14 @@ package jmccul.config;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -31,10 +34,15 @@ public final class ConfigTestGui extends javax.swing.JFrame {
      */
     public ConfigTestGui() {
         initComponents();
-        setSize(500, 850);
-
+        setSize(800, 600);
         // TODO look for daq devices and show them in a dropdown or something
-        for (Class theClass : new Class[]{BoardConfig.class}) {
+        final Class[] configClasses = new Class[]{
+            AnalogInputConfig.class, AnalogOutputConfig.class,
+            BoardConfig.class, CounterConfig.class,
+            DigitalInputConfig.class, DigitalOutputConfig.class,
+            ExpansionConfig.class, NetworkConfig.class,
+            TemperatureConfig.class, WirelessConfig.class,};
+        for (Class theClass : configClasses) {
             createTabForClass(theClass);
         }
     }
@@ -52,7 +60,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(2, 5, 2, 5);
+        gbc.insets = new Insets(2, 15, 2, 15); //top, left, bottom, right
         contentPanel.add(new JLabel("<html><b>Item"), gbc);
         gbc.gridx = 1;
         contentPanel.add(new JLabel("<html><b>Get"), gbc);
@@ -66,7 +74,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         for (Method method : methods) {
             final String methodName = method.getName();
             if (!(methodName.startsWith("get") || methodName.startsWith("set"))) {
-                System.out.println("method name does not start with get or set: " + methodName);
+                System.out.println(theClass.getSimpleName() + ": method name does not start with get or set: " + methodName);
                 continue;
             }
 
@@ -122,7 +130,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                 contentPanel.add(new JLabel("Write-only(??)"), gbc);
             } else {
 
-                final JLabel resultLabel = new JLabel("-");
+                final JLabel resultLabel = new JLabel("(result appears here)");
 
                 final JButton getButton = new JButton("Get");
                 getButton.addActionListener((e) -> {
@@ -146,12 +154,13 @@ public final class ConfigTestGui extends javax.swing.JFrame {
 
                 final Parameter[] params = gas.setter.getParameters();
                 switch (params.length) {
-                    case 0:
-                        final JLabel jLabel = new JLabel("no params!!!!!!!!!!!!!");
+                    case 0 -> {
+                        final JLabel jLabel = new JLabel("setter has no paramaters");
                         jLabel.setForeground(Color.red);
                         contentPanel.add(jLabel, gbc);
-                        break;
-                    case 1: {
+                        System.out.println(theClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": setter has no parameters");
+                    }
+                    case 1 -> {
                         // devNum is ignored
                         JPanel flowLayoutPanel = new JPanel();
                         final Parameter theParam = params[0];
@@ -176,10 +185,9 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                         JButton button = new JButton("Set");
                         flowLayoutPanel.add(button);
                         contentPanel.add(flowLayoutPanel, gbc);
-                        break;
                     }
 
-                    case 2: {
+                    case 2 -> {
                         // devNum is used
                         JTextField textFieldDevNum = new JTextField(2);
                         JTextField textFieldValueToWrite = new JTextField(2);
@@ -190,11 +198,10 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                         flowLayoutPanel.add(textFieldValueToWrite);
                         flowLayoutPanel.add(button);
                         contentPanel.add(flowLayoutPanel, gbc);
-                        break;
                     }
-                    default:
+                    default -> {
                         contentPanel.add(new JLabel("param count is " + params.length), gbc);
-                        break;
+                    }
                 }
 
             }
@@ -219,6 +226,8 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Config items tester");
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
+
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         getContentPane().add(jTabbedPane1);
 
         pack();

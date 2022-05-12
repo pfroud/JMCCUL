@@ -35,7 +35,7 @@ public class CounterConfig {
      Readable? yes
      Writabale? NO
      */
-    public int getCoutnerTriggerCount() throws JMCCULException {
+    public int getCounterTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -44,13 +44,13 @@ public class CounterConfig {
         );
     }
 
-    public void setCounterTriggerCount() throws JMCCULException {
+    public void setCounterTriggerCount(int trigCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BICTRTRIGCOUNT,
-                0 //new value
+                trigCount
         );
     }
 
@@ -59,11 +59,11 @@ public class CounterConfig {
      Readable? yes
      Writabale? NO
      */
-    public int getCounterNumber() throws JMCCULException {
+    public int getCounterNumber(int dev) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.COUNTERINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                dev,
                 MeasurementComputingUniversalLibrary.CICTRNUM
         );
     }
@@ -72,12 +72,19 @@ public class CounterConfig {
      CICTRTYPE -> CI CTR TYPE -> counterInfo counter type
      Readable? yes
      Writabale? NO
+
+    Can't find anything in cbw.h for this. It says:
+    Counter type, where:
+    1 = 8254, 2 = 9513, 3 = 8536, 4 = 7266, 5 = event counter, 6 = scan counter,
+    7 = timer counter, 8 = quadrature counter, and 9 = pulse counter.
+
+
      */
-    public int getCountertYPE() throws JMCCULException {
+    public int getCounterType(int idx) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.COUNTERINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                idx,
                 MeasurementComputingUniversalLibrary.CICTRTYPE
         );
     }

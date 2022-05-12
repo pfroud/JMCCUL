@@ -21,7 +21,7 @@ public class DigitalOutputConfig {
      Readable? yes
      Writabale? yes
      */
-    public int getDigitalOutTriggerCount() throws JMCCULException {
+    public int getDigitalOutputTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -30,13 +30,13 @@ public class DigitalOutputConfig {
         );
     }
 
-    public void setDigitalOutputTriggerCount() throws JMCCULException {
+    public void setDigitalOutputTriggerCount(int trigCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIDOTRIGCOUNT,
-                0 //new value
+                trigCount
         );
     }
 

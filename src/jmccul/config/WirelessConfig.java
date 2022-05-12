@@ -21,7 +21,7 @@ public class WirelessConfig {
      Readable? yes
      Writabale? yes
      */
-    public int getRfChannel() throws JMCCULException {
+    public int getWirelessRfChannel() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -30,17 +30,22 @@ public class WirelessConfig {
         );
     }
 
-    public void setRfChannel() throws JMCCULException {
+    public void setWirelessRfChannel(int channel) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIRFCHANNEL,
-                0 //new value
+                channel
         );
     }
 
-    public int getWirelessSignalStrengthDbm() throws JMCCULException {
+    /* /////////////////////////////////////////////////////////////////////////////////
+     BIRSS -> BI RF receivedSignalStrength
+     Readable? yes
+     Writabale? yes but that is probably a mistake in the docs
+     */
+    public int getWirelessSignalStrength() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -49,13 +54,13 @@ public class WirelessConfig {
         );
     }
 
-    public void setSignalStrength() throws JMCCULException {
+    public void setWirelessSignalStrength(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
-                0, //devNum
+                0, //devNum is ignored
                 MeasurementComputingUniversalLibrary.BIRSS,
-                0 //new value
+                n
         );
     }
 

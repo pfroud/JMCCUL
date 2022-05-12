@@ -25,7 +25,7 @@ public class ExpansionConfig {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
-                0, //devNum is ignored
+                0, //don't know what devNum does
                 MeasurementComputingUniversalLibrary.XIBOARDTYPE
         );
     }
@@ -47,13 +47,13 @@ public class ExpansionConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      XIMUXADCHAN1 -> XI MUX AD CHAN 1 -> expansionInfo multiplexer(?) analog-to-digital channel 1
      Readable? yes
-     Writabale? no
+     Writabale? yes
      */
     public int getExpansionBoardChannel1() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
-                0, //devNum is ignored
+                0, //don't know what devNum does
                 MeasurementComputingUniversalLibrary.XIMUX_AD_CHAN1
         );
     }
@@ -62,9 +62,168 @@ public class ExpansionConfig {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
-                0, //devNum is ignored
+                0, //don't know what devNum does
                 MeasurementComputingUniversalLibrary.XIMUX_AD_CHAN1,
                 ch
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XIMUXADCHAN2 -> XI MUX AD CHAN 2 -> expansionInfo multiplexer(?) analog-to-digital channel 2
+     Readable? yes
+     Writabale? yes
+     */
+    public int getExpansionBoardChannel2() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XIMUX_AD_CHAN2
+        );
+    }
+
+    public void setExpansionBoardChannel2(int ch) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XIMUX_AD_CHAN2,
+                ch
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XIRANGE1 -> XI RANGE 1 -> expansionInfo range 1
+     Readable? yes
+     Writabale? yes
+
+    TODO does this use the same range enum as the non-expansion board?
+     */
+    public int getExpansionBoardRange1() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XIRANGE1
+        );
+    }
+
+    public void setExpansionBoardRange1(int ch) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XIRANGE1,
+                ch
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XIRANGE2 -> XI RANGE 1 -> expansionInfo range 2
+     Readable? yes
+     Writabale? yes
+
+    TODO does this use the same range enum as the non-expansion board?
+     */
+    public int getExpansionBoardRange2() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XIRANGE2
+        );
+    }
+
+    public void setExpansionBoardRange2(int ch) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XIRANGE2,
+                ch
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XICJCCHAN -> XI CJC CHAN -> expansionInfo coldJunctionCompensation(?) channel
+     Readable? yes
+     Writabale? yes
+     */
+    public int getExpansionCjcChannel() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XICJCCHAN
+        );
+    }
+
+    public void setExpansionCjcChannel(int ch) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XICJCCHAN,
+                ch
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XITHERMTYPE -> XI THERM TYPE -> expansionInfo thermocouple(?) type
+
+    The docs cbSetConfig says "thermocouple type" but the docs for cbGetConfig just says
+    "sensor type" and lists thermocouples *and* RTDs. But the RTDs are different than the ones
+    on RtdSensorType.java, and I can't find them in cbw.h.
+
+     Readable? yes
+     Writabale? yes
+     */
+    public int getExpansionThermocoupleType() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XITHERMTYPE
+        );
+    }
+
+    public void setExpansionThermocoupleType(int type) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //don't know what devNum does
+                MeasurementComputingUniversalLibrary.XITHERMTYPE,
+                type
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XINUMEXPCHANS -> XI NUM EXP CHANS -> expansionInfo number of expansion channels
+
+     Readable? yes
+     Writabale? no
+     */
+    public int getExpansionChannelCount() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.XINUMEXPCHANS
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     XIPARENTBOARD -> XI PARENT BOARD -> expansionInfo parent board
+
+     Readable? yes
+     Writabale? no
+     */
+    public int getExpansionParentBoard() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.XIPARENTBOARD
         );
     }
 
