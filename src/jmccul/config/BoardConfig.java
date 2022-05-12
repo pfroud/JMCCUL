@@ -7,7 +7,7 @@ import jmccul.enums.CalibrationTableType;
 import jmccul.enums.InterruptClockEdge;
 import jmccul.enums.ExternalPacerClockEdge;
 import jmccul.enums.ExternalClockType;
-import jmccul.enums.FirmwareVersion;
+import jmccul.enums.FirmwareVersionType;
 import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -469,7 +469,7 @@ public class BoardConfig {
      Readable? yes
      Writabale? NO
      */
-    public String getVersion(FirmwareVersion version) throws JMCCULException {
+    public String getVersion(FirmwareVersionType version) throws JMCCULException {
         return Configuration.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
