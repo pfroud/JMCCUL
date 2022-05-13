@@ -181,8 +181,8 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                     Object configInstance = getConfigInstance(theClass);
 
                     if (isDevNumUsed && inputComponentForDevNum_ != null) {
-                        final Object inputValue = getInput(inputComponentForDevNum_, params[0].getType());
-                        invoke = gas.getter.invoke(configInstance, inputValue);
+                        final Object devNumInputValue = getInput(inputComponentForDevNum_, params[0].getType());
+                        invoke = gas.getter.invoke(configInstance, devNumInputValue);
                     } else {
                         invoke = gas.getter.invoke(configInstance);
                     }
@@ -255,39 +255,84 @@ public final class ConfigTestGui extends javax.swing.JFrame {
             final boolean isDevNumUsed = params.length == 2;
             final JPanel flowLayoutPanel = new JPanel();
 
+            Component inputComponentForDevNum;
             final Parameter paramForInput;
             if (isDevNumUsed) {
                 final Parameter paramForDevNum = params[0];
                 flowLayoutPanel.add(new JLabel(paramForDevNum.getName() + " (" + paramForDevNum.getType().getSimpleName() + "): "));
 
                 try {
-                    flowLayoutPanel.add(getInputComponentForParameter(paramForDevNum));
+                    inputComponentForDevNum = getInputComponentForParameter(paramForDevNum);
+                    flowLayoutPanel.add(inputComponentForDevNum);
                 } catch (ReflectiveOperationException ex) {
                     final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
                     jLabel.setForeground(Color.red);
                     flowLayoutPanel.add(jLabel);
+                    inputComponentForDevNum = null;
                 }
 
                 paramForInput = params[1];
             } else {
                 // devNum is ignored
+                inputComponentForDevNum = null;
                 paramForInput = params[0];
             }
 
+            Component inputComponentForNewValue;
             flowLayoutPanel.add(new JLabel(paramForInput.getName() + " (" + paramForInput.getType().getSimpleName() + "): "));
             try {
-                flowLayoutPanel.add(getInputComponentForParameter(paramForInput));
+                inputComponentForNewValue = getInputComponentForParameter(paramForInput);
+                flowLayoutPanel.add(inputComponentForNewValue);
             } catch (ReflectiveOperationException ex) {
                 final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
                 jLabel.setForeground(Color.red);
                 flowLayoutPanel.add(jLabel);
+                inputComponentForNewValue = null;
             }
-            JButton button = new JButton("Set");
+            final JButton button = new JButton("Set");
+            final JLabel status = new JLabel();
+            final Component inputComponentForDevNum_ = inputComponentForDevNum;//local variable referenced from a lambda expression must be final
+            final Component inputComponentForNewValue_ = inputComponentForNewValue;//local variable referenced from a lambda expression must be final
             button.addActionListener(e -> {
+
+                if (selectedDevice == null) {
+                    return;
+                }
+                if (inputComponentForNewValue_ == null) {
+                    return;
+                }
+                try {
+                    Object configInstance = getConfigInstance(theClass);
+
+                    if (isDevNumUsed && inputComponentForDevNum_ != null) {
+                        final Object devNumInputValue = getInput(inputComponentForDevNum_, params[0].getType());
+                        final Object newValueInputValue = getInput(inputComponentForNewValue_, params[1].getType());
+                        status.setText("OK - devNum " + devNumInputValue + ", new value " + newValueInputValue);
+                        gas.setter.invoke(configInstance, devNumInputValue, newValueInputValue);
+                    } else {
+                        final Object devNumInputValue = getInput(inputComponentForNewValue_, params[0].getType());
+                        status.setText("Set to " + devNumInputValue);
+                        gas.setter.invoke(configInstance, devNumInputValue);
+                    }
+                    status.setForeground(Color.black);
+                } catch (Exception ex) {
+                    if (ex instanceof InvocationTargetException && ex.getCause() instanceof JMCCULException) {
+                        // usually means the board does not support it
+                        status.setForeground(Color.black);
+                        status.setText(ex.getCause().getMessage());
+                    } else {
+                        System.err.println("Exception setting " + methodNameWithoutPrefix + " ( " + theClass.getName() + "):");
+                        ex.printStackTrace();
+                        System.err.println();
+                        status.setForeground(Color.red);
+                        status.setText(ex.getClass().getName());
+                    }
+                }
+
             });
             flowLayoutPanel.add(button);
+            flowLayoutPanel.add(status);
             return flowLayoutPanel;
-
         }
     }
 
@@ -295,7 +340,6 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         final Class<?> paramType = param.getType();
         if (paramType.isEnum()) {
             final Object invoke = paramType.getMethod("values").invoke(null);
-//            final Object castToArrayType = paramType.arrayType().cast(invoke);
             final Object[] objArray = (Object[]) invoke;
 
             Object[] filtered = Arrays.stream(objArray).filter(obj -> {
