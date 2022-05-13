@@ -10,6 +10,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum CalibrationTableType {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     FACTORY(MeasurementComputingUniversalLibrary.CAL_TABLE_FACTORY),
     FIELD(MeasurementComputingUniversalLibrary.CAL_TABLE_FIELD);
 

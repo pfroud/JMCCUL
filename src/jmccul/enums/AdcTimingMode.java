@@ -14,6 +14,7 @@ public enum AdcTimingMode {
     BoardInfo
     BIADTIMINGMODE
      */
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     HIGH_SPEED(1),
     SIXTY_HERTZ_REJECTION(8),
     FIFTY_HERTZ_REJECTION(9),

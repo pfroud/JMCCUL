@@ -4,6 +4,7 @@ package jmccul.enums;
 
 import java.util.HashMap;
 import java.util.Map;
+import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
@@ -11,7 +12,9 @@ import java.util.Map;
  */
 public enum BaseOrExpansionBoard {
 
-    BASE(0), EXPANSION(1);
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
+    BASE(0),
+    EXPANSION(1);
 
     private static final Map<Integer, BaseOrExpansionBoard> valueMap;
 

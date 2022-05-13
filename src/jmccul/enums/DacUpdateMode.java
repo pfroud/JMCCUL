@@ -10,6 +10,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum DacUpdateMode {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     IMMEDIATE(MeasurementComputingUniversalLibrary.UPDATEIMMEDIATE),
     ON_COMMAND(MeasurementComputingUniversalLibrary.UPDATEONCOMMAND);
 

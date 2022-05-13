@@ -2,6 +2,7 @@ package jmccul.enums;
 
 import java.util.HashMap;
 import java.util.Map;
+import jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  *
@@ -9,6 +10,7 @@ import java.util.Map;
  */
 public enum TemperatureRejection {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     OFF(0),
     FIFTY_HERTZ(50),
     SIXTY_HERTZ(60);

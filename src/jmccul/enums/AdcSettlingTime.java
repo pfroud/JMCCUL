@@ -14,6 +14,7 @@ public enum AdcSettlingTime {
     BoardInfo
     BIADCSETTLETIME
      */
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     DEFAULT(MeasurementComputingUniversalLibrary.SETTLE_DEFAULT),
     ONE_MICROSECOND(MeasurementComputingUniversalLibrary.SETTLE_1us),
     FIVE_MICROSECONDS(MeasurementComputingUniversalLibrary.SETTLE_5us),

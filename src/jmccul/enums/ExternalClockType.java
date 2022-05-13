@@ -10,6 +10,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum ExternalClockType {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     CONTINOUS(MeasurementComputingUniversalLibrary.CONTINUOUS_CLK),
     GATED(MeasurementComputingUniversalLibrary.GATED_CLK);
 

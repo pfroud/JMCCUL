@@ -10,6 +10,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum ThermocoupleSensorType {
 
+    NOT_SET(0),
     J(MeasurementComputingUniversalLibrary.TC_TYPE_J),
     K(MeasurementComputingUniversalLibrary.TC_TYPE_K),
     S(MeasurementComputingUniversalLibrary.TC_TYPE_S),

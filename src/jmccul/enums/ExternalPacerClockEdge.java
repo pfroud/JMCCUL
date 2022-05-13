@@ -10,6 +10,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum ExternalPacerClockEdge {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     RISING(MeasurementComputingUniversalLibrary.EXT_PACER_EDGE_RISING),
     FALLING(MeasurementComputingUniversalLibrary.EXT_PACER_EDGE_FALLING);
 

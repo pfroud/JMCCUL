@@ -11,6 +11,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 public enum RtdSensorType {
 
     // RTD = Resistance Temperature Detector
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     PLATINUM_3750(MeasurementComputingUniversalLibrary.RTD_PT_3750),
     PLATINUM_3850(MeasurementComputingUniversalLibrary.RTD_PT_3850),
     PLATINUM_3851(MeasurementComputingUniversalLibrary.RTD_PT_3851),

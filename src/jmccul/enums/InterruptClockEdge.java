@@ -10,6 +10,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum InterruptClockEdge {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     RISING(MeasurementComputingUniversalLibrary.RISING_EDGE),
     FALLING(MeasurementComputingUniversalLibrary.FALLING_EDGE);
 

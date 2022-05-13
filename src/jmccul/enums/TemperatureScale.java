@@ -11,6 +11,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
 public enum TemperatureScale {
 
     // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Enumerations/MccDaq.TempScale.htm
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     CELSIUS(MeasurementComputingUniversalLibrary.CELSIUS),
     FAHRENHEIT(MeasurementComputingUniversalLibrary.FAHRENHEIT),
     KELVIN(MeasurementComputingUniversalLibrary.KELVIN),

@@ -4,6 +4,16 @@ import jmccul.config.Configuration;
 import java.nio.ByteBuffer;
 import jmccul.analog.AnalogInputImpl;
 import jmccul.analog.AnalogOutputImpl;
+import jmccul.config.AnalogInputConfig;
+import jmccul.config.AnalogOutputConfig;
+import jmccul.config.BoardConfig;
+import jmccul.config.CounterConfig;
+import jmccul.config.DigitalInputConfig;
+import jmccul.config.DigitalOutputConfig;
+import jmccul.config.ExpansionConfig;
+import jmccul.config.NetworkConfig;
+import jmccul.config.TemperatureConfig;
+import jmccul.config.WirelessConfig;
 import jmccul.counter.CounterImpl;
 import jmccul.digital.DigitalImpl;
 import jmccul.jna.DaqDeviceDescriptor;
@@ -70,6 +80,17 @@ public class DaqDevice implements AutoCloseable {
     public final TemperatureImpl temperature;
     public final CounterImpl counter;
 
+    public final AnalogInputConfig analogInputConfig;
+    public final AnalogOutputConfig analogOutputConfig;
+    public final BoardConfig boardConfig;
+    public final CounterConfig counterConfig;
+    public final DigitalInputConfig digitalInputConfig;
+    public final DigitalOutputConfig digitalOutputConfig;
+    public final ExpansionConfig expansionConfig;
+    public final NetworkConfig networkConfig;
+    public final TemperatureConfig temperatureConfig;
+    public final WirelessConfig wirelessConfig;
+
     public DaqDevice(DaqDeviceDescriptor daqDeviceDescriptor) throws JMCCULException {
         BOARD_NUMBER = nextBoardNumber;
 
@@ -81,7 +102,7 @@ public class DaqDevice implements AutoCloseable {
         BOARD_NAME = getBoardName();
         FACTORY_SERIAL_NUMBER = getFactorySerialNumber();
         PRODUCT_ID = daqDeviceDescriptor.ProductID;
-//        USER_DEVICE_IDENTIFIER = getUserDeviceIdentifier();
+        //        USER_DEVICE_IDENTIFIER = getUserDeviceIdentifier();
 
         /*
         if (debugPrintouts) {
@@ -93,6 +114,17 @@ public class DaqDevice implements AutoCloseable {
         analogInput = new AnalogInputImpl(this);
         temperature = new TemperatureImpl(this);
         counter = new CounterImpl(this);
+
+        analogInputConfig = new AnalogInputConfig(this);
+        analogOutputConfig = new AnalogOutputConfig(this);
+        boardConfig = new BoardConfig(this);
+        counterConfig = new CounterConfig(this);
+        digitalInputConfig = new DigitalInputConfig(this);
+        digitalOutputConfig = new DigitalOutputConfig(this);
+        expansionConfig = new ExpansionConfig(this);
+        networkConfig = new NetworkConfig(this);
+        temperatureConfig = new TemperatureConfig(this);
+        wirelessConfig = new WirelessConfig(this);
     }
 
     private String getBoardName() throws JMCCULException {

@@ -12,6 +12,7 @@ import jmccul.jna.MeasurementComputingUniversalLibrary;
  */
 public enum FirmwareVersionType {
 
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     MAIN(MeasurementComputingUniversalLibrary.VER_FW_MAIN),
     MEASUREMENT(MeasurementComputingUniversalLibrary.VER_FW_MEASUREMENT),
     RATIO(MeasurementComputingUniversalLibrary.VER_FW_RADIO),

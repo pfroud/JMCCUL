@@ -14,6 +14,7 @@ public enum AnalogInputChannelType {
     InfoType: BoardInfo
     ConfigItem: BIADCHANTYPE
      */
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     VOLTAGE(MeasurementComputingUniversalLibrary.AI_CHAN_TYPE_VOLTAGE),
     CURRENT(MeasurementComputingUniversalLibrary.AI_CHAN_TYPE_CURRENT),
     RESISTANCE_4WIRE_10KOHM(MeasurementComputingUniversalLibrary.AI_CHAN_TYPE_RESISTANCE_10K4W),

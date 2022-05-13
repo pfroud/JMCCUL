@@ -14,6 +14,7 @@ public enum AdcTransferMode {
     BoardInfo
     BIADXFERMODE
      */
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     KERNEL(MeasurementComputingUniversalLibrary.XFER_KERNEL),
     USER(MeasurementComputingUniversalLibrary.XFER_USER);
 
