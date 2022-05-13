@@ -66,7 +66,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
             ExpansionConfig.class, NetworkConfig.class,
             TemperatureConfig.class, WirelessConfig.class};
         for (Class theClass : configClasses) {
-            createTabForClass(theClass);
+            createTabForConfigClass(theClass);
         }
     }
 
@@ -83,11 +83,11 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         Method getter, setter;
     }
 
-    private void createTabForClass(Class theClass) {
+    private void createTabForConfigClass(Class configClass) {
         final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        final GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -98,21 +98,18 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         gbc.gridx = 2;
         contentPanel.add(new JLabel("<html><b>Set"), gbc);
 
-        final Map<String, GetterAndSetter> methodMap = getMethodMap(theClass);
+        // The map key is the method name without "get" or "set" prefix.
+        final Map<String, GetterAndSetter> methodMap = getMethodMap(configClass);
 
         final String[] methodNamesWithoutPrefixesSorted = methodMap.keySet().stream().sorted().toArray(String[]::new);
 
         for (int i = 0; i < methodNamesWithoutPrefixesSorted.length; i++) {
             final String methodNameWithoutPrefix = methodNamesWithoutPrefixesSorted[i];
 
-            if (!methodMap.containsKey(methodNameWithoutPrefix)) {
-                System.out.println("map does not contain key " + methodNameWithoutPrefix);
-                continue;
-            }
             final GetterAndSetter gas = methodMap.get(methodNameWithoutPrefix);
 
             if (gas.getter == null && gas.setter == null) {
-                System.out.println("getter and setter are both null??" + methodNameWithoutPrefix);
+                System.out.println("getter and setter are both null?? " + methodNameWithoutPrefix);
                 continue;
             }
 
@@ -121,287 +118,308 @@ public final class ConfigTestGui extends javax.swing.JFrame {
             contentPanel.add(new JLabel(methodNameWithoutPrefix), gbc);
 
             gbc.gridx = 1;
-
-            contentPanel.add(getComponentForGetter(theClass, methodNameWithoutPrefix, gas), gbc);
+            contentPanel.add(getComponentForGetter(configClass, methodNameWithoutPrefix, gas.getter), gbc);
 
             gbc.gridx = 2;
-            contentPanel.add(getComponentForSetter(theClass, methodNameWithoutPrefix, gas), gbc);
+            contentPanel.add(getComponentForSetter(configClass, methodNameWithoutPrefix, gas.setter), gbc);
 
         }
         final JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(50);
-        jTabbedPane1.add(scrollPane, theClass.getSimpleName());
+        jTabbedPane1.add(scrollPane, configClass.getSimpleName());
 
     }
 
-    private Component getComponentForGetter(Class theClass, String methodNameWithoutPrefix, GetterAndSetter gas) {
-        if (gas.getter == null) {
+    private Component getComponentForGetter(Class configClass, String methodNameWithoutPrefix, Method getterMethod) {
+        if (getterMethod == null) {
             return new JLabel("Write-only (getter is null)");
-        } else {
-            final Parameter[] params = gas.getter.getParameters();
+        }
 
-            if (params.length != 0 && params.length != 1) {
-                System.out.println(theClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": param count of getter is " + params.length);
-                JLabel jlabel = new JLabel("param count is " + params.length);
-                jlabel.setForeground(Color.red);
-                return jlabel;
-            }
+        final Parameter[] getterParams = getterMethod.getParameters();
 
-            final boolean isDevNumUsed = params.length == 1;
-            final JPanel flowLayoutPanel = new JPanel();
+        /*
+        There are two possibilities for getters:
+        If devNum is used, the getter method has one parameter (the devNum).
+        If devNum is ignored, the getter method has no paramaters.
+         */
+        if (getterParams.length != 0 && getterParams.length != 1) {
+            System.out.println(configClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": param count of getter is " + getterParams.length);
+            JLabel jlabel = new JLabel("param count is " + getterParams.length);
+            jlabel.setForeground(Color.red);
+            return jlabel;
+        }
 
-            Component inputComponentForDevNum;
-            if (isDevNumUsed) {
-                final Parameter paramForDevNum = params[0];
-                flowLayoutPanel.add(new JLabel(paramForDevNum.getName() + " (" + paramForDevNum.getType().getSimpleName() + "): "));
-                try {
-                    inputComponentForDevNum = getInputComponentForParameter(paramForDevNum);
-                    flowLayoutPanel.add(inputComponentForDevNum);
-                } catch (ReflectiveOperationException ex) {
-                    final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
-                    jLabel.setForeground(Color.red);
-                    flowLayoutPanel.add(jLabel);
-                    inputComponentForDevNum = null;
-                }
-            } else {
+        final boolean isDevNumUsed = getterParams.length == 1;
+        final JPanel flowLayoutPanel = new JPanel();
+
+        Component inputComponentForDevNum;
+        if (isDevNumUsed) {
+            final Parameter paramForDevNum = getterParams[0];
+            flowLayoutPanel.add(new JLabel(paramForDevNum.getName() + " (" + paramForDevNum.getType().getSimpleName() + "): "));
+            try {
+                inputComponentForDevNum = getInputComponentForParameter(paramForDevNum);
+                flowLayoutPanel.add(inputComponentForDevNum);
+            } catch (ReflectiveOperationException ex) {
+                final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
+                jLabel.setForeground(Color.red);
+                flowLayoutPanel.add(jLabel);
                 inputComponentForDevNum = null;
             }
-
-            final JLabel resultLabel = new JLabel();
-
-            final JButton getButton = new JButton("Get");
-            final Component inputComponentForDevNum_ = inputComponentForDevNum;//local variable referenced from a lambda expression must be final
-            getButton.addActionListener(e -> {
-                if (selectedDevice == null) {
-                    return;
-                }
-                try {
-                    Object invoke;
-                    Object configInstance = getConfigInstance(theClass);
-
-                    if (isDevNumUsed && inputComponentForDevNum_ != null) {
-                        final Object devNumInputValue = getInput(inputComponentForDevNum_, params[0].getType());
-                        invoke = gas.getter.invoke(configInstance, devNumInputValue);
-                    } else {
-                        invoke = gas.getter.invoke(configInstance);
-                    }
-                    if (invoke == null) {
-                        resultLabel.setText("null");
-                    } else {
-                        resultLabel.setText(invoke.toString());
-                    }
-                    resultLabel.setForeground(Color.black);
-                } catch (Exception ex) {
-                    if (ex instanceof InvocationTargetException && ex.getCause() instanceof JMCCULException) {
-                        // usually means the board does not support it
-                        resultLabel.setForeground(Color.black);
-                        resultLabel.setText(ex.getCause().getMessage());
-                    } else {
-                        System.err.println("Exception getting " + methodNameWithoutPrefix + " ( " + theClass.getName() + "): " + ex.toString());
-                        resultLabel.setForeground(Color.red);
-                        resultLabel.setText(ex.getClass().getName());
-                    }
-                }
-            });
-            flowLayoutPanel.add(getButton);
-
-            flowLayoutPanel.add(resultLabel);
-
-            return flowLayoutPanel;
+        } else {
+            inputComponentForDevNum = null;
         }
+
+        final JLabel resultLabel = new JLabel();
+
+        final JButton getButton = new JButton("Get");
+        final Component inputComponentForDevNum_ = inputComponentForDevNum;//local variable referenced from a lambda expression must be final
+        getButton.addActionListener(e -> {
+            if (selectedDevice == null) {
+                return;
+            }
+            try {
+                final Object invoked;
+                final Object configInstance = getConfigInstanceFromSelectedDevice(configClass);
+
+                if (isDevNumUsed && inputComponentForDevNum_ != null) {
+                    final Parameter paramForDevNum = getterParams[0];
+                    final Object devNumInputValue = getUserInputFromComponent(inputComponentForDevNum_, paramForDevNum.getType());
+                    invoked = getterMethod.invoke(configInstance, devNumInputValue);
+                } else {
+                    invoked = getterMethod.invoke(configInstance);
+                }
+
+                resultLabel.setForeground(Color.black);
+                if (invoked == null) {
+                    resultLabel.setText("null");
+                } else {
+                    resultLabel.setText(invoked.toString());
+                }
+            } catch (Exception ex) {
+                if (ex instanceof InvocationTargetException && ex.getCause() instanceof JMCCULException) {
+                    // usually means the DAQ device does not support this config item
+                    resultLabel.setForeground(Color.black);
+                    resultLabel.setText(ex.getCause().getMessage());
+                } else {
+                    System.err.println("Exception getting " + methodNameWithoutPrefix + " ( " + configClass.getName() + "): " + ex.toString());
+                    resultLabel.setForeground(Color.red);
+                    resultLabel.setText(ex.getClass().getName());
+                }
+            }
+        });
+        flowLayoutPanel.add(getButton);
+        flowLayoutPanel.add(resultLabel);
+        return flowLayoutPanel;
+
     }
 
-    private Object getConfigInstance(Class configClass) {
+    private Object getConfigInstanceFromSelectedDevice(Class configClass) {
         if (configClass == AnalogInputConfig.class) {
             return selectedDevice.analogInputConfig;
+
         } else if (configClass == AnalogOutputConfig.class) {
             return selectedDevice.analogOutputConfig;
+
         } else if (configClass == BoardConfig.class) {
             return selectedDevice.boardConfig;
+
         } else if (configClass == CounterConfig.class) {
             return selectedDevice.counterConfig;
+
         } else if (configClass == DigitalInputConfig.class) {
             return selectedDevice.digitalInputConfig;
+
         } else if (configClass == DigitalOutputConfig.class) {
             return selectedDevice.digitalOutputConfig;
+
         } else if (configClass == ExpansionConfig.class) {
             return selectedDevice.expansionConfig;
+
         } else if (configClass == NetworkConfig.class) {
             return selectedDevice.networkConfig;
+
         } else if (configClass == TemperatureConfig.class) {
             return selectedDevice.temperatureConfig;
+
         } else if (configClass == WirelessConfig.class) {
             return selectedDevice.wirelessConfig;
+
         } else {
             throw new IllegalArgumentException("don't know what to do when configClass is " + configClass.getName());
         }
 
     }
 
-    private Component getComponentForSetter(Class theClass, String methodNameWithoutPrefix, GetterAndSetter gas) {
-        if (gas.setter == null) {
+    private Component getComponentForSetter(Class configClass, String methodNameWithoutPrefix, Method setterMethod) {
+        if (setterMethod == null) {
             return new JLabel("Read-only (setter is null)");
-        } else {
-            final Parameter[] params = gas.setter.getParameters();
+        }
+        final Parameter[] setterParams = setterMethod.getParameters();
 
-            if (params.length != 1 && params.length != 2) {
-                System.out.println(theClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": param count of setter is " + params.length);
-                JLabel jlabel = new JLabel("param count is " + params.length);
-                jlabel.setForeground(Color.red);
-                return jlabel;
-            }
+        /*
+        There are two possibilities for getters:
+        If devNum is used, the setter method has two parameter (the devNum and the value to write).
+        If devNum is ignored, the setter method has one paramaters (the value to write).
+         */
+        if (setterParams.length != 1 && setterParams.length != 2) {
+            System.out.println(configClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": param count of setter is " + setterParams.length);
+            JLabel jlabel = new JLabel("param count is " + setterParams.length);
+            jlabel.setForeground(Color.red);
+            return jlabel;
+        }
 
-            final boolean isDevNumUsed = params.length == 2;
-            final JPanel flowLayoutPanel = new JPanel();
+        final boolean isDevNumUsed = setterParams.length == 2;
+        final JPanel flowLayoutPanel = new JPanel();
 
-            Component inputComponentForDevNum;
-            final Parameter paramForInput;
-            if (isDevNumUsed) {
-                final Parameter paramForDevNum = params[0];
-                flowLayoutPanel.add(new JLabel(paramForDevNum.getName() + " (" + paramForDevNum.getType().getSimpleName() + "): "));
+        Component inputComponentForDevNum;
+        final Parameter paramForInput;
+        if (isDevNumUsed) {
+            final Parameter paramForDevNum = setterParams[0];
+            flowLayoutPanel.add(new JLabel(paramForDevNum.getName() + " (" + paramForDevNum.getType().getSimpleName() + "): "));
 
-                try {
-                    inputComponentForDevNum = getInputComponentForParameter(paramForDevNum);
-                    flowLayoutPanel.add(inputComponentForDevNum);
-                } catch (ReflectiveOperationException ex) {
-                    final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
-                    jLabel.setForeground(Color.red);
-                    flowLayoutPanel.add(jLabel);
-                    inputComponentForDevNum = null;
-                }
-
-                paramForInput = params[1];
-            } else {
-                // devNum is ignored
-                inputComponentForDevNum = null;
-                paramForInput = params[0];
-            }
-
-            Component inputComponentForNewValue;
-            flowLayoutPanel.add(new JLabel(paramForInput.getName() + " (" + paramForInput.getType().getSimpleName() + "): "));
             try {
-                inputComponentForNewValue = getInputComponentForParameter(paramForInput);
-                flowLayoutPanel.add(inputComponentForNewValue);
+                inputComponentForDevNum = getInputComponentForParameter(paramForDevNum);
+                flowLayoutPanel.add(inputComponentForDevNum);
             } catch (ReflectiveOperationException ex) {
                 final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
                 jLabel.setForeground(Color.red);
                 flowLayoutPanel.add(jLabel);
-                inputComponentForNewValue = null;
+                inputComponentForDevNum = null;
             }
-            final JButton button = new JButton("Set");
-            final JLabel status = new JLabel();
-            final Component inputComponentForDevNum_ = inputComponentForDevNum;//local variable referenced from a lambda expression must be final
-            final Component inputComponentForNewValue_ = inputComponentForNewValue;//local variable referenced from a lambda expression must be final
-            button.addActionListener(e -> {
 
-                if (selectedDevice == null) {
-                    return;
-                }
-                if (inputComponentForNewValue_ == null) {
-                    return;
-                }
-                try {
-                    Object configInstance = getConfigInstance(theClass);
-
-                    if (isDevNumUsed && inputComponentForDevNum_ != null) {
-                        final Object devNumInputValue = getInput(inputComponentForDevNum_, params[0].getType());
-                        final Object newValueInputValue = getInput(inputComponentForNewValue_, params[1].getType());
-                        status.setText("OK - devNum " + devNumInputValue + ", new value " + newValueInputValue);
-                        gas.setter.invoke(configInstance, devNumInputValue, newValueInputValue);
-                    } else {
-                        final Object devNumInputValue = getInput(inputComponentForNewValue_, params[0].getType());
-                        status.setText("Set to " + devNumInputValue);
-                        gas.setter.invoke(configInstance, devNumInputValue);
-                    }
-                    status.setForeground(Color.black);
-                } catch (Exception ex) {
-                    if (ex instanceof InvocationTargetException && ex.getCause() instanceof JMCCULException) {
-                        // usually means the board does not support it
-                        status.setForeground(Color.black);
-                        status.setText(ex.getCause().getMessage());
-                    } else {
-                        System.err.println("Exception setting " + methodNameWithoutPrefix + " ( " + theClass.getName() + "):");
-                        ex.printStackTrace();
-                        System.err.println();
-                        status.setForeground(Color.red);
-                        status.setText(ex.getClass().getName());
-                    }
-                }
-
-            });
-            flowLayoutPanel.add(button);
-            flowLayoutPanel.add(status);
-            return flowLayoutPanel;
+            paramForInput = setterParams[1];
+        } else {
+            // devNum is ignored
+            inputComponentForDevNum = null;
+            paramForInput = setterParams[0];
         }
+
+        Component inputComponentForNewValue;
+        flowLayoutPanel.add(new JLabel(paramForInput.getName() + " (" + paramForInput.getType().getSimpleName() + "): "));
+        try {
+            inputComponentForNewValue = getInputComponentForParameter(paramForInput);
+            flowLayoutPanel.add(inputComponentForNewValue);
+        } catch (ReflectiveOperationException ex) {
+            final JLabel jLabel = new JLabel(ex.getClass().getSimpleName());
+            jLabel.setForeground(Color.red);
+            flowLayoutPanel.add(jLabel);
+            inputComponentForNewValue = null;
+        }
+        final JButton button = new JButton("Set");
+        final JLabel status = new JLabel();
+        final Component inputComponentForDevNum_ = inputComponentForDevNum;//local variable referenced from a lambda expression must be final
+        final Component inputComponentForNewValue_ = inputComponentForNewValue;//local variable referenced from a lambda expression must be final
+        button.addActionListener(e -> {
+            if (selectedDevice == null || inputComponentForNewValue_ == null) {
+                return;
+            }
+
+            try {
+                final Object configInstance = getConfigInstanceFromSelectedDevice(configClass);
+
+                if (isDevNumUsed && inputComponentForDevNum_ != null) {
+                    final Parameter paramForDevNum = setterParams[0];
+                    final Parameter paramForNewValue = setterParams[1];
+                    final Object devNumInputValue = getUserInputFromComponent(inputComponentForDevNum_, paramForDevNum.getType());
+                    final Object newValueInputValue = getUserInputFromComponent(inputComponentForNewValue_, paramForNewValue.getType());
+                    status.setText("OK - devNum " + devNumInputValue + ", new value " + newValueInputValue);
+                    setterMethod.invoke(configInstance, devNumInputValue, newValueInputValue);
+                } else {
+                    final Parameter paramForNewValue = setterParams[0];
+                    final Object devNumInputValue = getUserInputFromComponent(inputComponentForNewValue_, paramForNewValue.getType());
+                    status.setText("Set to " + devNumInputValue);
+                    setterMethod.invoke(configInstance, devNumInputValue);
+                }
+                status.setForeground(Color.black);
+            } catch (Exception ex) {
+                if (ex instanceof InvocationTargetException && ex.getCause() instanceof JMCCULException) {
+                    // usually means the DAQ device does not support this config item
+                    status.setForeground(Color.black);
+                    status.setText(ex.getCause().getMessage());
+                } else {
+                    System.err.println("Exception setting " + methodNameWithoutPrefix + " ( " + configClass.getName() + "):");
+                    ex.printStackTrace();
+                    System.err.println();
+                    status.setForeground(Color.red);
+                    status.setText(ex.getClass().getName());
+                }
+            }
+
+        });
+        flowLayoutPanel.add(button);
+        flowLayoutPanel.add(status);
+        return flowLayoutPanel;
+
     }
 
     private Component getInputComponentForParameter(Parameter param) throws ReflectiveOperationException {
-        final Class<?> paramType = param.getType();
+        final Class paramType = param.getType();
         if (paramType.isEnum()) {
-            final Object invoke = paramType.getMethod("values").invoke(null);
-            final Object[] objArray = (Object[]) invoke;
-
-            Object[] filtered = Arrays.stream(objArray).filter(obj -> {
+            // Get all the enum values using reflection, then filter out anything named NOT_USED or NOT_SET.
+            final Object invoked = paramType.getMethod("values").invoke(null);
+            final Object[] castToObjectArray = (Object[]) invoked;
+            final Object[] filtered = Arrays.stream(castToObjectArray).filter(obj -> {
                 final String enumName = ((Enum) obj).name();
                 return !enumName.equals("NOT_USED") && !enumName.equals("NOT_SET");
             }).toArray();
+            return new JComboBox(filtered);
 
-            final JComboBox comboBox = new JComboBox(filtered);
-            comboBox.setPreferredSize(new Dimension(100, 20));
-            return comboBox;
         } else if (paramType == boolean.class) {
             return new JCheckBox();
+
+        } else if (paramType == String.class) {
+            return new JTextField(10);
+
         } else {
-            return new JTextField("0", 5);
+            return new JTextField("0", 2);
         }
     }
 
-    private Object getInput(Component comp, Class desiredType) {
-        if (comp instanceof JComboBox) {
+    private Object getUserInputFromComponent(Component inputComponent, Class desiredType) {
+        if (inputComponent instanceof JComboBox) {
             if (desiredType.isEnum()) {
-                final JComboBox cast = (JComboBox) comp;
-                return cast.getSelectedItem();
+                final JComboBox castToComboBox = (JComboBox) inputComponent;
+                return castToComboBox.getSelectedItem();
             } else {
-                throw new IllegalArgumentException("the component is a JComboBox but the type is not an enum: " + desiredType.getClass());
+                throw new IllegalArgumentException("the component is a JComboBox but the desired type is not an enum: " + desiredType.getClass());
             }
-        } else if (comp instanceof JCheckBox) {
+        } else if (inputComponent instanceof JCheckBox) {
             if (desiredType == boolean.class) {
-                final JCheckBox cast = (JCheckBox) comp;
-                return cast.isSelected();
+                final JCheckBox castToCheckbox = (JCheckBox) inputComponent;
+                return castToCheckbox.isSelected();
             } else {
-                throw new IllegalArgumentException("the component is a JCheckBox but the type is not boolean: " + desiredType.getClass());
+                throw new IllegalArgumentException("the component is a JCheckBox but the desired type is not boolean: " + desiredType.getClass());
             }
-        } else if (comp instanceof JTextField) {
-            final JTextField cast = (JTextField) comp;
+        } else if (inputComponent instanceof JTextField) {
+            final JTextField castToTextField = (JTextField) inputComponent;
             if (desiredType == String.class) {
-                return cast.getText();
+                return castToTextField.getText();
             } else if (desiredType == int.class) {
-                return Integer.parseInt(cast.getText());
+                return Integer.parseInt(castToTextField.getText());
             } else {
-                throw new IllegalArgumentException("the component is a JTextField but the type is neither String nor int: " + desiredType.getClass());
+                throw new IllegalArgumentException("the component is a JTextField but the desired type is neither String nor int: " + desiredType.getClass());
             }
         } else {
-            throw new IllegalArgumentException("don't know what to do when the component is a " + comp.getClass().getSimpleName());
+            throw new IllegalArgumentException("don't know what to do when the component is a " + inputComponent.getClass().getSimpleName());
         }
     }
 
-    private Map<String, GetterAndSetter> getMethodMap(Class theClass) throws SecurityException {
-        final Method[] methods = theClass.getDeclaredMethods();
-
+    private Map<String, GetterAndSetter> getMethodMap(Class configClass) throws SecurityException {
         // the map key is the name of the methods without the get/set prefix
-        final Map<String, GetterAndSetter> methodMap = new HashMap<>();
-        for (Method method : methods) {
+        final Map<String, GetterAndSetter> rv = new HashMap<>();
+
+        for (Method method : configClass.getDeclaredMethods()) {
             final String methodName = method.getName();
             if (!(methodName.startsWith("get") || methodName.startsWith("set"))) {
-                System.out.println(theClass.getSimpleName() + ": method name does not start with get or set: " + methodName);
+                System.out.println(configClass.getSimpleName() + ": method name does not start with get or set: " + methodName);
                 continue;
             }
 
             final String methodNameWithoutPrefix = methodName.substring(3);
-            if (methodMap.containsKey(methodNameWithoutPrefix)) {
+            if (rv.containsKey(methodNameWithoutPrefix)) {
                 // add to the existing GetterAndSetter object
-                final GetterAndSetter gas = methodMap.get(methodNameWithoutPrefix);
+                final GetterAndSetter gas = rv.get(methodNameWithoutPrefix);
                 if (methodName.startsWith("get")) {
                     if (gas.getter == null) {
                         gas.getter = method;
@@ -423,10 +441,10 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                 } else {
                     gas.setter = method;
                 }
-                methodMap.put(methodNameWithoutPrefix, gas);
+                rv.put(methodNameWithoutPrefix, gas);
             }
         }
-        return methodMap;
+        return rv;
     }
 
     /**
