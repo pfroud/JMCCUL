@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- https://maven.apache.org/pom.html -->
+
+    <groupId>xyz.froud</groupId>
+    <artifactId>JMCCUL</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>JMCCUL</name>
+    <description>Java wrapper for Measurement Computing Corporation Universal Library for data acquisition devices</description>
+    <url>https://github.com/pfroud/JMCCUL</url>
+
+    <issueManagement>
+        <!-- https://maven.apache.org/pom.html#issue-management -->
+        <url>https://github.com/pfroud/JMCCUL/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <!-- https://maven.apache.org/pom.html#Licenses -->
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <!-- https://maven.apache.org/pom.html#SCM -->
+        <url>https://github.com/pfroud/JMCCUL</url>
+        <connection>scm:git:https://github.com/pfroud/JMCCUL.git</connection>
+        <developerConnection>scm:git:git@github.com:pfroud/JMCCUL.git</developerConnection>
+    </scm>
+
+    <developers>
+        <!-- https://maven.apache.org/pom.html#Developers -->
+        <developer>
+            <name>Peter Froud</name>
+            <url>https://froud.xyz/</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <!-- https://maven.apache.org/pom.html#Properties -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
+    </properties>
+
+
+    <dependencies>
+        <!-- https://maven.apache.org/pom.html#Dependencies -->
+        <dependency>
+            <!-- Java Native Access -->
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.11.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- https://maven.apache.org/plugins/index.html -->
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-clean-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-compiler-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-jar-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <JMCCUL-Version>${project.version}</JMCCUL-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-shade-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>with-dependencies</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-install-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/scm/maven-scm-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>2.0.0-M1</version>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-source-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doclint>none</doclint>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
