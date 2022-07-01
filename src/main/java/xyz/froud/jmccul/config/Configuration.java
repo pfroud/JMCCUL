@@ -1,13 +1,13 @@
 package xyz.froud.jmccul.config;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
 /**
- *
  * @author Peter Froud
  */
 public class Configuration {

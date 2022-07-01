@@ -1,13 +1,12 @@
-
 package xyz.froud.jmccul.enums;
 
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum BaseOrExpansionBoard {
@@ -32,7 +31,7 @@ public enum BaseOrExpansionBoard {
 
     public final int VALUE;
 
-    private BaseOrExpansionBoard(int value) {
+    BaseOrExpansionBoard(int value) {
         VALUE = value;
     }
 

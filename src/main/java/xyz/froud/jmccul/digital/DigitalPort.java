@@ -2,12 +2,13 @@ package xyz.froud.jmccul.digital;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
-import java.nio.ShortBuffer;
-import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
+import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+
+import java.nio.ShortBuffer;
 
 /**
  * Adapted from a subclass of https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py
@@ -147,7 +148,7 @@ public class DigitalPort {
         return rv;
     }
 
-    private boolean isConfigurable() throws JMCCULException {
+    private boolean isConfigurable() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L130
         boolean rv = false;
         /*
@@ -194,7 +195,7 @@ public class DigitalPort {
         return (OUTPUT_MASK > 0) || IS_PORT_CONFIGURABLE;
     }
 
-    private boolean isInputScanSupported() throws JMCCULException {
+    private boolean isInputScanSupported() {
         /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
@@ -223,7 +224,7 @@ public class DigitalPort {
         return rv;
     }
 
-    private boolean isOutputScanSupported() throws JMCCULException {
+    private boolean isOutputScanSupported() {
         /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:

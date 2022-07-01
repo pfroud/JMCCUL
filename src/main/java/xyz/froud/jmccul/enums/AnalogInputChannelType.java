@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum AnalogInputChannelType {
@@ -48,7 +48,7 @@ public enum AnalogInputChannelType {
 
     public final int VALUE;
 
-    private AnalogInputChannelType(int value) {
+    AnalogInputChannelType(int value) {
         VALUE = value;
     }
 

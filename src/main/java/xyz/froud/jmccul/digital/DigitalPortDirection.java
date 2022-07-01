@@ -3,7 +3,6 @@ package xyz.froud.jmccul.digital;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public enum DigitalPortDirection {
@@ -11,7 +10,7 @@ public enum DigitalPortDirection {
     INPUT(MeasurementComputingUniversalLibrary.DIGITALIN);
     public final int VALUE;
 
-    private DigitalPortDirection(int value) {
+    DigitalPortDirection(int value) {
         VALUE = value;
     }
 

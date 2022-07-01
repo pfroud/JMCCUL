@@ -4,14 +4,13 @@ import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
 import xyz.froud.jmccul.enums.CalibrationTableType;
-import xyz.froud.jmccul.enums.InterruptClockEdge;
-import xyz.froud.jmccul.enums.ExternalPacerClockEdge;
 import xyz.froud.jmccul.enums.ExternalClockType;
+import xyz.froud.jmccul.enums.ExternalPacerClockEdge;
 import xyz.froud.jmccul.enums.FirmwareVersionType;
+import xyz.froud.jmccul.enums.InterruptClockEdge;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public class BoardConfig {

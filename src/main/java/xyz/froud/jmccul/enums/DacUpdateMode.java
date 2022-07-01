@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum DacUpdateMode {
@@ -30,7 +30,7 @@ public enum DacUpdateMode {
 
     public final int VALUE;
 
-    private DacUpdateMode(int value) {
+    DacUpdateMode(int value) {
         VALUE = value;
     }
 

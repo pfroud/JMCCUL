@@ -6,7 +6,6 @@ import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
 /**
- *
  * @author Peter Froud
  */
 public class PrintDeviceInfo {

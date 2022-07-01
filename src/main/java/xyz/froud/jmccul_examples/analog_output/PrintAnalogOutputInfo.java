@@ -1,10 +1,11 @@
 package xyz.froud.jmccul_examples.analog_output;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
+
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author Peter Froud
@@ -21,7 +22,7 @@ public class PrintAnalogOutputInfo {
         }
 
         try (DaqDevice device = optionalDevice.get()) {
-            System.out.println("Analog output info for this device: " + device.toString());
+            System.out.println("Analog output info for this device: " + device);
             System.out.println("CHANNEL_COUNT = " + device.analogOutput.CHANNEL_COUNT);
             System.out.println("RESOLUTION = " + device.analogOutput.RESOLUTION);
             System.out.println("SUPPORTED_RANGES = " + device.analogOutput.SUPPORTED_RANGES);

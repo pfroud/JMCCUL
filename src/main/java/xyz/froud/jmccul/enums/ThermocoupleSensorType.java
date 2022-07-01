@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum ThermocoupleSensorType {
@@ -36,7 +36,7 @@ public enum ThermocoupleSensorType {
 
     public final int VALUE;
 
-    private ThermocoupleSensorType(int value) {
+    ThermocoupleSensorType(int value) {
         VALUE = value;
     }
 

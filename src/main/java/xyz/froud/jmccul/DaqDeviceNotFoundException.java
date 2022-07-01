@@ -3,7 +3,6 @@ package xyz.froud.jmccul;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
 /**
- *
  * @author Peter Froud
  */
 public class DaqDeviceNotFoundException extends JMCCULException {

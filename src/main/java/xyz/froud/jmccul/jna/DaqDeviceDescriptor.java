@@ -1,6 +1,7 @@
 package xyz.froud.jmccul.jna;
 
 import com.sun.jna.Structure;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class DaqDeviceDescriptor extends Structure {
      */
     public int ProductID;
     /**
-     * @see DaqDeviceInterface<br>
+     * @see MeasurementComputingUniversalLibrary.DaqDeviceInterface
      * USB, BLUETOOTH, ...<br>
      * C type : DaqDeviceInterface
      */
@@ -64,7 +65,7 @@ public class DaqDeviceDescriptor extends Structure {
      * @param Reserved reserved for the future.<br>
      * C type : CHAR[512]
      */
-    public DaqDeviceDescriptor(byte ProductName[], int ProductID, int InterfaceType, byte DevString[], byte UniqueID[], long NUID, byte Reserved[]) {
+    public DaqDeviceDescriptor(byte[] ProductName, int ProductID, int InterfaceType, byte[] DevString, byte[] UniqueID, long NUID, byte[] Reserved) {
         super();
         if ((ProductName.length != this.ProductName.length)) {
             throw new IllegalArgumentException("Wrong array size !");
@@ -124,9 +125,9 @@ public class DaqDeviceDescriptor extends Structure {
 
     public static class ByReference extends DaqDeviceDescriptor implements Structure.ByReference {
 
-    };
+    }
 
     public static class ByValue extends DaqDeviceDescriptor implements Structure.ByValue {
 
-    };
+    }
 }

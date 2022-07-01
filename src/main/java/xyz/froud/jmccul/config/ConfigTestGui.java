@@ -1,17 +1,10 @@
 package xyz.froud.jmccul.config;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import xyz.froud.jmccul.DaqDevice;
+import xyz.froud.jmccul.DeviceDiscovery;
+import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -21,13 +14,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DeviceDiscovery;
-import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- *
  * @author Peter Froud
  */
 public final class ConfigTestGui extends javax.swing.JFrame {
@@ -59,13 +58,13 @@ public final class ConfigTestGui extends javax.swing.JFrame {
 
         }
 
-        final Class[] configClasses = new Class[]{
-            AnalogInputConfig.class, AnalogOutputConfig.class,
-            BoardConfig.class, CounterConfig.class,
-            DigitalInputConfig.class, DigitalOutputConfig.class,
-            ExpansionConfig.class, NetworkConfig.class,
-            TemperatureConfig.class, WirelessConfig.class};
-        for (Class theClass : configClasses) {
+        final Class<?>[] configClasses = new Class[]{
+                AnalogInputConfig.class, AnalogOutputConfig.class,
+                BoardConfig.class, CounterConfig.class,
+                DigitalInputConfig.class, DigitalOutputConfig.class,
+                ExpansionConfig.class, NetworkConfig.class,
+                TemperatureConfig.class, WirelessConfig.class};
+        for (Class<?> theClass : configClasses) {
             createTabForConfigClass(theClass);
         }
     }
@@ -78,12 +77,12 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         selectedDevice = new DaqDevice(descriptor);
     }
 
-    private class GetterAndSetter {
+    private static class GetterAndSetter {
 
         Method getter, setter;
     }
 
-    private void createTabForConfigClass(Class configClass) {
+    private void createTabForConfigClass(Class<?> configClass) {
         final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
 
@@ -131,7 +130,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
 
     }
 
-    private Component getComponentForGetter(Class configClass, String methodNameWithoutPrefix, Method getterMethod) {
+    private Component getComponentForGetter(Class<?> configClass, String methodNameWithoutPrefix, Method getterMethod) {
         if (getterMethod == null) {
             return new JLabel("Write-only (getter is null)");
         }
@@ -202,7 +201,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                     resultLabel.setForeground(Color.black);
                     resultLabel.setText(ex.getCause().getMessage());
                 } else {
-                    System.err.println("Exception getting " + methodNameWithoutPrefix + " ( " + configClass.getName() + "): " + ex.toString());
+                    System.err.println("Exception getting " + methodNameWithoutPrefix + " ( " + configClass.getName() + "): " + ex);
                     resultLabel.setForeground(Color.red);
                     resultLabel.setText(ex.getClass().getName());
                 }
@@ -214,7 +213,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
 
     }
 
-    private Object getConfigInstanceFromSelectedDevice(Class configClass) {
+    private Object getConfigInstanceFromSelectedDevice(Class<?> configClass) {
         if (configClass == AnalogInputConfig.class) {
             return selectedDevice.analogInputConfig;
 
@@ -251,7 +250,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
 
     }
 
-    private Component getComponentForSetter(Class configClass, String methodNameWithoutPrefix, Method setterMethod) {
+    private Component getComponentForSetter(Class<?> configClass, String methodNameWithoutPrefix, Method setterMethod) {
         if (setterMethod == null) {
             return new JLabel("Read-only (setter is null)");
         }
@@ -354,13 +353,13 @@ public final class ConfigTestGui extends javax.swing.JFrame {
     }
 
     private Component getInputComponentForParameter(Parameter param) throws ReflectiveOperationException {
-        final Class paramType = param.getType();
+        final Class<?> paramType = param.getType();
         if (paramType.isEnum()) {
             // Get all the enum values using reflection, then filter out anything named NOT_USED or NOT_SET.
             final Object invoked = paramType.getMethod("values").invoke(null);
             final Object[] castToObjectArray = (Object[]) invoked;
             final Object[] filtered = Arrays.stream(castToObjectArray).filter(obj -> {
-                final String enumName = ((Enum) obj).name();
+                final String enumName = ((Enum<?>) obj).name();
                 return !enumName.equals("NOT_USED") && !enumName.equals("NOT_SET");
             }).toArray();
             return new JComboBox(filtered);
@@ -376,7 +375,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         }
     }
 
-    private Object getUserInputFromComponent(Component inputComponent, Class desiredType) {
+    private Object getUserInputFromComponent(Component inputComponent, Class<?> desiredType) {
         if (inputComponent instanceof JComboBox) {
             if (desiredType.isEnum()) {
                 final JComboBox castToComboBox = (JComboBox) inputComponent;
@@ -405,7 +404,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         }
     }
 
-    private Map<String, GetterAndSetter> getMethodMap(Class configClass) throws SecurityException {
+    private Map<String, GetterAndSetter> getMethodMap(Class<?> configClass) throws SecurityException {
         // the map key is the name of the methods without the get/set prefix
         final Map<String, GetterAndSetter> rv = new HashMap<>();
 
@@ -496,19 +495,16 @@ public final class ConfigTestGui extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 javax.swing.UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         }
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ConfigTestGui().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new ConfigTestGui().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

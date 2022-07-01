@@ -1,15 +1,15 @@
 package xyz.froud.jmccul_examples.temperature;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.enums.TemperatureScale;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 /**
- *
  * @author Peter Froud
  */
 public class TemperatureExample {
@@ -25,7 +25,7 @@ public class TemperatureExample {
         }
 
         final DaqDevice device = optionalDevice.get();
-        System.out.println("Opened this device: " + device.toString());
+        System.out.println("Opened this device: " + device);
 
         doTemperatureInput(device);
 

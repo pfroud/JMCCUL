@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum RtdSensorType {
@@ -37,7 +37,7 @@ public enum RtdSensorType {
 
     public final int VALUE;
 
-    private RtdSensorType(int value) {
+    RtdSensorType(int value) {
         VALUE = value;
     }
 

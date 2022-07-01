@@ -1,13 +1,13 @@
 package xyz.froud.jmccul_examples.temperature;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 /**
- *
  * @author Peter Froud
  */
 public class PrintTemperatureInfo {
@@ -22,7 +22,7 @@ public class PrintTemperatureInfo {
         }
 
         try (DaqDevice device = optionalDevice.get()) {
-            System.out.println("Temperature input info for this device: " + device.toString());
+            System.out.println("Temperature input info for this device: " + device);
 
             System.out.println("CHANNEL_COUNT = " + device.temperature.CHANNEL_COUNT);
 

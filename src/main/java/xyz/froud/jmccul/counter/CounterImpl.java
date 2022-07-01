@@ -1,12 +1,11 @@
 package xyz.froud.jmccul.counter;
 
-import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public class CounterImpl {

@@ -10,7 +10,6 @@ import xyz.froud.jmccul.enums.ThermocoupleSensorType;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public class TemperatureConfig {

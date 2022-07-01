@@ -1,16 +1,16 @@
 package xyz.froud.jmccul.temperature;
 
-import java.nio.FloatBuffer;
-import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
+import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.enums.TemperatureScale;
 import xyz.froud.jmccul.enums.ThermocoupleSensorType;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.nio.FloatBuffer;
+
 /**
- *
  * @author Peter Froud
  */
 public class TemperatureImpl {

@@ -1,8 +1,9 @@
 package xyz.froud.jmccul.digital;
 
+import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+
 import java.util.HashMap;
 import java.util.Map;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Enumerations/MccDaq.DigitalPortType.htm
@@ -72,7 +73,7 @@ public enum DigitalPortType {
 
     public final int VALUE;
 
-    private DigitalPortType(int value) {
+    DigitalPortType(int value) {
         VALUE = value;
 
     }

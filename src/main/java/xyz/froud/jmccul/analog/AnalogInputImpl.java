@@ -1,22 +1,22 @@
 package xyz.froud.jmccul.analog;
 
-import xyz.froud.jmccul.enums.AnalogRange;
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
+import xyz.froud.jmccul.DaqDevice;
+import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.JMCCULUtils;
+import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.enums.AnalogRange;
+import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import xyz.froud.jmccul.config.Configuration;
-import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public class AnalogInputImpl {

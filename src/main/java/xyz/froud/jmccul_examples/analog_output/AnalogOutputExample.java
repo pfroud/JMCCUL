@@ -1,14 +1,14 @@
 package xyz.froud.jmccul_examples.analog_output;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.enums.AnalogRange;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 /**
- *
  * @author Peter Froud
  */
 public class AnalogOutputExample {
@@ -25,7 +25,7 @@ public class AnalogOutputExample {
 
         final DaqDevice device = optionalDevice.get();
 
-        System.out.println("Opened this device: " + device.toString());
+        System.out.println("Opened this device: " + device);
 
         // TODO set differential vs single-ended!!
         doAnalogOutput(device);

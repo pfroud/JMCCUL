@@ -1,14 +1,14 @@
 package xyz.froud.jmccul_examples.digital;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.digital.DigitalPort;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 /**
- *
  * @author Peter Froud
  */
 public class PrintDigitalInfo {
@@ -23,7 +23,7 @@ public class PrintDigitalInfo {
         }
 
         try (DaqDevice device = optionalDevice.get()) {
-            System.out.println("Digital I/O info for this device: " + device.toString());
+            System.out.println("Digital I/O info for this device: " + device);
 
             final DigitalPort[] ports = device.digital.PORTS;
 

@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum AdcTimingMode {
@@ -36,7 +36,7 @@ public enum AdcTimingMode {
 
     public final int VALUE;
 
-    private AdcTimingMode(int value) {
+    AdcTimingMode(int value) {
         VALUE = value;
     }
 

@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum TemperatureScale {
@@ -34,7 +34,7 @@ public enum TemperatureScale {
 
     public final int VALUE;
 
-    private TemperatureScale(int value) {
+    TemperatureScale(int value) {
         VALUE = value;
     }
 

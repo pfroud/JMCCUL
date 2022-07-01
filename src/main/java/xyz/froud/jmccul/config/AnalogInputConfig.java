@@ -2,9 +2,9 @@ package xyz.froud.jmccul.config;
 
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.enums.AdcSettlingTime;
 import xyz.froud.jmccul.enums.AdcTimingMode;
 import xyz.froud.jmccul.enums.AdcTransferMode;
-import xyz.froud.jmccul.enums.AdcSettlingTime;
 import xyz.froud.jmccul.enums.AnalogInputChannelType;
 import xyz.froud.jmccul.enums.AnalogRange;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;

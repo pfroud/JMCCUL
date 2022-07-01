@@ -2,17 +2,17 @@ package xyz.froud.jmccul.digital;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.NativeLongByReference;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
+import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary.HGLOBAL;
 
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 /**
- *
  * @author Peter Froud
  */
 public class DigitalImpl {

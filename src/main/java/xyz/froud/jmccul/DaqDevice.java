@@ -1,12 +1,11 @@
 package xyz.froud.jmccul;
 
-import xyz.froud.jmccul.config.Configuration;
-import java.nio.ByteBuffer;
 import xyz.froud.jmccul.analog.AnalogInputImpl;
 import xyz.froud.jmccul.analog.AnalogOutputImpl;
 import xyz.froud.jmccul.config.AnalogInputConfig;
 import xyz.froud.jmccul.config.AnalogOutputConfig;
 import xyz.froud.jmccul.config.BoardConfig;
+import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.config.CounterConfig;
 import xyz.froud.jmccul.config.DigitalInputConfig;
 import xyz.froud.jmccul.config.DigitalOutputConfig;
@@ -20,8 +19,9 @@ import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.temperature.TemperatureImpl;
 
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author Peter Froud
  */
 public class DaqDevice implements AutoCloseable {

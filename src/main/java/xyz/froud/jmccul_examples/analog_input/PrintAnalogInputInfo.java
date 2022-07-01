@@ -1,10 +1,11 @@
 package xyz.froud.jmccul_examples.analog_input;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
+
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author Peter Froud
@@ -21,7 +22,7 @@ public class PrintAnalogInputInfo {
         }
 
         try (DaqDevice device = optionalDevice.get()) {
-            System.out.println("Analog input info for this device: " + device.toString());
+            System.out.println("Analog input info for this device: " + device);
             System.out.println("CHANNEL_COUNT = " + device.analogInput.CHANNEL_COUNT);
             System.out.println("RESOLUTION = " + device.analogInput.RESOLUTION);
             System.out.println("PACKET_SIZE = " + device.analogInput.PACKET_SIZE);

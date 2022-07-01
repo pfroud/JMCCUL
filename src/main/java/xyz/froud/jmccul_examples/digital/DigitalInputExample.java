@@ -1,7 +1,5 @@
 package xyz.froud.jmccul_examples.digital;
 
-import java.util.Arrays;
-import java.util.Optional;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
@@ -9,8 +7,10 @@ import xyz.froud.jmccul.digital.DigitalPort;
 import xyz.froud.jmccul.digital.DigitalPortDirection;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
- *
  * @author Peter Froud
  */
 public class DigitalInputExample {
@@ -75,8 +75,8 @@ public class DigitalInputExample {
 
                 final Optional<DigitalPort> optionalPortToUse
                         = Arrays.stream(device.digital.PORTS)
-                                .filter(port -> port.IS_INPUT_SUPPORTED)
-                                .findFirst();
+                        .filter(port -> port.IS_INPUT_SUPPORTED)
+                        .findFirst();
 
                 if (optionalPortToUse.isPresent()) {
                     DeviceAndPort rv = new DeviceAndPort();

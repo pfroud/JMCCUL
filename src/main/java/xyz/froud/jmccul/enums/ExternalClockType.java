@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum ExternalClockType {
@@ -30,7 +30,7 @@ public enum ExternalClockType {
 
     public final int VALUE;
 
-    private ExternalClockType(int value) {
+    ExternalClockType(int value) {
         VALUE = value;
     }
 

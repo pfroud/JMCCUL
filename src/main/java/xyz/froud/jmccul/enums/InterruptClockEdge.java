@@ -1,11 +1,11 @@
 package xyz.froud.jmccul.enums;
 
-import java.util.HashMap;
-import java.util.Map;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author Peter Froud
  */
 public enum InterruptClockEdge {
@@ -30,7 +30,7 @@ public enum InterruptClockEdge {
 
     public final int VALUE;
 
-    private InterruptClockEdge(int value) {
+    InterruptClockEdge(int value) {
         VALUE = value;
     }
 

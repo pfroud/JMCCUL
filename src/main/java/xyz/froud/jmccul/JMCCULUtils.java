@@ -1,12 +1,12 @@
 package xyz.froud.jmccul;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+
 /**
- *
  * @author Peter Froud
  */
 public class JMCCULUtils {

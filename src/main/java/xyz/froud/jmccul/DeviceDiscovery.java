@@ -1,15 +1,16 @@
 package xyz.froud.jmccul;
 
+import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
+import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+
 import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
+
 import static xyz.froud.jmccul.JMCCULUtils.checkError;
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public class DeviceDiscovery {

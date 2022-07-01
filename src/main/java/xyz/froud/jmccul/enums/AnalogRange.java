@@ -1,15 +1,15 @@
 package xyz.froud.jmccul.enums;
 
+import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+
 import java.util.HashMap;
 import java.util.Map;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm#Misc/Supported_A_D_Ranges.htm
- *
- *
+ * <p>
  * https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/enums.py#L652
- *
+ * <p>
  * This enum is used for both digital-to-analog and analog-to-digital operations.
  *
  * @author Peter Froud
@@ -87,7 +87,7 @@ public enum AnalogRange {
         return valueMap.get(value);
     }
 
-    private AnalogRange(int value, RangeType rangeType, double bound) {
+    AnalogRange(int value, RangeType rangeType, double bound) {
         VALUE = value;
         if (bound <= 0) {
             throw new IllegalArgumentException(String.format(
@@ -108,7 +108,7 @@ public enum AnalogRange {
         }
     }
 
-    private AnalogRange(int value, double minimum, double maximum) {
+    AnalogRange(int value, double minimum, double maximum) {
         VALUE = value;
 
         if (maximum < minimum) {

@@ -1,7 +1,6 @@
 package xyz.froud.jmccul;
 
 /**
- *
  * @author Peter Froud
  */
 public class JMCCULException extends Exception {

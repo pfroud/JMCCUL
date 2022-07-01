@@ -5,7 +5,6 @@ import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
- *
  * @author Peter Froud
  */
 public class WirelessConfig {
