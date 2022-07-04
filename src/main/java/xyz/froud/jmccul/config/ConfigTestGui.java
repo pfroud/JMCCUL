@@ -38,7 +38,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         setSize(800, 600);
 
         try {
-            final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+            final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDescriptors();
 
             if (descriptors.length > 0) {
                 System.out.println("Discovered device count: " + descriptors.length);
@@ -140,7 +140,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         /*
         There are two possibilities for getters:
         If devNum is used, the getter method has one parameter (the devNum).
-        If devNum is ignored, the getter method has no paramaters.
+        If devNum is ignored, the getter method has no parameters.
          */
         if (getterParams.length != 0 && getterParams.length != 1) {
             System.out.println(configClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": param count of getter is " + getterParams.length);
@@ -259,7 +259,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
         /*
         There are two possibilities for getters:
         If devNum is used, the setter method has two parameter (the devNum and the value to write).
-        If devNum is ignored, the setter method has one paramaters (the value to write).
+        If devNum is ignored, the setter method has one parameter (the value to write).
          */
         if (setterParams.length != 1 && setterParams.length != 2) {
             System.out.println(configClass.getSimpleName() + ": " + methodNameWithoutPrefix + ": param count of setter is " + setterParams.length);
@@ -381,14 +381,14 @@ public final class ConfigTestGui extends javax.swing.JFrame {
                 final JComboBox castToComboBox = (JComboBox) inputComponent;
                 return castToComboBox.getSelectedItem();
             } else {
-                throw new IllegalArgumentException("the component is a JComboBox but the desired type is not an enum: " + desiredType.getClass());
+                throw new IllegalArgumentException("the component is a JComboBox but the desired type is not an enum: " + desiredType);
             }
         } else if (inputComponent instanceof JCheckBox) {
             if (desiredType == boolean.class) {
                 final JCheckBox castToCheckbox = (JCheckBox) inputComponent;
                 return castToCheckbox.isSelected();
             } else {
-                throw new IllegalArgumentException("the component is a JCheckBox but the desired type is not boolean: " + desiredType.getClass());
+                throw new IllegalArgumentException("the component is a JCheckBox but the desired type is not boolean: " + desiredType);
             }
         } else if (inputComponent instanceof JTextField) {
             final JTextField castToTextField = (JTextField) inputComponent;
@@ -397,7 +397,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
             } else if (desiredType == int.class) {
                 return Integer.parseInt(castToTextField.getText());
             } else {
-                throw new IllegalArgumentException("the component is a JTextField but the desired type is neither String nor int: " + desiredType.getClass());
+                throw new IllegalArgumentException("the component is a JTextField but the desired type is neither String nor int: " + desiredType);
             }
         } else {
             throw new IllegalArgumentException("don't know what to do when the component is a " + inputComponent.getClass().getSimpleName());

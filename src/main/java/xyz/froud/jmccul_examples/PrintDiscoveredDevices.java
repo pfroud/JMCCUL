@@ -10,7 +10,7 @@ import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 public class PrintDiscoveredDevices {
 
     public static void main(String[] args) throws JMCCULException {
-        final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+        final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDescriptors();
         if (descriptors.length == 0) {
             System.out.println("No daq device descriptors found!");
         } else {

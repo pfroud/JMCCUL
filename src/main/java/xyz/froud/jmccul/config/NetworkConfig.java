@@ -12,13 +12,13 @@ public class NetworkConfig {
     private final int BOARD_NUMBER;
 
     public NetworkConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BINETCONNECTCODE -> BI NET CONNECT CODE -> boardInfo network connection code
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getNetworkConnectionCode() throws JMCCULException {
         return Configuration.getInt(
@@ -42,7 +42,7 @@ public class NetworkConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BINETIOTIMEOUT -> BI NET IO TIMEOUT -> boardInfo network I/O timeout
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getNetworkIoTimeoutMillisec() throws JMCCULException {
         return Configuration.getInt(
@@ -66,7 +66,7 @@ public class NetworkConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDEVMACADDR -> BI DEV MAC ADDR -> boardInfo device MAC address
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public String getMacAddress() throws JMCCULException {
         return Configuration.getString(

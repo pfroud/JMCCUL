@@ -12,13 +12,13 @@ public class DigitalOutputConfig {
     private final int BOARD_NUMBER;
 
     public DigitalOutputConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDOTRIGCOUNT -> BI DO TRIG COUNT -> boardInfo digitalOutput trigger count
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getDigitalOutputTriggerCount() throws JMCCULException {
         return Configuration.getInt(

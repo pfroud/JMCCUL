@@ -72,7 +72,7 @@ public enum AnalogRange {
 
     private enum RangeType {
         // this enum is only to make the AnalogRange constructors easier
-        BIPOLAR, UNIPOLAR;
+        BIPOLAR, UNIPOLAR
     }
 
     static {
@@ -95,16 +95,15 @@ public enum AnalogRange {
             ));
         }
         switch (rangeType) {
-            case BIPOLAR:
+            case BIPOLAR -> {
                 MINIMUM = -bound;
                 MAXIMUM = bound;
-                break;
-            case UNIPOLAR:
+            }
+            case UNIPOLAR -> {
                 MINIMUM = 0;
                 MAXIMUM = bound;
-                break;
-            default:
-                throw new IllegalStateException("the RangeType argument is neither BIPOLAR nor UNIPOLAR");
+            }
+            default -> throw new IllegalStateException("the RangeType argument is neither BIPOLAR nor UNIPOLAR");
         }
     }
 

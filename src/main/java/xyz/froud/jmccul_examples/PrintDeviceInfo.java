@@ -11,7 +11,7 @@ import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 public class PrintDeviceInfo {
 
     public static void main(String[] args) throws JMCCULException {
-        final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+        final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDescriptors();
         if (descriptors.length == 0) {
             System.out.println("No daq devices found!");
         } else {
@@ -21,8 +21,8 @@ public class PrintDeviceInfo {
 
                 System.out.printf("This is device %d / %d\n", i + 1, descriptors.length);
                 try (DaqDevice device = new DaqDevice(descriptor)) {
-                    System.out.println("  BOARD NAME = " + device.BOARD_NAME);
-                    System.out.println("  FACTORY_SERIAL_NUMBER = " + device.FACTORY_SERIAL_NUMBER);
+                    System.out.println("  BOARD NAME = " + device.getBoardName());
+                    System.out.println("  FACTORY_SERIAL_NUMBER = " + device.getFactorySerialNumber());
 //                    System.out.println("  PRODUCT_ID = " + device.PRODUCT_ID);
                     // TODO look at the user device identifier thing
                     System.out.println("  Is digital I/O supported?   " + device.digital.isDigitalIOSupported());

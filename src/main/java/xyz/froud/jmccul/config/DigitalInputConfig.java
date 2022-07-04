@@ -12,13 +12,13 @@ public class DigitalInputConfig {
     private final int BOARD_NUMBER;
 
     public DigitalInputConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDITRIGCOUNT -> BI DI TRIG COUNT -> boardInfo digitalInput trigger count
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getDigitalInputTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -42,7 +42,7 @@ public class DigitalInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDIDEBOUNCESTATE -> BI DI DEBOUNCE STATE  -> boardInfo digitalInput debounce state
      Readable? NO
-     Writabale? yes
+     Writable? yes
      */
     public void setDigitalInputDebounceState(int n) throws JMCCULException {
         Configuration.setInt(
@@ -57,7 +57,7 @@ public class DigitalInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDIDEBOUNCETIME -> BI DI DEBOUNCE TIME -> boardInfo digitalInput debounce time
      Readable? NO
-     Writabale? yes
+     Writable? yes
      */
     public void setDigitalInputDebounceTime(int n) throws JMCCULException {
         Configuration.setInt(
@@ -72,7 +72,7 @@ public class DigitalInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDISOFILTER -> BI DI ISO FILTER -> boardInfo digitalInput isolation(?) filter
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public boolean getDigitalInputAcFilter(int bitNumber) throws JMCCULException {
         return Configuration.getInt(
@@ -96,7 +96,7 @@ public class DigitalInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDINUMDEVS -> BI DI NUM DEVS -> boardInfo digitalInput number of devices
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getDigitalDeviceCount() throws JMCCULException {
         return Configuration.getInt(

@@ -12,13 +12,13 @@ public class WirelessConfig {
     private final int BOARD_NUMBER;
 
     public WirelessConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIRFCHANNEL -> BI RF channel
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getWirelessRfChannel() throws JMCCULException {
         return Configuration.getInt(
@@ -42,7 +42,7 @@ public class WirelessConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIRSS -> BI RF receivedSignalStrength
      Readable? yes
-     Writabale? yes but that is probably a mistake in the docs
+     Writable? yes but that is probably a mistake in the docs
      */
     public int getWirelessSignalStrength() throws JMCCULException {
         return Configuration.getInt(

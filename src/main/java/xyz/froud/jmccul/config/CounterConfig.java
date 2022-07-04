@@ -12,13 +12,13 @@ public class CounterConfig {
     private final int BOARD_NUMBER;
 
     public CounterConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BICINUMDEVS -> BI CI NUM DEVS -> boardInfo counterInfo number of devices
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getCounterDeviceCount() throws JMCCULException {
         return Configuration.getInt(
@@ -32,7 +32,7 @@ public class CounterConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BICTRTRIGCOUNT -> BI CTR TRIG COUNT -> boardInfo counter trigger count
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getCounterTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -56,7 +56,7 @@ public class CounterConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      CICTRNUM -> CI CTR NUM -> counterInfo counter number
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getCounterNumber(int dev) throws JMCCULException {
         return Configuration.getInt(
@@ -70,7 +70,7 @@ public class CounterConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      CICTRTYPE -> CI CTR TYPE -> counterInfo counter type
      Readable? yes
-     Writabale? NO
+     Writable? NO
 
     Can't find anything in cbw.h for this. It says:
     Counter type, where:

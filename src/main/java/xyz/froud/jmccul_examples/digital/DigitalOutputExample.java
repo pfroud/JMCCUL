@@ -15,21 +15,20 @@ import java.util.Optional;
  */
 public class DigitalOutputExample {
 
-    @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DeviceAndPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportsDigitalOutput();
+        final Optional<DeviceAndDigitalPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportDigitalOutput();
 
         if (optionalDeviceAndPort.isPresent()) {
-            final DeviceAndPort deviceAndPort = optionalDeviceAndPort.get();
-            final DaqDevice device = deviceAndPort.device;
-            final DigitalPort port = deviceAndPort.port;
+            try (DeviceAndDigitalPort deviceAndPort = optionalDeviceAndPort.get()) {
+                final DaqDevice device = deviceAndPort.device;
+                final DigitalPort port = deviceAndPort.port;
 
-            System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
-                    device.BOARD_NAME, device.FACTORY_SERIAL_NUMBER, port.PORT_TYPE);
+                System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
+                        device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
 
-            doDigitalOutput(device, port);
-            device.close();
+                doDigitalOutput(device, port);
+            }
         } else {
             System.out.println("Didn't find a device which supports digital output.");
         }
@@ -38,32 +37,24 @@ public class DigitalOutputExample {
 
     private static void doDigitalOutput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
-        if (port.IS_PORT_CONFIGURABLE) {
-            device.digital.configurePort(port.PORT_TYPE, DigitalPortDirection.OUTPUT);
+        if (port.isPortConfigurable()) {
+            device.digital.configurePort(port.getPortType(), DigitalPortDirection.OUTPUT);
         }
 
         //                       eight bits: 76453210
         final short valueToWrite = (short) 0b10110110;
         System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(valueToWrite));
-        device.digital.outputPort(port.PORT_TYPE, valueToWrite);
+        device.digital.outputPort(port.getPortType(), valueToWrite);
 
         System.out.println("Now setting each bit on individually");
-        for (int bitIdx = 0; bitIdx < port.NUM_BITS; bitIdx++) {
-            device.digital.outputBit(port.PORT_TYPE, bitIdx, true);
+        for (int bitIdx = 0; bitIdx < port.getBitCount(); bitIdx++) {
+            device.digital.outputBit(port.getPortType(), bitIdx, true);
         }
 
     }
 
-    private static class DeviceAndPort {
-
-        DaqDevice device;
-        DigitalPort port;
-
-    }
-
-    @SuppressWarnings("ConvertToTryWithResources")
-    private static Optional<DeviceAndPort> findDeviceAndPortWhichSupportsDigitalOutput() throws JMCCULException {
-        final DaqDeviceDescriptor[] allDeviceDescriptors = DeviceDiscovery.findDaqDeviceDescriptors();
+    private static Optional<DeviceAndDigitalPort> findDeviceAndPortWhichSupportDigitalOutput() throws JMCCULException {
+        final DaqDeviceDescriptor[] allDeviceDescriptors = DeviceDiscovery.findDescriptors();
 
         for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
             final DaqDevice device = new DaqDevice(descriptor);
@@ -71,12 +62,12 @@ public class DigitalOutputExample {
             if (device.digital.isDigitalIOSupported()) {
 
                 final Optional<DigitalPort> optionalPortToUse
-                        = Arrays.stream(device.digital.PORTS)
-                        .filter(port -> port.IS_OUTPUT_SUPPORTED)
+                        = Arrays.stream(device.digital.getPorts())
+                        .filter(DigitalPort::isOutputSupported)
                         .findFirst();
 
                 if (optionalPortToUse.isPresent()) {
-                    DeviceAndPort rv = new DeviceAndPort();
+                    DeviceAndDigitalPort rv = new DeviceAndDigitalPort();
                     rv.device = device;
                     rv.port = optionalPortToUse.get();
                     return Optional.of(rv);

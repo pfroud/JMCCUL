@@ -17,13 +17,13 @@ public class TemperatureConfig {
     private final int BOARD_NUMBER;
 
     public TemperatureConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BITEMPAVG -> BI TEMP AVG -> boardInfo temperature average
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getTemperatureScansToAverage() throws JMCCULException {
         return Configuration.getInt(
@@ -47,7 +47,7 @@ public class TemperatureConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BITEMPSCALE -> BI TEMP SCALE -> boardInfo temperature scale
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public TemperatureScale getTemperatureScale() throws JMCCULException {
         return TemperatureScale.parseInt(Configuration.getInt(
@@ -71,7 +71,7 @@ public class TemperatureConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BITEMPREJFREQ -> BI TEMP REJ FREQ -> boardInfo temperature rejection frequency
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public TemperatureRejection getRejectionFrequency(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return TemperatureRejection.parseInt(
@@ -95,9 +95,9 @@ public class TemperatureConfig {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
-     BIDETECTOPENTC  -> BI DETECT OPEN TC -> boardInfo detect open thermocouople
+     BIDETECTOPENTC  -> BI DETECT OPEN TC -> boardInfo detect open thermocouple
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public boolean getOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return Configuration.getInt(
@@ -121,7 +121,7 @@ public class TemperatureConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BINUMTEMPCHANS -> BI NUM TEMP CHANS -> boardInfo number of temperature channels
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getTemperatureChannelCount() throws JMCCULException {
         return Configuration.getInt(
@@ -135,7 +135,7 @@ public class TemperatureConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BICHANTCTYPE -> BI CHAN TC TYPE  -> boardInfo channel thermocouple type
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public ThermocoupleSensorType getThermocoupleSensorType(int channel) throws JMCCULException {
         return ThermocoupleSensorType.parseInt(
@@ -161,7 +161,7 @@ public class TemperatureConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BICHANRTDTYPE -> BI CHAN RTD TYPE  -> boardInfo channel resistanceTemperatureDetector type
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public RtdSensorType getRtdSensorType(int channel) throws JMCCULException {
         return RtdSensorType.parseInt(

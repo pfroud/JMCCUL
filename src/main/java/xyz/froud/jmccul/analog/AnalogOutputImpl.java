@@ -22,47 +22,49 @@ public class AnalogOutputImpl {
     https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ao_info.py
      */
     private final DaqDevice DAQ_DEVICE;
-    public final int CHANNEL_COUNT;
-    public final int RESOLUTION;
-    public final List<AnalogRange> SUPPORTED_RANGES;
-    public boolean IS_VOLTAGAE_OUTPUT_SUPPORTED;
 
-    public AnalogOutputImpl(DaqDevice device) throws JMCCULException {
+    private Integer channelCount;
+    private Integer resolution;
+    private List<AnalogRange> supportedRanges;
+    private Boolean isVoltageOutputSupported;
+
+    public AnalogOutputImpl(DaqDevice device) {
         DAQ_DEVICE = device;
-        CHANNEL_COUNT = getChannelCount();
-        RESOLUTION = getResolution();
-        SUPPORTED_RANGES = getSupportedRanges();
-        IS_VOLTAGAE_OUTPUT_SUPPORTED = isVoltageOutputSupported();
-
     }
 
-    private int getChannelCount() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L32
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0,
-                MeasurementComputingUniversalLibrary.BINUMDACHANS
-        );
+    public int getChannelCount() throws JMCCULException {
+        if (channelCount == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L32
+            channelCount = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0,
+                    MeasurementComputingUniversalLibrary.BINUMDACHANS
+            );
+        }
+        return channelCount;
     }
 
-    public boolean isAnalogOutputSupported() {
+    public boolean isAnalogOutputSupported() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L37
-        return CHANNEL_COUNT > 0;
+        return getChannelCount() > 0;
     }
 
-    private int getResolution() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L41
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0,
-                MeasurementComputingUniversalLibrary.BIDACRES
-        );
+    public int getResolution() throws JMCCULException {
+        if (resolution == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L41
+            resolution = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0,
+                    MeasurementComputingUniversalLibrary.BIDACRES
+            );
+        }
+        return resolution;
     }
 
     /*
-    void getSuportedScanOptions() {
+    void getSupPortedScanOptions() {
         //https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L50
         // Their Python program is querying the DACSCANOPTIONS config item, which is not present in the C header file
     }
@@ -71,87 +73,84 @@ public class AnalogOutputImpl {
         //todo
     }
      */
-    private List<AnalogRange> getSupportedRanges() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L61
+    public List<AnalogRange> getSupportedRanges() throws JMCCULException {
+        if (supportedRanges == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L61
 
-        List<AnalogRange> rv = new ArrayList<>();
+            supportedRanges = new ArrayList<>();
 
-        // Check if the range is ignored by passing a bogus range in
-        boolean isRangeIgnored = false;
-        try {
-            // cal cbAOut() with a bogus range.
-            // If the D/A board does not have programmable ranges then the range argument will be ignored.
-            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAOut(
-                    DAQ_DEVICE.BOARD_NUMBER,
-                    0,
-                    -5,
-                    (short) 0
-            );
-            JMCCULUtils.checkError(errorCode);
-
-            isRangeIgnored = true;
-        } catch (JMCCULException ex) {
-            if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSE
-                    || ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSEBYANOTHERPROC) {
-                throw ex;
-            }
-        }
-
-        if (isRangeIgnored) {
-            // Try and get the range configured in InstaCal
+            // Check if the range is ignored by passing a bogus range in
+            boolean isRangeIgnored = false;
             try {
-                int range = Configuration.getInt(
-                        MeasurementComputingUniversalLibrary.BOARDINFO,
-                        DAQ_DEVICE.BOARD_NUMBER,
+                // cal cbAOut() with a bogus range.
+                // If the D/A board does not have programmable ranges then the range argument will be ignored.
+                final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAOut(
+                        DAQ_DEVICE.getBoardNumber(),
                         0,
-                        MeasurementComputingUniversalLibrary.BIDACRANGE
+                        -5,
+                        (short) 0
                 );
-                rv.add(AnalogRange.parseInt(range));
+                JMCCULUtils.checkError(errorCode);
+
+                isRangeIgnored = true;
             } catch (JMCCULException ex) {
-                if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSE
-                        || ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSEBYANOTHERPROC) {
-                    throw ex;
-                }
+                ex.throwIfErrorIsNetworkDeviceInUse();
             }
-        } else {
-            // try all possible analog ranges
-            for (AnalogRange rangeToCheck : AnalogRange.values()) {
+
+            if (isRangeIgnored) {
+                // Try and get the range configured in InstaCal
                 try {
-                    analogOutput(0, rangeToCheck, (short) 0);
-                    rv.add(rangeToCheck);
+                    int range = Configuration.getInt(
+                            MeasurementComputingUniversalLibrary.BOARDINFO,
+                            DAQ_DEVICE.getBoardNumber(),
+                            0,
+                            MeasurementComputingUniversalLibrary.BIDACRANGE
+                    );
+                    supportedRanges.add(AnalogRange.parseInt(range));
                 } catch (JMCCULException ex) {
-                    if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSE
-                            || ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSEBYANOTHERPROC) {
-                        throw ex;
+                    ex.throwIfErrorIsNetworkDeviceInUse();
+                }
+            } else {
+                // try all possible analog ranges
+                for (AnalogRange rangeToCheck : AnalogRange.values()) {
+                    try {
+                        analogOutput(0, rangeToCheck, (short) 0);
+                        supportedRanges.add(rangeToCheck);
+                    } catch (JMCCULException ex) {
+                        ex.throwIfErrorIsNetworkDeviceInUse();
                     }
                 }
-            }
 
+            }
         }
 
-        return rv;
+        return supportedRanges;
 
     }
 
-    private boolean isVoltageOutputSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L97
-        boolean rv = false;
-        if (!SUPPORTED_RANGES.isEmpty()) {
-            try {
-                voltageOutput(0, SUPPORTED_RANGES.get(0), 0);
-                rv = true;
-            } catch (JMCCULException ex) {
-                rv = false;
+    public boolean isVoltageOutputSupported() throws JMCCULException {
+        if (isVoltageOutputSupported == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L97
+            if (getSupportedRanges().isEmpty()) {
+                isVoltageOutputSupported = false;
+            } else {
+                try {
+                    voltageOutput(0, getSupportedRanges().get(0), 0);
+                    isVoltageOutputSupported = true;
+                } catch (JMCCULException ex) {
+                    ex.throwIfErrorIsNetworkDeviceInUse();
+                    isVoltageOutputSupported = false;
+                }
             }
         }
-        return rv;
+        return isVoltageOutputSupported;
     }
 
     public void analogOutput(int channel, AnalogRange range, short value) throws JMCCULException {
         // The value must be between zero and 2^(resolution)-1.
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/CBAOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAOut(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 range.VALUE,
                 value
@@ -187,7 +186,7 @@ public class AnalogOutputImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOutScan.htm
         final int errorCodeAOutScan = MeasurementComputingUniversalLibrary.INSTANCE.cbAOutScan(
-                /* int BoardNum  */DAQ_DEVICE.BOARD_NUMBER,
+                /* int BoardNum  */DAQ_DEVICE.getBoardNumber(),
                 /* int LowChan   */ lowChannel,
                 /* int HighChan  */ highChannel,
                 /* int NumPoint  */ new NativeLong(count),
@@ -203,7 +202,7 @@ public class AnalogOutputImpl {
     public void voltageOutput(int channel, AnalogRange range, float value) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVOut(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 range.VALUE,
                 value,

@@ -11,7 +11,7 @@ import java.util.Map;
 public enum ExternalClockType {
 
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
-    CONTINOUS(MeasurementComputingUniversalLibrary.CONTINUOUS_CLK),
+    CONTINUOUS(MeasurementComputingUniversalLibrary.CONTINUOUS_CLK),
     GATED(MeasurementComputingUniversalLibrary.GATED_CLK);
 
     private static final Map<Integer, ExternalClockType> valueMap;

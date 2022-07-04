@@ -16,33 +16,35 @@ import java.nio.FloatBuffer;
 public class TemperatureImpl {
 
     private final DaqDevice DAQ_DEVICE;
-    public final int CHANNEL_COUNT;
+    private Integer channelCount;
 
-    public TemperatureImpl(DaqDevice device) throws JMCCULException {
+    public TemperatureImpl(DaqDevice device) {
         DAQ_DEVICE = device;
-        CHANNEL_COUNT = getChannelCount();
     }
 
-    private int getChannelCount() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L45
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0, //device number
-                MeasurementComputingUniversalLibrary.BINUMTEMPCHANS
-        );
+    public int getChannelCount() throws JMCCULException {
+        if (channelCount == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L45
+            channelCount = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0, //device number
+                    MeasurementComputingUniversalLibrary.BINUMTEMPCHANS
+            );
+        }
+        return channelCount;
 
     }
 
     public boolean isTemperatureInputSupported() {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L50
-        return CHANNEL_COUNT > 0;
+        return channelCount > 0;
     }
 
     public void setThermocoupleType(int channel, ThermocoupleSensorType tc) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 MeasurementComputingUniversalLibrary.BICHANTCTYPE,
                 tc.VALUE
@@ -54,7 +56,7 @@ public class TemperatureImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbTIn(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 scale.VALUE,
                 temperatureFloat,

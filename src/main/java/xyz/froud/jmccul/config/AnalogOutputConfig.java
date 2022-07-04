@@ -16,13 +16,13 @@ public class AnalogOutputConfig {
     private final int BOARD_NUMBER;
 
     public AnalogOutputConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDACFORCESENSE -> BI DAC FORCE SENSE -> boardInfo
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public boolean getDacForceSense(int channel) throws JMCCULException {
         /*
@@ -56,9 +56,9 @@ public class AnalogOutputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDACRANGE  -> BI DAC RANGE -> boardInfo DAC range
      Readable? yes
-     Writabale? yes
+     Writable? yes
 
-    TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
+    TODO what is the difference between BI DAC RANGE and BI RANGE?
     TODO why is channel used when setting but ignored when getting?
      */
     public AnalogRange getDacRange() throws JMCCULException {
@@ -85,7 +85,7 @@ public class AnalogOutputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDACRES -> BI DAC RES -> boardInfo DAC resolution
      Readable? yes
-     Writabale? no
+     Writable? no
      */
     public int getDacResolution() throws JMCCULException {
         return Configuration.getInt(
@@ -99,7 +99,7 @@ public class AnalogOutputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDACSTARTUP -> BI DAC STARTUP -> boardInfo DAC startup
      Readable?
-     Writabale?
+     Writable?
      */
     public boolean getDacStartup(int channel) throws JMCCULException {
         /*
@@ -136,7 +136,7 @@ public class AnalogOutputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDACTRIGCOUNT -> BI DAC TRIG COUNT -> boardInfo DAC trigger count
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getDacTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -160,7 +160,7 @@ public class AnalogOutputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDACUPDATEMODE -> BI DAC UPDATE MODE  -> boardInfo DAC update mode
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public DacUpdateMode getDacUpdateMode() throws JMCCULException {
         return DacUpdateMode.parseInt(
@@ -200,7 +200,7 @@ public class AnalogOutputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BINUMDACHANS -> BI NUM DA CHANS -> boardInfo number of DA channels
      Readable? yes
-     Writabale? no
+     Writable? no
      */
     public int getDacChannelCount() throws JMCCULException {
         return Configuration.getInt(

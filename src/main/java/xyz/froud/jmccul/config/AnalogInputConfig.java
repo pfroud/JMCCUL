@@ -19,15 +19,15 @@ public class AnalogInputConfig {
     private final int BOARD_NUMBER;
 
     public AnalogInputConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIRANGE -> BI RANGE -> boardInfo range
      Readable? yes
-     Writabale? yes
+     Writable? yes
 
-    TODO what is the difference betweeb BI DAC RANGE and BI RANGE?
+    TODO what is the difference between BI DAC RANGE and BI RANGE?
      */
     public AnalogRange getRange() throws JMCCULException {
         return AnalogRange.parseInt(
@@ -53,7 +53,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BINUMADCHANS -> BI NUM AD CHANS -> boardInfo number of ADC channels
      Readable? yes
-     Writabale? yes??
+     Writable? yes??
      */
     public int getAdcChannelCount() throws JMCCULException {
         return Configuration.getInt(
@@ -78,7 +78,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADDATARATE -> BI AD DATA RATE -> boardInfo ADC data rate
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getAdcDataRate(int channel) throws JMCCULException {
         return Configuration.getInt(
@@ -102,7 +102,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADXFERMODE -> BI AD XFER MODE -> boardInfo ADC transfer mode
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public AdcTransferMode getAdcDataTransferMode() throws JMCCULException {
         return AdcTransferMode.parseInt(
@@ -127,7 +127,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADRES -> BI AD RES -> boardInfo ADC resolution
      Readable? yes
-     Writabale? no
+     Writable? no
      */
     public int getAdcResolution() throws JMCCULException {
         return Configuration.getInt(
@@ -141,7 +141,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADCSETTLETIME -> BI ADC SETTLE TIME -> boardInfo ADC settle  time
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public AdcSettlingTime getAdcSettlingTime() throws JMCCULException {
         return AdcSettlingTime.parseInt(
@@ -166,7 +166,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADTIMINGMODE -> BI AD TIMING MODE -> boardInfo ADC timing mode
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public AdcTimingMode getAdcTimingMode() throws JMCCULException {
         return AdcTimingMode.parseInt(
@@ -189,9 +189,9 @@ public class AnalogInputConfig {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
-     BIADTRIGCOUNT -> BI AD TRIG COUNT -> boardInfo ADC triger count
+     BIADTRIGCOUNT -> BI AD TRIG COUNT -> boardInfo ADC trigger count
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getAdcTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -213,9 +213,9 @@ public class AnalogInputConfig {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
-     BIADTRIGSRC -> BI AD TRIG SRC -> boardInfo ADC triger count
+     BIADTRIGSRC -> BI AD TRIG SRC -> boardInfo ADC trigger count
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getAdcTriggerSource(int channel) throws JMCCULException {
         /*
@@ -247,7 +247,7 @@ public class AnalogInputConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIADCHANTYPE -> BI AD CHAN TYPE -> boardInfo ADC channel type
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public AnalogInputChannelType getAnalogInputChannelType(int channel) throws JMCCULException {
         return AnalogInputChannelType.parseInt(

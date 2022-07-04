@@ -14,7 +14,6 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Peter Froud
@@ -26,168 +25,164 @@ public class AnalogInputImpl {
      */
     private final DaqDevice DAQ_DEVICE;
 
-    public final int CHANNEL_COUNT;
-    public final int RESOLUTION;
-    public final int PACKET_SIZE;
-    public final int TRIGGER_RESOLUTION;
+    private Integer channelCount;
+    private Integer resolution;
+    private Integer packetSize;
+    private Integer triggerResolution;
 
-    public final List<AnalogRange> SUPPORTED_RANGES;
-    public final AnalogRange ANALOG_TRIGGER_RANGE;
+    private List<AnalogRange> supportedRanges;
+    private AnalogRange analogTriggerRange;
 
-    public final boolean IS_VOLTAGE_INPUT_SUPPORTED;
-    public final boolean IS_ANALOG_TRIGGER_SUPPORTED;
-    public final boolean IS_GAIN_QUEUE_SUPPORTED;
-    public final boolean IS_SCAN_SUPPORTED;
+    private Boolean isVoltageInputSupported;
+    private Boolean isAnalogTriggerSupported;
+    private Boolean isGainQueueSupported;
+    private Boolean isScanSupported;
 
-    public AnalogInputImpl(DaqDevice device) throws JMCCULException {
+    public AnalogInputImpl(DaqDevice device) {
         DAQ_DEVICE = device;
-
-        CHANNEL_COUNT = getChannelCount();
-        RESOLUTION = getResolution();
-        PACKET_SIZE = getPacketSize();
-        TRIGGER_RESOLUTION = getAnalogTriggerResolution();
-
-        SUPPORTED_RANGES = getSupportedRanges();
-        ANALOG_TRIGGER_RANGE = getAnalogTriggerRange();
-
-        IS_VOLTAGE_INPUT_SUPPORTED = isVoltageInputSupported();
-        IS_ANALOG_TRIGGER_SUPPORTED = isAnalogTriggerSupported();
-        IS_GAIN_QUEUE_SUPPORTED = isGainQueueSupported();
-        IS_SCAN_SUPPORTED = isScanSupported();
-
     }
 
-    private int getChannelCount() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L36
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0,
-                MeasurementComputingUniversalLibrary.BINUMADCHANS
-        );
-    }
-
-    public boolean isAnalogInputSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L41
-        return CHANNEL_COUNT > 0;
-    }
-
-    private int getResolution() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L54
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0,
-                MeasurementComputingUniversalLibrary.BIADRES
-        );
-    }
-
-    private boolean isScanSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L59
-
-        boolean rv = true;
-        try {
-            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
-                    DAQ_DEVICE.BOARD_NUMBER,
-                    ShortBuffer.allocate(1),
-                    new NativeLongByReference(new NativeLong(0)),
-                    new NativeLongByReference(new NativeLong(0)),
-                    MeasurementComputingUniversalLibrary.AIFUNCTION
+    public int getChannelCount() throws JMCCULException {
+        if (channelCount == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L36
+            channelCount = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0,
+                    MeasurementComputingUniversalLibrary.BINUMADCHANS
             );
-            JMCCULUtils.checkError(errorCode);
-        } catch (JMCCULException ex) {
-            rv = false;
         }
-        return rv;
+        return channelCount;
+    }
+
+    public boolean isAnalogInputSupported() throws JMCCULException {
+        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L41
+        return getChannelCount() > 0;
+    }
+
+    public int getResolution() throws JMCCULException {
+        if (resolution == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L54
+            resolution = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0,
+                    MeasurementComputingUniversalLibrary.BIADRES
+            );
+        }
+        return resolution;
+    }
+
+    public boolean isScanSupported() throws JMCCULException {
+        if (isScanSupported == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L59
+            try {
+                final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
+                        DAQ_DEVICE.getBoardNumber(),
+                        ShortBuffer.allocate(1),
+                        new NativeLongByReference(new NativeLong(0)),
+                        new NativeLongByReference(new NativeLong(0)),
+                        MeasurementComputingUniversalLibrary.AIFUNCTION
+                );
+                JMCCULUtils.checkError(errorCode);
+                isScanSupported = true;
+            } catch (JMCCULException ex) {
+                ex.throwIfErrorIsNetworkDeviceInUse();
+                isScanSupported = false;
+            }
+        }
+        return isScanSupported;
 
     }
 
-    private List<AnalogRange> getSupportedRanges() throws JMCCULException {
-        List<AnalogRange> rv = new ArrayList<>();
+    public List<AnalogRange> getSupportedRanges() throws JMCCULException {
+        if (supportedRanges == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L68
+            supportedRanges = new ArrayList<>();
 
-        // Check if the board has a switch-selectable, or only one, range
-        final int hardRange = Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0,
-                MeasurementComputingUniversalLibrary.BIRANGE
-        );
+            // Check if the board has a switch-selectable, or only one, range
+            final int hardRange = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0,
+                    MeasurementComputingUniversalLibrary.BIRANGE
+            );
 
-        if (hardRange >= 0) {
-            rv.add(AnalogRange.parseInt(hardRange));
-        } else {
-            // try all the ranges
-            for (AnalogRange rangeToCheck : AnalogRange.values()) {
-                try {
-                    if (RESOLUTION <= 16) {
-                        analogInput(0, rangeToCheck);
-                    } else {
-                        analogInput32(0, rangeToCheck);
-                    }
-                    rv.add(rangeToCheck);
-
-                } catch (JMCCULException ex) {
-                    if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSE
-                            || ex.ERROR_CODE == MeasurementComputingUniversalLibrary.NETDEVINUSEBYANOTHERPROC) {
-                        throw ex;
+            if (hardRange >= 0) {
+                supportedRanges.add(AnalogRange.parseInt(hardRange));
+            } else {
+                // try all the ranges
+                for (AnalogRange rangeToCheck : AnalogRange.values()) {
+                    try {
+                        if (getResolution() <= 16) {
+                            analogInput(0, rangeToCheck);
+                        } else {
+                            analogInput32(0, rangeToCheck);
+                        }
+                        supportedRanges.add(rangeToCheck);
+                    } catch (JMCCULException ex) {
+                        ex.throwIfErrorIsNetworkDeviceInUse();
                     }
                 }
             }
         }
-        return rv;
+        return supportedRanges;
     }
 
-    private int getPacketSize() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L93
-        /*
-        The hardware in the following table will return a packet size.
-        This hardware must use an integer multiple of the packet size as
-        the total_count for a_in_scan when using the CONTINUOUS option
-        in BLOCKIO mode.
+    public int getPacketSize() {
+        if (packetSize == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L93
+            /*
+            The hardware in the following table will return a packet size.
+            This hardware must use an integer multiple of the packet size as
+            the total_count for a_in_scan when using the CONTINUOUS option
+            in BLOCKIO mode.
 
-        For all other hardware, this method will return 1.
+            For all other hardware, this method will return 1.
 
-        ==========  ==========  ===========
-        Hardware    Product Id  Packet Size
-        ==========  ==========  ===========
-        USB-1208LS  122         64
-        USB-1208FS  130         31
-        USB-1408FS  161         31
-        USB-7204    240         31
-        ==========  ==========  ===========
-         */
+            ==========  ==========  ===========
+            Hardware    Product Id  Packet Size
+            ==========  ==========  ===========
+            USB-1208LS  122         64
+            USB-1208FS  130         31
+            USB-1408FS  161         31
+            USB-7204    240         31
+            ==========  ==========  ===========
+             */
 
-        int packet_size = 1;
-        if (DAQ_DEVICE.PRODUCT_ID == 122) {
-            packet_size = 64;
-        } else if (DAQ_DEVICE.PRODUCT_ID == 130
-                || DAQ_DEVICE.PRODUCT_ID == 161
-                || DAQ_DEVICE.PRODUCT_ID == 240) {
-            packet_size = 31;
+            packetSize = switch (DAQ_DEVICE.getProductID()) {
+                case 122 -> 64;
+                case 130, 161, 240 -> 31;
+                default -> 1;
+            };
+
         }
+        return packetSize;
 
-        return packet_size;
     }
 
-    private boolean isVoltageInputSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L121
+    public boolean isVoltageInputSupported() throws JMCCULException {
+        if (isVoltageInputSupported == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L121
 
-        boolean rv = true;
-        if (SUPPORTED_RANGES.isEmpty()) {
-            rv = false;
-        } else {
-            try {
-                voltageInput(0, SUPPORTED_RANGES.get(0));
-            } catch (JMCCULException ex) {
-                rv = false;
+            final List<AnalogRange> supportedRanges = getSupportedRanges();
+            if (supportedRanges.isEmpty()) {
+                isVoltageInputSupported = false;
+            } else {
+                try {
+                    voltageInput(0, supportedRanges.get(0));
+                    isVoltageInputSupported = true;
+                } catch (JMCCULException ignore) {
+                    isVoltageInputSupported = false;
+                }
             }
         }
-        return rv;
+        return isVoltageInputSupported;
     }
 
-    private int getAnalogTriggerResolution() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L134
-
+    public int getAnalogTriggerResolution() {
+        if (triggerResolution == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L134
 
         /*
         PCI-DAS6030, 6031, 6032, 6033, 6052
@@ -195,80 +190,84 @@ public class AnalogInputImpl {
         PCI-2511, 2513, 2515, 2517, USB-2523, 2527, 2533, 2537
         USB-1616HS, 1616HS-2, 1616HS-4, 1616HS-BNC
          */
-        Set<Integer> trig_res_12_bit_types = Set.of(95, 96, 97, 98, 102, 165, 166, 167, 168, 177,
-                178, 179, 180, 203, 204, 205, 213, 214, 215,
-                216, 217);
-
-        // PCI-DAS6040, 6070, 6071
-        Set<Integer> trig_res_8_bit_types = Set.of(101, 103, 104);
-
-        int rv = 0;
-        if (trig_res_12_bit_types.contains(DAQ_DEVICE.PRODUCT_ID)) {
-            rv = 12;
-        } else if (trig_res_8_bit_types.contains(DAQ_DEVICE.PRODUCT_ID)) {
-            rv = 8;
+            triggerResolution = switch (DAQ_DEVICE.getProductID()) {
+                case 95, 96, 97, 98, 102, 165, 166, 167, 168, 177, 178,
+                        179, 180, 203, 204, 205, 213, 214, 215, 216, 217 -> 12;
+                case 101, 103, 104 -> 8;
+                default -> 0;
+            };
         }
-        return rv;
+        return triggerResolution;
 
     }
 
-    private AnalogRange getAnalogTriggerRange() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L155
+    public AnalogRange getAnalogTriggerRange() throws JMCCULException {
+        if (analogTriggerRange == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L155
 
-        int trigSource;
-        try {
-            trigSource = Configuration.getInt(
-                    MeasurementComputingUniversalLibrary.BOARDINFO,
-                    DAQ_DEVICE.BOARD_NUMBER,
-                    0,
-                    MeasurementComputingUniversalLibrary.BIADTRIGSRC
-            );
-        } catch (Exception ex) {
-            trigSource = 0;
-        }
+            int trigSource;
+            try {
+                trigSource = Configuration.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        DAQ_DEVICE.getBoardNumber(),
+                        0,
+                        MeasurementComputingUniversalLibrary.BIADTRIGSRC
+                );
+            } catch (JMCCULException ex) {
+                ex.throwIfErrorIsNetworkDeviceInUse();
+                trigSource = 0;
+            }
 
-        if (TRIGGER_RESOLUTION > 0 && trigSource <= 0) {
-            return AnalogRange.BIPOLAR_10_VOLTS;
-        } else {
-            return AnalogRange.UNKNOWN;
+            if (getAnalogTriggerResolution() > 0 && trigSource <= 0) {
+                analogTriggerRange = AnalogRange.BIPOLAR_10_VOLTS;
+            } else {
+                analogTriggerRange = AnalogRange.UNKNOWN;
+            }
         }
+        return analogTriggerRange;
 
     }
 
-    private boolean isAnalogTriggerSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L172
+    public boolean isAnalogTriggerSupported() throws JMCCULException {
+        if (isAnalogTriggerSupported == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L172
 
-        boolean rv = true;
-        try {
-            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbSetTrigger(
-                    DAQ_DEVICE.BOARD_NUMBER,
-                    MeasurementComputingUniversalLibrary.TRIGABOVE,
-                    (short) 0,
-                    (short) 0
-            );
-            JMCCULUtils.checkError(errorCode);
-        } catch (JMCCULException ex) {
-            rv = false;
+            try {
+                final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbSetTrigger(
+                        DAQ_DEVICE.getBoardNumber(),
+                        MeasurementComputingUniversalLibrary.TRIGABOVE,
+                        (short) 0,
+                        (short) 0
+                );
+                JMCCULUtils.checkError(errorCode);
+                isAnalogTriggerSupported = true;
+            } catch (JMCCULException ex) {
+                ex.throwIfErrorIsNetworkDeviceInUse();
+                isAnalogTriggerSupported = false;
+            }
         }
-        return rv;
+        return isAnalogTriggerSupported;
     }
 
-    private boolean isGainQueueSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L190
+    public boolean isGainQueueSupported() throws JMCCULException {
+        if (isGainQueueSupported == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L190
 
-        boolean rv = true;
-        try {
-            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbALoadQueue(
-                    DAQ_DEVICE.BOARD_NUMBER,
-                    ShortBuffer.allocate(0),
-                    ShortBuffer.allocate(0),
-                    0
-            );
-            JMCCULUtils.checkError(errorCode);
-        } catch (JMCCULException ex) {
-            rv = false;
+            try {
+                final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbALoadQueue(
+                        DAQ_DEVICE.getBoardNumber(),
+                        ShortBuffer.allocate(0),
+                        ShortBuffer.allocate(0),
+                        0
+                );
+                JMCCULUtils.checkError(errorCode);
+                isGainQueueSupported = true;
+            } catch (JMCCULException ex) {
+                ex.throwIfErrorIsNetworkDeviceInUse();
+                isGainQueueSupported = false;
+            }
         }
-        return rv;
+        return isGainQueueSupported;
 
     }
 
@@ -278,7 +277,7 @@ public class AnalogInputImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAIn(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 range.VALUE,
                 buf
@@ -295,7 +294,7 @@ public class AnalogInputImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAIn32(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 range.VALUE,
                 nlbr,
@@ -311,7 +310,7 @@ public class AnalogInputImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVIn(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 range.VALUE,
                 buf,
@@ -327,7 +326,7 @@ public class AnalogInputImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVIn32(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 channel,
                 range.VALUE,
                 buf,

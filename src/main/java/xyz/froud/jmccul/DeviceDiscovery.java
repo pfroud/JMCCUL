@@ -15,13 +15,23 @@ import static xyz.froud.jmccul.JMCCULUtils.checkError;
  */
 public class DeviceDiscovery {
 
-    public static DaqDeviceDescriptor[] findDaqDeviceDescriptors() throws JMCCULException {
+    /**
+     * @param interfaceTypeBitMask use either:
+     * <ul>
+     *     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ANY_IFC}</li>
+     *         <li>Or create a bit mask by OR-ing together any of these items:
+     *         <ul>
+     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#USB_IFC}</li>
+     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#BLUETOOTH_IFC}</li>
+     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ETHERNET_IFC}</li>
+     *         </ul>
+     *     </li>
+     * </ul>
+     */
+    public static DaqDeviceDescriptor[] findDescriptors(int interfaceTypeBitMask) throws JMCCULException {
 
-        /*
-        You can change the max device count to something bigger,
-        I just made this number up for testing.
-         */
-        final int MAX_DEVICE_COUNT = 5;
+        // Can be any arbitrary number, just needed so C can allocate stuff
+        final int MAX_DEVICE_COUNT = 16;
 
         /*
         Allocate an array of empty DaqDeviceDescriptors. The cbGetDaqDeviceInventory() call will populate this array.
@@ -30,13 +40,11 @@ public class DeviceDiscovery {
         final DaqDeviceDescriptor[] buffer = (DaqDeviceDescriptor[]) new DaqDeviceDescriptor().toArray(MAX_DEVICE_COUNT);
 
         /*
-        The deviceCount variable is used an both an input and output to cbGetDaqDeviceInventory().
+        The deviceCount variable is used both an input and output to cbGetDaqDeviceInventory().
         As an input, it is the length of the DaqDeviceDescriptor array.
-        As an ooutput, it is how many DAQ devices were actually found.
+        As an output, it is how many DAQ devices were actually found.
          */
         final IntBuffer deviceCount = IntBuffer.wrap(new int[]{MAX_DEVICE_COUNT});
-
-        final int INTERFACE_TYPE_ANY = MeasurementComputingUniversalLibrary.DaqDeviceInterface.ANY_IFC;
 
         /*
         https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm
@@ -48,7 +56,7 @@ public class DeviceDiscovery {
 
         According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the array.
          */
-        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(INTERFACE_TYPE_ANY, buffer[0], deviceCount);
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(interfaceTypeBitMask, buffer[0], deviceCount);
         checkError(errorCode);
 
         // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
@@ -58,39 +66,80 @@ public class DeviceDiscovery {
         return Arrays.copyOf(buffer, devicesFoundCount);
     }
 
-    public static Optional<DaqDevice> searchByBoardName(String desiredBoardName) throws JMCCULException {
-        Predicate<DaqDeviceDescriptor> boardNamePredicate = (DaqDeviceDescriptor descriptor) -> {
-            final String prodNameFromDescriptor = (new String(descriptor.ProductName)).trim();
-            return prodNameFromDescriptor.equals(desiredBoardName);
-        };
-
-        Optional<DaqDeviceDescriptor> descriptor = findFirstDescriptorMatching(boardNamePredicate);
-        if (descriptor.isPresent()) {
-            DaqDevice device = new DaqDevice(descriptor.get());
-            return Optional.of(device);
-        } else {
-            return Optional.empty();
-        }
+    public static DaqDeviceDescriptor[] findDescriptors() throws JMCCULException {
+        return findDescriptors(MeasurementComputingUniversalLibrary.DaqDeviceInterface.ANY_IFC);
     }
 
-    public static Optional<DaqDevice> findDeviceMatchingPredicate(Predicate<DaqDevice> predicate) throws JMCCULException {
-        // can't do this cleanly with stream because DaqDevice constructors throws a checked exception
-        DaqDeviceDescriptor[] descriptors = findDaqDeviceDescriptors();
-        for (DaqDeviceDescriptor descriptor : descriptors) {
-            try {
-                DaqDevice device = new DaqDevice(descriptor);
-                if (predicate.test(device)) {
-                    return Optional.of(device);
-                }
-            } catch (JMCCULException ignore) {
+    public static Optional<DaqDevice> findByBoardName(String desiredBoardName) throws JMCCULException {
+        // Best to do this by filtering descriptors because we don't need to open and close devices.
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                findFirstDescriptorMatching(d -> d.getProductName().equals(desiredBoardName))
+        );
+    }
 
+    public static Optional<DaqDevice> findByUniqueID(String desiredUniqueID) throws JMCCULException {
+        // Best to do this by filtering descriptors because we don't need to open and close devices.
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                findFirstDescriptorMatching(d -> d.getUniqueID().equals(desiredUniqueID))
+        );
+    }
+
+    public static Optional<DaqDevice> findByUniqueID(long desiredUniqueID) throws JMCCULException {
+        // Best to do this by filtering descriptors because we don't need to open and close devices.
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                findFirstDescriptorMatching(d -> d.NUID == desiredUniqueID)
+        );
+    }
+
+    public static Optional<DaqDeviceDescriptor> findFirstDescriptorMatching(Predicate<DaqDeviceDescriptor> predicate) throws JMCCULException {
+        return Arrays.stream(findDescriptors()).filter(predicate).findFirst();
+    }
+
+    public static Optional<DaqDevice> findFirstDeviceMatching(PredicateThrowsJMCCULException<DaqDevice> predicate) throws JMCCULException {
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        for (DaqDeviceDescriptor descriptor : findDescriptors()) {
+            DaqDevice device = new DaqDevice(descriptor);
+            if (predicate.test(device)) {
+                return Optional.of(device);
+            } else {
+                device.close();
             }
         }
         return Optional.empty();
     }
 
-    public static Optional<DaqDeviceDescriptor> findFirstDescriptorMatching(Predicate<DaqDeviceDescriptor> predicate) throws JMCCULException {
-        return Arrays.stream(findDaqDeviceDescriptors()).filter(predicate).findFirst();
+    public static Optional<DaqDeviceDescriptor> findAnyDescriptor() throws JMCCULException {
+        return Arrays.stream(findDescriptors()).findAny();
+    }
+
+    public static Optional<DaqDevice> findAnyDevice() throws JMCCULException {
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                findAnyDescriptor()
+        );
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private static Optional<DaqDevice> getOptionalDeviceFromOptionalDescriptor(Optional<DaqDeviceDescriptor> optDescr) throws JMCCULException {
+        /*
+        Use this method instead of
+            optDescr.map(DaqDevice::new);
+        because the DaqDevice constructor throws a checked exception.
+         */
+        if (optDescr.isPresent()) {
+            return Optional.of(new DaqDevice(optDescr.get()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /** Same as {@link java.util.function.Predicate} but it throws a JMCCUL exception. */
+    @FunctionalInterface
+    public interface PredicateThrowsJMCCULException<T> {
+        boolean test(T t) throws JMCCULException;
     }
 
 }

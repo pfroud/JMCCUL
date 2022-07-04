@@ -19,43 +19,48 @@ public class DigitalImpl {
 
     private final DaqDevice DAQ_DEVICE;
 
-    public final DigitalPort[] PORTS;
+    private DigitalPort[] ports;
+    private Integer portCount;
 
-    public DigitalImpl(DaqDevice device) throws JMCCULException {
+    public DigitalImpl(DaqDevice device) {
         DAQ_DEVICE = device;
-        PORTS = getPorts();
     }
 
-    private DigitalPort[] getPorts() throws JMCCULException {
-        final int portCount = getPortCount();
-        final DigitalPort[] rv = new DigitalPort[portCount];
-        for (int i = 0; i < portCount; i++) {
-            rv[i] = new DigitalPort(DAQ_DEVICE, i);
+    public DigitalPort[] getPorts() throws JMCCULException {
+        if (ports == null) {
+            final int portCount = getPortCount();
+            ports = new DigitalPort[portCount];
+            for (int i = 0; i < portCount; i++) {
+                ports[i] = new DigitalPort(DAQ_DEVICE, i);
+            }
         }
-        return rv;
+        return ports;
     }
 
-    private int getPortCount() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L29
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
-        return Configuration.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.BOARD_NUMBER,
-                0,
-                MeasurementComputingUniversalLibrary.BIDINUMDEVS
-        );
+    public int getPortCount() throws JMCCULException {
+        if (portCount == null) {
+            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L29
+            // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
+            portCount = Configuration.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    DAQ_DEVICE.getBoardNumber(),
+                    0,
+                    MeasurementComputingUniversalLibrary.BIDINUMDEVS
+            );
+        }
+        return portCount;
     }
 
-    public boolean isDigitalIOSupported() {
+    public boolean isDigitalIOSupported() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L39
-        return PORTS.length > 0;
+        return getPorts().length > 0;
     }
 
     public void configureBit(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
-        // configure an indiviaul bit. Not all devices support doing this.
+        // configure an individual bit. Not all devices support doing this.
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigBit.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 bitNumber,
                 direction.VALUE
@@ -66,7 +71,7 @@ public class DigitalImpl {
     public void configurePort(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigPort.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 direction.VALUE
         );
@@ -77,7 +82,7 @@ public class DigitalImpl {
         final ShortBuffer buf = ShortBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDBitIn(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 bitNumber,
                 buf
@@ -90,7 +95,7 @@ public class DigitalImpl {
         final ShortBuffer buf = ShortBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDIn(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 buf
         );
@@ -103,7 +108,7 @@ public class DigitalImpl {
         final IntBuffer buf = IntBuffer.allocate(1);
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDIn32(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 buf
         );
@@ -115,7 +120,7 @@ public class DigitalImpl {
         final int zeroOrOne = value ? 1 : 0;
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDBitOut(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 bitNumber,
                 (short) zeroOrOne);
@@ -126,7 +131,7 @@ public class DigitalImpl {
         // Java short is 16-bit signed integer
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOut(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 value);
         JMCCULUtils.checkError(errorCode);
@@ -135,7 +140,7 @@ public class DigitalImpl {
     public void outputPort32(DigitalPortType portType, int value) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOut32(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
                 value);
         JMCCULUtils.checkError(errorCode);
@@ -150,7 +155,7 @@ public class DigitalImpl {
         The JNAerator binding is not very helpful. The last argument is a ULONG* which probably
         means we need to allocate a LongBuffer or something and then pass the first element.
 
-        The C# .NET function prototype gives us more information than the C function prototye.
+        The C# .NET function prototype gives us more information than the C function prototype.
         it says:
         public MccDaq.ErrorInfo DInArray(
             MccDaq.DigitalPortType lowPort,
@@ -163,7 +168,7 @@ public class DigitalImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDInArray.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDInArray(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 lowPort.VALUE,
                 highPort.VALUE,
                 nativeLongByRef
@@ -192,7 +197,7 @@ public class DigitalImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutArray.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOutArray(
-                DAQ_DEVICE.BOARD_NUMBER,
+                DAQ_DEVICE.getBoardNumber(),
                 lowPort.VALUE,
                 highPort.VALUE,
                 nativeLongByRef
@@ -213,7 +218,7 @@ public class DigitalImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDInScan.htm
         final int errorCodeScan = MeasurementComputingUniversalLibrary.INSTANCE.cbDInScan(
-                /* int BoardNum  */DAQ_DEVICE.BOARD_NUMBER,
+                /* int BoardNum  */DAQ_DEVICE.getBoardNumber(),
                 /* int portType  */ portType.VALUE,
                 /* long Count    */ new NativeLong(count),
                 /* long *Rate    */ rateByReference, //returns the value of the actual rate set, which may be different from the requested rate because of pacer limitations.
@@ -249,7 +254,7 @@ public class DigitalImpl {
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutScan.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOutScan(
-                /* int BoardNum  */DAQ_DEVICE.BOARD_NUMBER,
+                /* int BoardNum  */DAQ_DEVICE.getBoardNumber(),
                 /* int portType  */ portType.VALUE,
                 /* long Count    */ new NativeLong(count),
                 /* long *Rate    */ rateByReference, //returns the value of the actual rate set, which may be different from the requested rate because of pacer limitations.

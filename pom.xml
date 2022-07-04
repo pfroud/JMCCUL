@@ -11,7 +11,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>JMCCUL</name>
-    <description>Java wrapper for Measurement Computing Corporation Universal Library for data acquisition devices</description>
+    <description>
+        Java wrapper for Measurement Computing Corporation Universal Library for data acquisition devices
+    </description>
     <url>https://github.com/pfroud/JMCCUL</url>
 
     <issueManagement>

@@ -7,29 +7,26 @@ import xyz.froud.jmccul.enums.TemperatureScale;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * @author Peter Froud
  */
 public class TemperatureExample {
 
-    @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) throws JMCCULException {
 
-        final Predicate<DaqDevice> predicate = d -> d.temperature.isTemperatureInputSupported();
-        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findDeviceMatchingPredicate(predicate);
-        if (optionalDevice.isEmpty()) {
+        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
+                d -> d.temperature.isTemperatureInputSupported()
+        );
+
+        if (optionalDevice.isPresent()) {
+            try (DaqDevice device = optionalDevice.get()) {
+                System.out.println("Opened this device: " + device);
+                doTemperatureInput(device);
+            }
+        } else {
             System.out.println("Didn't find a device which supports temperature input.");
-            return;
         }
-
-        final DaqDevice device = optionalDevice.get();
-        System.out.println("Opened this device: " + device);
-
-        doTemperatureInput(device);
-
-        device.close();
 
     }
 

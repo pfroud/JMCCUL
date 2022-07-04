@@ -38,8 +38,8 @@ public class JMCCULUtils {
 
     public static float getDLLRevision() throws JMCCULException {
         /*
-        VXD apparently is an old devide driver system for Windows 2, 3, and 9x.
-        Since nobody cares about that anymore I will only return the DLL version.
+        VXD apparently is an old deviCe driver system for Windows 2, 3, and 9x.
+        Since that is ancient I will only return the DLL version.
         https://en.wikipedia.org/wiki/VxD
          */
 

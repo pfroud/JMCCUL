@@ -18,13 +18,13 @@ public class BoardConfig {
     private final int BOARD_NUMBER;
 
     public BoardConfig(DaqDevice device) {
-        BOARD_NUMBER = device.BOARD_NUMBER;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
      BIBASEADR -> BI BASE ADR -> boardInfo base address
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getBaseAddress() throws JMCCULException {
         return Configuration.getInt(
@@ -48,7 +48,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIBOARDTYPE -> BI BOARD TYPE -> boardInfo board type
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getBoardType() throws JMCCULException {
         return Configuration.getInt(
@@ -62,7 +62,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BICALTABLETYPE -> BI CAL TABLE TYPE -> boardInfo calibration table type
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public CalibrationTableType getCalibrationTableType(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return CalibrationTableType.parseInt(
@@ -88,7 +88,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BICLOCK -> BI CLOCK -> boardInfo clock
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getClockFrequencyMegahertz() throws JMCCULException {
         return Configuration.getInt(
@@ -113,7 +113,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
       BIDMACHAN -> BI DMA CHAN -> boardInfo directMemoryAccess channel
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getDmaChannel() throws JMCCULException {
         return Configuration.getInt(
@@ -138,7 +138,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDTBOARD -> BI DT BOARD -> boardInfo DataTranslation board
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getDataTranslationBoardNumber() throws JMCCULException {
         // Data Translation, acquired by Measurement Computing in 2015
@@ -153,7 +153,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIEXTCLKTYPE -> BI EXT CLK TYPE -> boardInfo external clock type
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public ExternalClockType getExternalClockType() throws JMCCULException {
         return ExternalClockType.parseInt(Configuration.getInt(
@@ -177,7 +177,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIEXTINPACEREDGE  -> BI EXT IN PACER EDGE -> boardInfo external input pacer edge
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public ExternalPacerClockEdge getInputPacerClockEdge() throws JMCCULException {
         return ExternalPacerClockEdge.parseInt(Configuration.getInt(
@@ -201,7 +201,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIEXTOUTPACEREDGE -> BI EXT OUT PACER EDGE -> boardInfo external output pacer edge
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public ExternalPacerClockEdge getOutputPacerClockEdge() throws JMCCULException {
         return ExternalPacerClockEdge.parseInt(Configuration.getInt(
@@ -225,7 +225,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIOUTPUTPACEROUT -> BI OUTPUT PACER OUT -> boardInfo output pacer output
      Readable? no but that is probably a mistake in the docs
-     Writabale? yes
+     Writable? yes
      */
     public void setOutputPacerEnable(boolean enable) throws JMCCULException {
         Configuration.setInt(
@@ -240,7 +240,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIINPUTPACEROUT -> BI INPUT PACER OUT -> boardInfo input pacer output
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public boolean getInputPacerClockState() throws JMCCULException {
         return Configuration.getInt(
@@ -264,7 +264,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIINTEDGE -> BI INT EDGE -> boardInfo interrupt edge
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public InterruptClockEdge getInterruptEdge() throws JMCCULException {
         return InterruptClockEdge.parseInt(Configuration.getInt(
@@ -288,7 +288,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIINTLEVEL  -> BI INT LEVEL -> boardInfo interrupt level
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getInterruptLevel() throws JMCCULException {
         return Configuration.getInt(
@@ -313,7 +313,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BINUMIOPORTS -> BI NUM IO PORTS -> boardInfo number of I/O ports
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public int getIoPortCount() throws JMCCULException {
         return Configuration.getInt(
@@ -327,7 +327,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIPANID  -> BI PAN ID -> boardInfo PersonalAreaNetwork ID
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getPanId() throws JMCCULException {
         // Personal Area Network
@@ -352,7 +352,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIPATTERNTRIGPORT -> BI PATTERN TRIG PORT -> boardInfo pattern trigger port
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getPatternTriggerPort() throws JMCCULException {
         return Configuration.getInt(
@@ -377,7 +377,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BISYNCMODE  -> BI SYNC MODE -> boardInfo sync mode
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getSyncMode() throws JMCCULException {
         //TODO find lines in cbw.h for enum
@@ -402,7 +402,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      setAdc -> BI TERM COUNT STAT BIT -> boardInfo terminal count output status bit
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public boolean getTerminalCountOutputStatus(int bitNumber) throws JMCCULException {
         return Configuration.getInt(
@@ -426,7 +426,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIWAITSTATE -> BI WAIT STATE -> boardInfo wait state
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public boolean getWaitStateJumper() throws JMCCULException {
         return Configuration.getInt(
@@ -451,7 +451,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BICALOUTPUT -> BI CAL OUTPUT -> boardInfo calibration output
      Readable? NO
-     Writabale? yes
+     Writable? yes
      */
     public void setCalPinVoltage(int calPinVoltage) throws JMCCULException {
         Configuration.setInt(
@@ -466,7 +466,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIDEVVERSION -> BI DEV VERSION -> boardInfo device version
      Readable? yes
-     Writabale? NO
+     Writable? NO
      */
     public String getVersion(FirmwareVersionType version) throws JMCCULException {
         return Configuration.getString(
@@ -486,7 +486,7 @@ public class BoardConfig {
 
 
      Readable? yes
-     Writabale? no
+     Writable? no
      */
     public String getFactorySerialNumber(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return Configuration.getString(
@@ -504,7 +504,7 @@ public class BoardConfig {
     Unique identifier of a discoverable device, such as the serial number of a USB device or MAC address of an Ethernet device.
 
      Readable? yes
-     Writabale? no
+     Writable? no
      */
     public String getUniqueID() throws JMCCULException {
         return Configuration.getString(
@@ -523,7 +523,7 @@ public class BoardConfig {
     Custom serial number assigned by a user to a USB device.
 
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public int getUserSpecifiedSerialNumber() throws JMCCULException {
         return Configuration.getInt(
@@ -550,7 +550,7 @@ public class BoardConfig {
     User-configured string of up to maxConfigLen character/bytes to an Ethernet, Bluetooth, or USB device.
 
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public String getUserSpecifiedID() throws JMCCULException {
         return Configuration.getString(
@@ -579,7 +579,7 @@ public class BoardConfig {
 
 
      Readable?
-     Writabale? no
+     Writable? no
      */
     public int getUserSpecifiedString() throws JMCCULException {
         //todo the docs are probably wrong, this should probably use the getString instead of getInt
@@ -594,7 +594,7 @@ public class BoardConfig {
     /* /////////////////////////////////////////////////////////////////////////////////
      BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
      Readable? yes
-     Writabale? yes
+     Writable? yes
      */
     public void setHideLoginDialog(boolean hide) throws JMCCULException {
         Configuration.setInt(
