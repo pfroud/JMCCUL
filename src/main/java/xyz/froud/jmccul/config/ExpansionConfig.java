@@ -15,10 +15,15 @@ public class ExpansionConfig {
         BOARD_NUMBER = device.getBoardNumber();
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XIBOARDTYPE -> XI BOARD TYPE -> expansionInfo board type
      Readable? yes
      Writable? NO
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetBoardType_Expansion.htm">ExpansionConfig.GetBoardType()</a>
      */
     public int getExpansionBoardType() throws JMCCULException {
         return Configuration.getInt(
@@ -29,12 +34,17 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIUSESEXPS -> BI USES EXPS -> boardInfo uses expansions
      Readable? yes
      Writable? no
      */
-    public boolean getExpansionBoardSupported() throws JMCCULException {
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetUsesExps.htm">BoardConfig.GetUsesExps()</a>
+     */
+    public boolean isExpansionBoardSupported() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -43,10 +53,15 @@ public class ExpansionConfig {
         ) == 1;
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XIMUXADCHAN1 -> XI MUX AD CHAN 1 -> expansionInfo multiplexer(?) analog-to-digital channel 1
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetMuxAdChan1.htm">ExpansionConfig.GetMuxAdChan1()</a>
      */
     public int getExpansionBoardChannel1() throws JMCCULException {
         return Configuration.getInt(
@@ -57,6 +72,10 @@ public class ExpansionConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetMuxAdChan1.htm">ExpansionConfig.SetMuxAdChan1()</a>
+     */
     public void setExpansionBoardChannel1(int ch) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
@@ -67,10 +86,15 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XIMUXADCHAN2 -> XI MUX AD CHAN 2 -> expansionInfo multiplexer(?) analog-to-digital channel 2
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetMuxAdChan2.htm">ExpansionConfig.GetMuxAdChan2()</a>
      */
     public int getExpansionBoardChannel2() throws JMCCULException {
         return Configuration.getInt(
@@ -81,6 +105,10 @@ public class ExpansionConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetMuxAdChan2.htm">ExpansionConfig.SetMuxAdChan2()</a>
+     */
     public void setExpansionBoardChannel2(int ch) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
@@ -91,12 +119,17 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XIRANGE1 -> XI RANGE 1 -> expansionInfo range 1
      Readable? yes
      Writable? yes
 
     TODO does this use the same range enum as the non-expansion board?
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetRange1.htm">ExpansionConfig.GetRange1()</a>
      */
     public int getExpansionBoardRange1() throws JMCCULException {
         return Configuration.getInt(
@@ -107,6 +140,10 @@ public class ExpansionConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetRange1.htm">ExpansionConfig.SetRange1()</a>
+     */
     public void setExpansionBoardRange1(int ch) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
@@ -117,12 +154,17 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XIRANGE2 -> XI RANGE 1 -> expansionInfo range 2
      Readable? yes
      Writable? yes
 
     TODO does this use the same range enum as the non-expansion board?
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetRange2.htm">ExpansionConfig.GetRange2()</a>
      */
     public int getExpansionBoardRange2() throws JMCCULException {
         return Configuration.getInt(
@@ -133,6 +175,10 @@ public class ExpansionConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetRange2.htm">ExpansionConfig.SetRange2()</a>
+     */
     public void setExpansionBoardRange2(int ch) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
@@ -143,10 +189,15 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XICJCCHAN -> XI CJC CHAN -> expansionInfo coldJunctionCompensation(?) channel
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetCjcChan.htm">ExpansionConfig.GetCjcChan()</a>
      */
     public int getExpansionCjcChannel() throws JMCCULException {
         return Configuration.getInt(
@@ -157,6 +208,10 @@ public class ExpansionConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetCjcChan.htm">ExpansionConfig.SetCjcChan()</a>
+     */
     public void setExpansionCjcChannel(int ch) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
@@ -167,7 +222,7 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XITHERMTYPE -> XI THERM TYPE -> expansionInfo thermocouple(?) type
 
     The docs cbSetConfig says "thermocouple type" but the docs for cbGetConfig just says
@@ -176,6 +231,11 @@ public class ExpansionConfig {
 
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetThermType.htm">ExpansionConfig.GetThermType()</a>
      */
     public int getExpansionThermocoupleType() throws JMCCULException {
         return Configuration.getInt(
@@ -186,6 +246,10 @@ public class ExpansionConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetThermType.htm">ExpansionConfig.SetThermType()</a>
+     */
     public void setExpansionThermocoupleType(int type) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
@@ -196,11 +260,16 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XINUMEXPCHANS -> XI NUM EXP CHANS -> expansionInfo number of expansion channels
 
      Readable? yes
      Writable? no
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetNumExpChans.htm">ExpansionConfig.GetNumExpChans()</a>
      */
     public int getExpansionChannelCount() throws JMCCULException {
         return Configuration.getInt(
@@ -211,11 +280,15 @@ public class ExpansionConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      XIPARENTBOARD -> XI PARENT BOARD -> expansionInfo parent board
 
      Readable? yes
      Writable? no
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getExpansionParentBoard() throws JMCCULException {
         return Configuration.getInt(

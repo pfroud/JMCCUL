@@ -15,10 +15,14 @@ public class CounterConfig {
         BOARD_NUMBER = device.getBoardNumber();
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BICINUMDEVS -> BI CI NUM DEVS -> boardInfo counterInfo number of devices
      Readable? yes
      Writable? NO
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterDeviceCount() throws JMCCULException {
         return Configuration.getInt(
@@ -29,10 +33,14 @@ public class CounterConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BICTRTRIGCOUNT -> BI CTR TRIG COUNT -> boardInfo counter trigger count
      Readable? yes
      Writable? NO
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -43,6 +51,9 @@ public class CounterConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     */
     public void setCounterTriggerCount(int trigCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -53,10 +64,14 @@ public class CounterConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      CICTRNUM -> CI CTR NUM -> counterInfo counter number
      Readable? yes
      Writable? NO
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterNumber(int dev) throws JMCCULException {
         return Configuration.getInt(
@@ -67,7 +82,7 @@ public class CounterConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      CICTRTYPE -> CI CTR TYPE -> counterInfo counter type
      Readable? yes
      Writable? NO
@@ -78,6 +93,10 @@ public class CounterConfig {
     7 = timer counter, 8 = quadrature counter, and 9 = pulse counter.
 
 
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterType(int idx) throws JMCCULException {
         return Configuration.getInt(

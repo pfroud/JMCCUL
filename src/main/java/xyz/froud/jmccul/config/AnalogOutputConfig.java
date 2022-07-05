@@ -19,22 +19,25 @@ public class AnalogOutputConfig {
         BOARD_NUMBER = device.getBoardNumber();
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACFORCESENSE -> BI DAC FORCE SENSE -> boardInfo
      Readable? yes
      Writable? yes
      */
-    public boolean getDacForceSense(int channel) throws JMCCULException {
-        /*
-        The remote sensing feature compensates for the voltage
-        drop error that occurs in applications where the analog
-        outputs on a device are connected to its load through a
-        long wire or cable type interconnect.
 
-        The remote sensing feature utilizes the force and sense
-        output terminals on a supported device. Refer to the
-        device hardware manual for more information.
-         */
+    /**
+     * Remote sensing state of an analog output channel.
+     * <p>
+     * The remote sensing feature compensates for the voltage drop error that occurs in applications where the analog
+     * outputs on a device are connected to its load through a long wire or cable type interconnect.
+     * <p>
+     * The remote sensing feature utilizes the force and sense output terminals on a supported device. Refer to the
+     * device hardware manual for more information.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACForceSense.htm">BoardConfig.GetDACForceSense()</a>
+     */
+    public boolean getDacForceSense(int channel) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -43,6 +46,18 @@ public class AnalogOutputConfig {
         ) == 1;
     }
 
+    /**
+     * Enables or disables remote sensing of an analog output channel.
+     * <p>
+     * The remote sensing feature compensates for the voltage drop error that occurs in applications where the analog
+     * outputs on a device are connected to its load through a long wire or cable type interconnect.
+     * <p>
+     * The remote sensing feature utilizes the force and sense output terminals on a supported device. Refer to the
+     * device hardware manual for more information.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACForceSense.htm">BoardConfig.SetDACForceSense()</a>
+     */
     public void setDacForceSense(int channel, boolean sense) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -53,13 +68,18 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACRANGE  -> BI DAC RANGE -> boardInfo DAC range
      Readable? yes
      Writable? yes
 
     TODO what is the difference between BI DAC RANGE and BI RANGE?
     TODO why is channel used when setting but ignored when getting?
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACRange.htm">BoardConfig.GetDACRange()</a>
      */
     public AnalogRange getDacRange() throws JMCCULException {
         return AnalogRange.parseInt(
@@ -72,6 +92,10 @@ public class AnalogOutputConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACRange.htm">BoardConfig.SetDACRange()</a>
+     */
     public void setDacRange(int channel, AnalogRange range) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -82,10 +106,15 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACRES -> BI DAC RES -> boardInfo DAC resolution
      Readable? yes
      Writable? no
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDacResolution.htm">BoardConfig.GetDacResolution()</a>
      */
     public int getDacResolution() throws JMCCULException {
         return Configuration.getInt(
@@ -96,25 +125,20 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACSTARTUP -> BI DAC STARTUP -> boardInfo DAC startup
      Readable?
      Writable?
      */
+
+    /**
+     * Whether values written to the DAC get saved to non-volatile memory on the DAQ board.
+     *
+     * @see #setDacStartup
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
+     */
     public boolean getDacStartup(int channel) throws JMCCULException {
-        /*
-        Use the BIDACSTARTUP option to determine whether a board's
-        DAC values before the last power down are stored.
-
-        With ConfigItem set to BIDACSTARTUP, Configval returns 0 (zero)
-        when the startup bit is DISabled. Current DAC settings are stored
-        as startup values.
-
-        ConfigVal returns 1 (one) when the startup bit is ENabled. The
-        last DAC values are stored as startup values.
-
-        Refer to the cbSetConfig() Notes section for information about how to store the current or last DAC values as start-up values.
-         */
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -123,6 +147,20 @@ public class AnalogOutputConfig {
         ) == 1;
     }
 
+    /**
+     * Set whether DAC values get saved in non-volatile memory on the DAQ board.
+     * <p>
+     * Each time a DAC board is powered up, the board reads DAC values stored in onboard non-volatile memory and sets
+     * the DAC output to those values.
+     * <p>
+     * To store the current DAC values as start-up values: first, call {@code setDACStartup(true)}. Then, each time you
+     * call AOut() or AOutScan(), the value written for each channel is stored in non-volatile memory on the DAQ board.
+     * The last value written to a particular channel when {@code getDacStartup() == true} is the value that channel
+     * will be set to at power up. Call {@code setDACStartup(false)} stop storing values in non-volatile memory on the DAQ board.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
+     */
     public void setDacStartup(boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -133,10 +171,17 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACTRIGCOUNT -> BI DAC TRIG COUNT -> boardInfo DAC trigger count
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * Gets the number of samples to generate during each trigger event when ScanOptions.RetrigMode is enabled.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACRetrigCount.htm">BoardConfig.GetDACRetrigCount()</a>
      */
     public int getDacTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -147,6 +192,12 @@ public class AnalogOutputConfig {
         );
     }
 
+    /**
+     * Sets the number of samples to generate during each trigger event when ScanOptions.RetrigMode is enabled.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACRetrigCount.htm">BoardConfig.SetDACRetrigCount()</a>
+     */
     public void setDacTriggerCount(int triggerCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -157,10 +208,16 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACUPDATEMODE -> BI DAC UPDATE MODE  -> boardInfo DAC update mode
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * @see #setDacUpdateMode
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACUpdateMode.htm">BoardConfig.GetDACUpdateMode()</a>
      */
     public DacUpdateMode getDacUpdateMode() throws JMCCULException {
         return DacUpdateMode.parseInt(
@@ -171,22 +228,17 @@ public class AnalogOutputConfig {
                         MeasurementComputingUniversalLibrary.BIDACUPDATEMODE
                 )
         );
-        /*
-        Use the BIDACUPDATEMODE option to check the update mode for a DAC board.
-
-        With ConfigItem set to BIDACUPDATEMODE, ConfigVal returns 0 when the
-        DAC update mode is immediate. Values written with cbAOut() are
-        automatically output by the DAC channels.
-        ConfigVal returns 1 when the DAC update mode is set to on command.
-        Values written with cbAOut() are not output by the DAC channels
-        until a cbSetConfig() call is made with its ConfigItem argument
-        set to BIDACUPDATECMD.
-
-        #define UPDATEIMMEDIATE  0
-        #define UPDATEONCOMMAND  1
-         */
     }
 
+    /**
+     * <ul>
+     *      <li>If the value is {@link DacUpdateMode#IMMEDIATE}, then values written with cbAOut() or cbAOutScan() are automatically output by the DAC channels.</li>
+     *      <li>If the value is {@link DacUpdateMode#ON_COMMAND}, then values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call {@link #updateAnalogOutput()}.</li>
+     * </ul>
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACUpdateMode.htm">BoardConfig.GetDACUpdateMode()</a>
+     */
     public void setDacUpdateMode(DacUpdateMode updateMode) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -197,10 +249,15 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BINUMDACHANS -> BI NUM DA CHANS -> boardInfo number of DA channels
      Readable? yes
      Writable? no
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumDaChans.htm">BoardConfig.GetNumDaChans()</a>
      */
     public int getDacChannelCount() throws JMCCULException {
         return Configuration.getInt(
@@ -211,10 +268,17 @@ public class AnalogOutputConfig {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDACUPDATECMD -> BI DAC UPDATE CMD -> boardInfo DAC update command
 
     TODO move this out of AnalogOutputConfig.java
+     */
+
+    /**
+     * Updates the voltage values on analog output channels. This method is only useful if you first call {@link #setDacUpdateMode} with {@link DacUpdateMode#ON_COMMAND}.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/DACUpdate.htm">BoardConfig.DACUpdate()</a>
      */
     public void updateAnalogOutput() throws JMCCULException {
         Configuration.setInt(

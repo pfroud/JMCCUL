@@ -11,7 +11,11 @@ import java.util.Map;
 public enum DacUpdateMode {
 
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
+
+    /** Values written with cbAOut() or cbAOutScan() are automatically output by the DAC channels. */
     IMMEDIATE(MeasurementComputingUniversalLibrary.UPDATEIMMEDIATE),
+
+    /** Values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call {@link xyz.froud.jmccul.config.AnalogOutputConfig#updateAnalogOutput()}. */
     ON_COMMAND(MeasurementComputingUniversalLibrary.UPDATEONCOMMAND);
 
     private static final Map<Integer, DacUpdateMode> valueMap;

@@ -37,10 +37,11 @@ public class DigitalImpl {
         return ports;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L29">num_ports in dio_info.py</a>
+     */
     public int getPortCount() throws JMCCULException {
         if (portCount == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L29
-            // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
             portCount = Configuration.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
@@ -51,14 +52,19 @@ public class DigitalImpl {
         return portCount;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L39">is_supported in dio_info.py</a>
+     */
     public boolean isDigitalIOSupported() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L39
         return getPorts().length > 0;
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigBit.htm">cbDConfigBit()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DConfigBit.htm">DConfigBit()</a>
+     */
     public void configureBit(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
         // configure an individual bit. Not all devices support doing this.
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigBit.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -68,8 +74,11 @@ public class DigitalImpl {
         JMCCULUtils.checkError(errorCode);
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigPort.htm">cbDConfigPort()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DConfigPort.htm">DConfigPort()</a>
+     */
     public void configurePort(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigPort.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -78,9 +87,12 @@ public class DigitalImpl {
         JMCCULUtils.checkError(errorCode);
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitIn.htm">cbDBitIn()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DBitIn.htm">DBitIn()</a>
+     */
     public boolean inputBit(DigitalPortType portType, int bitNumber) throws JMCCULException {
         final ShortBuffer buf = ShortBuffer.allocate(1);
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDBitIn(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -91,9 +103,12 @@ public class DigitalImpl {
         return buf.get() == 1;
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm">cbDIn()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DIn.htm">DIn()</a>
+     */
     public short inputPort(DigitalPortType portType) throws JMCCULException {
         final ShortBuffer buf = ShortBuffer.allocate(1);
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDIn(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -104,9 +119,12 @@ public class DigitalImpl {
         return buf.get();
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn32.htm">cbDIn32()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DIn32.htm">DIn32()</a>
+     */
     public int inputPort32(DigitalPortType portType) throws JMCCULException {
         final IntBuffer buf = IntBuffer.allocate(1);
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDIn32(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -116,9 +134,12 @@ public class DigitalImpl {
         return buf.get();
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitOut.htm">cbDBitOut()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DBitOut.htm">DBitOut()</a>
+     */
     public void outputBit(DigitalPortType portType, int bitNumber, boolean value) throws JMCCULException {
         final int zeroOrOne = value ? 1 : 0;
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDBitOut(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -127,9 +148,12 @@ public class DigitalImpl {
         JMCCULUtils.checkError(errorCode);
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut.htm">cbDOut()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DOut.htm">DOut()</a>
+     */
     public void outputPort(DigitalPortType portType, short value) throws JMCCULException {
         // Java short is 16-bit signed integer
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOut(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,
@@ -137,6 +161,10 @@ public class DigitalImpl {
         JMCCULUtils.checkError(errorCode);
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut32.htm">cbDOut32()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DOut32.htm">DOut32()</a>
+     */
     public void outputPort32(DigitalPortType portType, int value) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOut32(

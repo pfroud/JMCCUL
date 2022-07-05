@@ -17,12 +17,10 @@ import java.util.List;
 
 /**
  * @author Peter Froud
+ * @see <a href="https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ai_info.py">ai_info.py</a>
  */
 public class AnalogInputImpl {
 
-    /*
-    https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ai_info.py
-     */
     private final DaqDevice DAQ_DEVICE;
 
     private Integer channelCount;
@@ -42,9 +40,12 @@ public class AnalogInputImpl {
         DAQ_DEVICE = device;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L36">num_chans in ai_info.py</a>
+     */
     public int getChannelCount() throws JMCCULException {
         if (channelCount == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L36
+            //
             channelCount = Configuration.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
@@ -55,14 +56,18 @@ public class AnalogInputImpl {
         return channelCount;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L41">is_supported in ai_info.py</a>
+     */
     public boolean isAnalogInputSupported() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L41
         return getChannelCount() > 0;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L54">resolution in ai_info.py</a>
+     */
     public int getResolution() throws JMCCULException {
         if (resolution == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L54
             resolution = Configuration.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
@@ -73,9 +78,11 @@ public class AnalogInputImpl {
         return resolution;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L59">supports_scan in ai_info.py</a>
+     */
     public boolean isScanSupported() throws JMCCULException {
         if (isScanSupported == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L59
             try {
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
                         DAQ_DEVICE.getBoardNumber(),
@@ -95,9 +102,11 @@ public class AnalogInputImpl {
 
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L68">supported_rangees in ai_info.py</a>
+     */
     public List<AnalogRange> getSupportedRanges() throws JMCCULException {
         if (supportedRanges == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L68
             supportedRanges = new ArrayList<>();
 
             // Check if the board has a switch-selectable, or only one, range
@@ -129,9 +138,11 @@ public class AnalogInputImpl {
         return supportedRanges;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L93">packet_size in ai_info.py</a>
+     */
     public int getPacketSize() {
         if (packetSize == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L93
             /*
             The hardware in the following table will return a packet size.
             This hardware must use an integer multiple of the packet size as
@@ -161,9 +172,11 @@ public class AnalogInputImpl {
 
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L121">supports_v_in in ai_info.py</a>
+     */
     public boolean isVoltageInputSupported() throws JMCCULException {
         if (isVoltageInputSupported == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L121
 
             final List<AnalogRange> supportedRanges = getSupportedRanges();
             if (supportedRanges.isEmpty()) {
@@ -180,10 +193,11 @@ public class AnalogInputImpl {
         return isVoltageInputSupported;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L134">analog_trig_resolution in ai_info.py</a>
+     */
     public int getAnalogTriggerResolution() {
         if (triggerResolution == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L134
-
         /*
         PCI-DAS6030, 6031, 6032, 6033, 6052
         USB-1602HS, 1602HS-2AO, 1604HS, 1604HS-2AO
@@ -201,10 +215,11 @@ public class AnalogInputImpl {
 
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L155">analog_trig_range in ai_info.py</a>
+     */
     public AnalogRange getAnalogTriggerRange() throws JMCCULException {
         if (analogTriggerRange == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L155
-
             int trigSource;
             try {
                 trigSource = Configuration.getInt(
@@ -228,10 +243,11 @@ public class AnalogInputImpl {
 
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L">supports_analog_trid in ai_info.py</a>
+     */
     public boolean isAnalogTriggerSupported() throws JMCCULException {
         if (isAnalogTriggerSupported == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L172
-
             try {
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbSetTrigger(
                         DAQ_DEVICE.getBoardNumber(),
@@ -249,10 +265,11 @@ public class AnalogInputImpl {
         return isAnalogTriggerSupported;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L190">supports_gain_queue in ai_info.py</a>
+     */
     public boolean isGainQueueSupported() throws JMCCULException {
         if (isGainQueueSupported == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L190
-
             try {
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbALoadQueue(
                         DAQ_DEVICE.getBoardNumber(),
@@ -271,11 +288,14 @@ public class AnalogInputImpl {
 
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn.htm">cbAIn()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AIn.htm">AIn()</a>
+     */
     public short analogInput(int channel, AnalogRange range) throws JMCCULException {
 
         final ShortBuffer buf = ShortBuffer.allocate(1);
 
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAIn(
                 DAQ_DEVICE.getBoardNumber(),
                 channel,
@@ -288,6 +308,10 @@ public class AnalogInputImpl {
 
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn32.htm">cbAIn32()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AIn32.htm">AIn32()</a>
+     */
     public long analogInput32(int channel, AnalogRange range) throws JMCCULException {
 
         final NativeLongByReference nlbr = new NativeLongByReference(new NativeLong());
@@ -304,11 +328,14 @@ public class AnalogInputImpl {
         return nlbr.getValue().longValue();
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm">cbVIn()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/VIn.htm">VIn()</a>
+     */
     public float voltageInput(int channel, AnalogRange range) throws JMCCULException {
 
         final FloatBuffer buf = FloatBuffer.allocate(1);
 
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVIn(
                 DAQ_DEVICE.getBoardNumber(),
                 channel,
@@ -320,11 +347,14 @@ public class AnalogInputImpl {
         return buf.get();
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm">cbVIn32()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/VIn32.htm">VIn32()</a>
+     */
     public double voltageInput32(int channel, AnalogRange range) throws JMCCULException {
 
         final DoubleBuffer buf = DoubleBuffer.allocate(1);
 
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVIn32(
                 DAQ_DEVICE.getBoardNumber(),
                 channel,

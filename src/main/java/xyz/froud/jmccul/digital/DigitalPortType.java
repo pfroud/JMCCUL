@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Enumerations/MccDaq.DigitalPortType.htm
- *
  * @author Peter Froud
+ * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Enumerations/MccDaq.DigitalPortType.htm">MccDaq.DigitalPortType</a>
  */
 public enum DigitalPortType {
     AUX_PORT(MeasurementComputingUniversalLibrary.AUXPORT),

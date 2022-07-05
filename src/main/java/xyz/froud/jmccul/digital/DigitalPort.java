@@ -11,9 +11,8 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import java.nio.ShortBuffer;
 
 /**
- * Adapted from a subclass of https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py
- *
  * @author Peter Froud
+ * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L50">class PortInfo in dio_info.py</a>
  */
 public class DigitalPort {
 
@@ -39,6 +38,9 @@ public class DigitalPort {
         return portType.name();
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDevType.htm">DioConfig.GetDevType()</a>
+     */
     public DigitalPortType getPortType() throws JMCCULException {
         if (portType == null) {
             final int portTypeInt = getConfigItem(MeasurementComputingUniversalLibrary.DIDEVTYPE);
@@ -47,6 +49,11 @@ public class DigitalPort {
         return portType;
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumBits.htm">DioConfig.GetNumBits()</a>
+     */
+
     public int getBitCount() throws JMCCULException {
         if (bitCount == null) {
             bitCount = getConfigItem(MeasurementComputingUniversalLibrary.DINUMBITS);
@@ -54,47 +61,43 @@ public class DigitalPort {
         return bitCount;
     }
 
+    /**
+     * Use getInputMask() and getOutputMask() to to determine if an AuxPort is configurable. If you apply both methods
+     * to the same port, and both configVal parameters returned have input and output bits that overlap, the port is
+     * not configurable. You can determine overlapping bits by ANDing both parameters.
+     * <p>
+     * For example, the PCI-DAS08 board has seven bits of digital I/O (four outputs and three inputs). For this board,
+     * getInputMask() always returns 7 (0b0111) and getOutputMask() always returns 15 (0b1111). When you And
+     * those values together, you get a non-zero number (7). Any non-zero number indicates that input and output bits
+     * overlap for the specified port, and that port is a non-configurable AuxPort.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDInMask.htm">DioConfig.GetDInMask()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L61">in_mask in class PortInfo in dio_info.py</a>
+     */
     public int getInputMask() throws JMCCULException {
-
-        /*
-        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
-        Use the DIINMASK and DIOUTMASK options to determine if an AUXPORT is configurable.
-        Execute cbGetConfig() twice to the same port – once using DIINMASK and once using DIOUTMASK.
-        If both of the ConfigValue arguments returned have input and output bits that overlap,
-        the port is not configurable.
-
-        You can determine overlapping bits by Anding both arguments.
-
-        Example: for a device with seven bits of digital I/O (four outputs and three inputs),
-        the ConfigValue returned by DIINMASK is always 7 (0000 0111),
-        while the ConfigValue argument returned by DIOUTMASK is always 15 (0000 1111).
-        When you And both ConfigValue arguments together, you get a non-zero number (7).
-        Any non-zero number indicates that input and output bits overlap for the specified port,
-        and the port is a non-configurable AUXPORT.
-         */
         if (inputMask == null) {
             inputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIINMASK);
         }
         return inputMask;
     }
 
+    /**
+     * Use getInputMask() and getOutputMask() to to determine if an AuxPort is configurable. If you apply both methods
+     * to the same port, and both configVal parameters returned have input and output bits that overlap, the port is
+     * not configurable. You can determine overlapping bits by ANDing both parameters.
+     * <p>
+     * For example, the PCI-DAS08 board has seven bits of digital I/O (four outputs and three inputs). For this board,
+     * getInputMask() always returns 7 (0b0111) and getOutputMask() always returns 15 (0b1111). When you And
+     * those values together, you get a non-zero number (7). Any non-zero number indicates that input and output bits
+     * overlap for the specified port, and that port is a non-configurable AuxPort.
+     *
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDOutMask.htm">DioConfig.GetDOutMask()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L66">out_mask in class PortInfo in dio_info.py</a>
+     */
+
     public int getOutputMask() throws JMCCULException {
-        /*
-        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
-        Use the DIINMASK and DIOUTMASK options to determine if an AUXPORT is configurable.
-        Execute cbGetConfig() twice to the same port – once using DIINMASK and once using DIOUTMASK.
-        If both of the ConfigValue arguments returned have input and output bits that overlap,
-        the port is not configurable.
-
-        You can determine overlapping bits by Anding both arguments.
-
-        Example: for a device with seven bits of digital I/O (four outputs and three inputs),
-        the ConfigValue returned by DIINMASK is always 7 (0000 0111),
-        while the ConfigValue argument returned by DIOUTMASK is always 15 (0000 1111).
-        When you And both ConfigValue arguments together, you get a non-zero number (7).
-        Any non-zero number indicates that input and output bits overlap for the specified port,
-        and the port is a non-configurable AUXPORT.
-         */
         if (outputMask == null) {
             outputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIOUTMASK);
         }
@@ -110,9 +113,45 @@ public class DigitalPort {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetCurVal.htm">DioConfig.GetCurVal</a>
+     */
+
+    public int getPresentValue() throws JMCCULException {
+        return getConfigItem(MeasurementComputingUniversalLibrary.DICURVAL);
+    }
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/IsDirectionCheckDisabled.htm">DioConfig.IsDirectionCheckDisabled()</a>
+     */
+    public boolean getDirectionCheckEnabled() throws JMCCULException {
+        final boolean isDisabled = (getConfigItem(MeasurementComputingUniversalLibrary.DIDISABLEDIRCHECK) == 1);
+        return !isDisabled;
+    }
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDirectionCheckDisabled.htm">DioConfig.SetDirectionCheckDisabled()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     */
+    public void setDirectionCheckEnabled(boolean enable) throws JMCCULException {
+        final boolean disable = !enable;
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.DIGITALINFO,
+                DAQ_DEVICE.getBoardNumber(),
+                PORT_INDEX,
+                MeasurementComputingUniversalLibrary.DIDISABLEDIRCHECK,
+                (disable ? 1 : 0)
+        );
+
+    }
+
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L77">first_bit in class PortInfo in dio_info.py</a>
+     */
     public int getFirstBit() {
         /*
-        https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L77
         A few devices (USB-SSR08 for example) start at FIRSTPORTCL and
         number the bits as if FIRSTPORTA and FIRSTPORTB exist for
         compatibility with older digital peripherals.
@@ -124,10 +163,14 @@ public class DigitalPort {
         }
     }
 
+    /**
+     * @see #getInputMask()
+     * @see #getOutputMask()
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L113">is_bit_configurable in class PortInfo in dio_info.py</a>
+     */
     public boolean isIndividualBitConfigurable() {
         if (isIndividualBitConfigurable == null) {
 
-            //https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L113
             if ((inputMask & outputMask) == 0) {
                 // TODO simplify nested if statements
                 // AUXPORT might be configurable, check if we can configure it
@@ -157,25 +200,13 @@ public class DigitalPort {
         return isIndividualBitConfigurable;
     }
 
+    /**
+     * @see #getInputMask()
+     * @see #getOutputMask()
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L130">is_port_configurable in class PortInfo in dio_info.py</a>
+     */
     public boolean isPortConfigurable() throws JMCCULException {
         if (isPortConfigurable == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L130
-            /*
-            https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm
-            Use the DIINMASK and DIOUTMASK options to determine if an AUXPORT is configurable.
-            Execute cbGetConfig() twice to the same port – once using DIINMASK and once using DIOUTMASK.
-            If both of the ConfigValue arguments returned have input and output bits that overlap,
-            the port is not configurable.
-
-            You can determine overlapping bits by Anding both arguments.
-
-            Example: for a device with seven bits of digital I/O (four outputs and three inputs),
-            the ConfigValue returned by DIINMASK is always 7 (0000 0111),
-            while the ConfigValue argument returned by DIOUTMASK is always 15 (0000 1111).
-            When you And both ConfigValue arguments together, you get a non-zero number (7).
-            Any non-zero number indicates that input and output bits overlap for the specified port,
-            and the port is a non-configurable AUXPORT.
-             */
             if ((inputMask & outputMask) == 0) {
                 try {
                     // check if we can configure the port
@@ -198,16 +229,23 @@ public class DigitalPort {
         return isPortConfigurable;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L87">supports_input in class PortInfo in dio_info.py</a>
+     */
     public boolean isInputSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L87
         return (inputMask > 0) || isPortConfigurable;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L109">supports_output in class PortInfo in dio_info.py</a>
+     */
     public boolean isOutputSupported() {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L109
         return (outputMask > 0) || isPortConfigurable;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L91">supports_input_scan in class PortInfo in dio_info.py</a>
+     */
     public boolean isInputScanSupported() throws JMCCULException {
         if (isInputScanSupported == null) {
         /*
@@ -220,7 +258,6 @@ public class DigitalPort {
         Blog post:
         https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
          */
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L91
             try {
                 // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
@@ -240,6 +277,9 @@ public class DigitalPort {
         return isInputScanSupported;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L100">supports_output_scan in class PortInfo in dio_info.py</a>
+     */
     public boolean isOutputScanSupported() throws JMCCULException {
         if (isOutputScanSupported == null) {
         /*
@@ -252,7 +292,6 @@ public class DigitalPort {
         Blog post:
         https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
          */
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L100
             try {
                 // // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(

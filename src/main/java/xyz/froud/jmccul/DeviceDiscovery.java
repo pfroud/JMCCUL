@@ -17,16 +17,16 @@ public class DeviceDiscovery {
 
     /**
      * @param interfaceTypeBitMask use either:
-     * <ul>
-     *     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ANY_IFC}</li>
-     *         <li>Or create a bit mask by OR-ing together any of these items:
      *         <ul>
-     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#USB_IFC}</li>
-     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#BLUETOOTH_IFC}</li>
-     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ETHERNET_IFC}</li>
+     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ANY_IFC}</li>
+     *                 <li>Or create a bit mask by OR-ing together any of these items:
+     *                 <ul>
+     *                     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#USB_IFC}</li>
+     *                     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#BLUETOOTH_IFC}</li>
+     *                     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ETHERNET_IFC}</li>
+     *                 </ul>
+     *             </li>
      *         </ul>
-     *     </li>
-     * </ul>
      */
     public static DaqDeviceDescriptor[] findDescriptors(int interfaceTypeBitMask) throws JMCCULException {
 

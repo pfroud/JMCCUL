@@ -15,10 +15,15 @@ public class DigitalOutputConfig {
         BOARD_NUMBER = device.getBoardNumber();
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDOTRIGCOUNT -> BI DO TRIG COUNT -> boardInfo digitalOutput trigger count
      Readable? yes
      Writable? yes
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDoRetrigCount.htm">BoardConfig.GetDoRetrigCount()</a>
      */
     public int getDigitalOutputTriggerCount() throws JMCCULException {
         return Configuration.getInt(
@@ -29,6 +34,10 @@ public class DigitalOutputConfig {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDoRetrigCount.htm">BoardConfig.SetDoRetrigCount()</a>
+     */
     public void setDigitalOutputTriggerCount(int trigCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,

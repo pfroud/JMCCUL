@@ -70,4 +70,37 @@ public class Configuration {
 
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////
+     GIVERSION -> GI VERSION -> globalInfo version
+     Readable? yes
+     Writable? NO
+     */
+    public static int getConfigFileVersion() throws JMCCULException {
+        return getInt(
+                MeasurementComputingUniversalLibrary.GLOBALINFO,
+                0,
+                0,
+                MeasurementComputingUniversalLibrary.GIVERSION
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////
+     GIVERSION -> GI NUM BOARDS -> globalInfo maximum number of boards
+     Readable? yes
+     Writable? NO
+     */
+
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/NumBoards_property.htm">NumBoards property</a>
+     */
+    public static int getMaxBoardCount() throws JMCCULException {
+        return getInt(
+                MeasurementComputingUniversalLibrary.GLOBALINFO,
+                0,
+                0,
+                MeasurementComputingUniversalLibrary.GINUMBOARDS
+        );
+    }
+
 }

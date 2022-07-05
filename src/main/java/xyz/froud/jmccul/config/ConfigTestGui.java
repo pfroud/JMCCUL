@@ -378,7 +378,7 @@ public final class ConfigTestGui extends javax.swing.JFrame {
     private Object getUserInputFromComponent(Component inputComponent, Class<?> desiredType) {
         if (inputComponent instanceof JComboBox) {
             if (desiredType.isEnum()) {
-                final JComboBox castToComboBox = (JComboBox) inputComponent;
+                final JComboBox<?> castToComboBox = (JComboBox<?>) inputComponent;
                 return castToComboBox.getSelectedItem();
             } else {
                 throw new IllegalArgumentException("the component is a JComboBox but the desired type is not an enum: " + desiredType);

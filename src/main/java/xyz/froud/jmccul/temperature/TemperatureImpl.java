@@ -51,6 +51,10 @@ public class TemperatureImpl {
         );
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm">cbTIn()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions_for_NET/TIn.htm">TIn()</a>
+     */
     public float readTemperature(int channel, TemperatureScale scale) throws JMCCULException {
         final FloatBuffer temperatureFloat = FloatBuffer.allocate(1);
 

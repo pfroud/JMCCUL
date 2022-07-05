@@ -32,9 +32,11 @@ public class AnalogOutputImpl {
         DAQ_DEVICE = device;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L32">num_chans in ao_info.py</a>
+     */
     public int getChannelCount() throws JMCCULException {
         if (channelCount == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L32
             channelCount = Configuration.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
@@ -45,14 +47,18 @@ public class AnalogOutputImpl {
         return channelCount;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L37">is_supported in ao_info.py</a>
+     */
     public boolean isAnalogOutputSupported() throws JMCCULException {
-        // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L37
         return getChannelCount() > 0;
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L41">resolution in ao_info.py</a>
+     */
     public int getResolution() throws JMCCULException {
         if (resolution == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L41
             resolution = Configuration.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
@@ -73,9 +79,12 @@ public class AnalogOutputImpl {
         //todo
     }
      */
+
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L61">supported_ranges in ao_info.py</a>
+     */
     public List<AnalogRange> getSupportedRanges() throws JMCCULException {
         if (supportedRanges == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L61
 
             supportedRanges = new ArrayList<>();
 
@@ -128,9 +137,11 @@ public class AnalogOutputImpl {
 
     }
 
+    /**
+     * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L97">supports_v_out in ao_info.py</a>
+     */
     public boolean isVoltageOutputSupported() throws JMCCULException {
         if (isVoltageOutputSupported == null) {
-            // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L97
             if (getSupportedRanges().isEmpty()) {
                 isVoltageOutputSupported = false;
             } else {
@@ -146,6 +157,11 @@ public class AnalogOutputImpl {
         return isVoltageOutputSupported;
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/CBAOut.htm">cbAOut()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AOut.htm">AOut()</a>
+     */
+
     public void analogOutput(int channel, AnalogRange range, short value) throws JMCCULException {
         // The value must be between zero and 2^(resolution)-1.
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/CBAOut.htm
@@ -158,6 +174,10 @@ public class AnalogOutputImpl {
         JMCCULUtils.checkError(errorCode);
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOutScan.htm">cbAOutScan()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AOutScan.htm">AOutScan()</a>
+     */
     public void analogOutputScan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, int options) throws JMCCULException {
 
         /*
@@ -199,6 +219,10 @@ public class AnalogOutputImpl {
 
     }
 
+    /**
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm">cbVOut()</a>
+     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/VOut.htm">VOut()</a>
+     */
     public void voltageOutput(int channel, AnalogRange range, float value) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVOut(

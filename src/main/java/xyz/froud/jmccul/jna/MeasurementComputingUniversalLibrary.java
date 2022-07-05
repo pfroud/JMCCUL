@@ -4473,10 +4473,9 @@ public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
      * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm
      * <p>
      * JNAerator generated:<br>
-     * <code>int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);</doce>
+     * <code>int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);</code>
      * <p>
-     * I am manually removing the ByValue part becasue I don't know how to get a <br>
-     * DaqDeviceDescriptor.ByValue from a DaqDeviceDescriptor.
+     * I am manually removing the ByValue part becasue I don't know how to get a DaqDeviceDescriptor.ByValue from a DaqDeviceDescriptor.
      * <p>
      * Original signature : <code>int cbGetBoardNumber(DaqDeviceDescriptor)</code><br>
      * native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1785
