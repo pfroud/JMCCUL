@@ -5,7 +5,6 @@ import xyz.froud.jmccul.analog.AnalogOutputImpl;
 import xyz.froud.jmccul.config.BoardConfig;
 import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.config.CounterConfig;
-import xyz.froud.jmccul.config.DigitalInputConfig;
 import xyz.froud.jmccul.config.DigitalOutputConfig;
 import xyz.froud.jmccul.config.ExpansionConfig;
 import xyz.froud.jmccul.config.NetworkConfig;
@@ -78,7 +77,6 @@ public class DaqDevice implements AutoCloseable {
 
     public final BoardConfig boardConfig;
     public final CounterConfig counterConfig;
-    public final DigitalInputConfig digitalInputConfig;
     public final DigitalOutputConfig digitalOutputConfig;
     public final ExpansionConfig expansionConfig;
     public final NetworkConfig networkConfig;
@@ -103,7 +101,6 @@ public class DaqDevice implements AutoCloseable {
 
         boardConfig = new BoardConfig(this);
         counterConfig = new CounterConfig(this);
-        digitalInputConfig = new DigitalInputConfig(this);
         digitalOutputConfig = new DigitalOutputConfig(this);
         expansionConfig = new ExpansionConfig(this);
         networkConfig = new NetworkConfig(this);
