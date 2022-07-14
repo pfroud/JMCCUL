@@ -20,7 +20,7 @@ public class PrintAnalogInputInfo {
         if (optionalDevice.isPresent()) {
             try (DaqDevice device = optionalDevice.get()) {
                 System.out.println("Analog input info for this device: " + device);
-                System.out.println("getChannelCount = " + device.analogInput.getChannelCount());
+                System.out.println("getAdcChannelCount = " + device.analogInput.getAdcChannelCount());
                 System.out.println("getResolution = " + device.analogInput.getResolution());
                 System.out.println("getPacketSize = " + device.analogInput.getPacketSize());
                 System.out.println("getTriggerResolution = " + device.analogInput.getAnalogTriggerResolution());

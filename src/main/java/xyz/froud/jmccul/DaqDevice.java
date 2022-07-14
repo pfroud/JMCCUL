@@ -2,8 +2,6 @@ package xyz.froud.jmccul;
 
 import xyz.froud.jmccul.analog.AnalogInputImpl;
 import xyz.froud.jmccul.analog.AnalogOutputImpl;
-import xyz.froud.jmccul.config.AnalogInputConfig;
-import xyz.froud.jmccul.config.AnalogOutputConfig;
 import xyz.froud.jmccul.config.BoardConfig;
 import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.config.CounterConfig;
@@ -78,8 +76,6 @@ public class DaqDevice implements AutoCloseable {
     public final TemperatureImpl temperature;
     public final CounterImpl counter;
 
-    public final AnalogInputConfig analogInputConfig;
-    public final AnalogOutputConfig analogOutputConfig;
     public final BoardConfig boardConfig;
     public final CounterConfig counterConfig;
     public final DigitalInputConfig digitalInputConfig;
@@ -105,8 +101,6 @@ public class DaqDevice implements AutoCloseable {
         temperature = new TemperatureImpl(this);
         counter = new CounterImpl(this);
 
-        analogInputConfig = new AnalogInputConfig(this);
-        analogOutputConfig = new AnalogOutputConfig(this);
         boardConfig = new BoardConfig(this);
         counterConfig = new CounterConfig(this);
         digitalInputConfig = new DigitalInputConfig(this);

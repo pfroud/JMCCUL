@@ -20,10 +20,10 @@ public class PrintAnalogOutputInfo {
         if (optionalDevice.isPresent()) {
             try (DaqDevice device = optionalDevice.get()) {
                 System.out.println("Analog output info for this device: " + device);
-                System.out.println("CHANNEL_COUNT = " + device.analogOutput.getChannelCount());
-                System.out.println("RESOLUTION = " + device.analogOutput.getResolution());
-                System.out.println("SUPPORTED_RANGES = " + device.analogOutput.getSupportedRanges());
-                System.out.println("IS_VOLTAGE_OUTPUT_SUPPORTED = " + device.analogOutput.isVoltageOutputSupported());
+                System.out.println("getDacChannelCount = " + device.analogOutput.getDacChannelCount());
+                System.out.println("getDacResolution = " + device.analogOutput.getDacResolution());
+                System.out.println("getSupportedRanges = " + device.analogOutput.getSupportedRanges());
+                System.out.println("isVoltageOutputSupported = " + device.analogOutput.isVoltageOutputSupported());
             }
         } else {
             System.out.println("Didn't find a device which supports analog input.");

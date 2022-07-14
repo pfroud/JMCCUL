@@ -36,7 +36,7 @@ public class AnalogOutputExample {
 
         final AnalogRange rangeToUse = device.analogOutput.getSupportedRanges().get(0);
 
-        final int max = (1 << device.analogOutput.getResolution()) - 1;
+        final int max = (1 << device.analogOutput.getDacResolution()) - 1;
         final int middle = (int) Math.round(max / 2.0);
 
         device.analogOutput.analogOutput(0, rangeToUse, (short) 0);
