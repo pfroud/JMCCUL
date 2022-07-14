@@ -421,7 +421,7 @@ public class DigitalImpl {
     }
     //</editor-fold>
 
-    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIDITRIGCOUNT -> BI DI TRIG COUNT -> boardInfo digitalInput trigger count
      Readable? yes
      Writable? yes
@@ -436,7 +436,7 @@ public class DigitalImpl {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDiRetrigCount.htm">BoardConfig.GetDiRetrigCount()</a>
      */
-    public int getTriggerCount() throws JMCCULException {
+    public int getDigitalInputTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -454,7 +454,7 @@ public class DigitalImpl {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDiRetrigCount.htm">BoardConfig.SetDiRetrigCount()</a>
      */
-    public void setTriggerCount(int count) throws JMCCULException {
+    public void setDigitalInputTriggerCount(int count) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -474,7 +474,7 @@ public class DigitalImpl {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
-    public void setDebounceState(int n) throws JMCCULException {
+    public void setDigitalInputDebounceState(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -494,7 +494,7 @@ public class DigitalImpl {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
-    public void setDebounceTime(int n) throws JMCCULException {
+    public void setDigitalInputDebounceTime(int n) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -516,7 +516,7 @@ public class DigitalImpl {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDisoFilter.htm">BoardConfig.GetDisoFilter()</a>
      */
-    public boolean getAcFilter(int bitNumber) throws JMCCULException {
+    public boolean getDigitalInputAcFilter(int bitNumber) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -531,7 +531,7 @@ public class DigitalImpl {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDisoFilter.htm">BoardConfig.SetDisoFilter()</a>
      */
-    public void setAcFilter(int bitNumber, boolean enable) throws JMCCULException {
+    public void setDigitalInputAcFilter(int bitNumber, boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -541,5 +541,41 @@ public class DigitalImpl {
         );
     }
 
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIDOTRIGCOUNT -> BI DO TRIG COUNT -> boardInfo digitalOutput trigger count
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDoRetrigCount.htm">BoardConfig.GetDoRetrigCount()</a>
+     */
+    public int getDigitalOutputTriggerCount() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIDOTRIGCOUNT
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDoRetrigCount.htm">BoardConfig.SetDoRetrigCount()</a>
+     */
+    public void setDigitalOutputTriggerCount(int trigCount) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIDOTRIGCOUNT,
+                trigCount
+        );
+    }
 
 }
