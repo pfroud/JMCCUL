@@ -26,6 +26,9 @@ import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.digital.DigitalPort;
 
+/**
+ * @author Peter Froud
+ */
 class DeviceAndDigitalPort implements AutoCloseable {
 
     DaqDevice device;
