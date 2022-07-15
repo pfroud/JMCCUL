@@ -5,10 +5,8 @@ import xyz.froud.jmccul.analog.AnalogOutputImpl;
 import xyz.froud.jmccul.config.BoardConfig;
 import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.config.CounterConfig;
-import xyz.froud.jmccul.config.DigitalOutputConfig;
 import xyz.froud.jmccul.config.ExpansionConfig;
 import xyz.froud.jmccul.config.NetworkConfig;
-import xyz.froud.jmccul.config.TemperatureConfig;
 import xyz.froud.jmccul.config.WirelessConfig;
 import xyz.froud.jmccul.counter.CounterImpl;
 import xyz.froud.jmccul.digital.DigitalImpl;
@@ -77,10 +75,8 @@ public class DaqDevice implements AutoCloseable {
 
     public final BoardConfig boardConfig;
     public final CounterConfig counterConfig;
-    public final DigitalOutputConfig digitalOutputConfig;
     public final ExpansionConfig expansionConfig;
     public final NetworkConfig networkConfig;
-    public final TemperatureConfig temperatureConfig;
     public final WirelessConfig wirelessConfig;
 
     public DaqDevice(DaqDeviceDescriptor descriptor) throws JMCCULException {
@@ -101,10 +97,8 @@ public class DaqDevice implements AutoCloseable {
 
         boardConfig = new BoardConfig(this);
         counterConfig = new CounterConfig(this);
-        digitalOutputConfig = new DigitalOutputConfig(this);
         expansionConfig = new ExpansionConfig(this);
         networkConfig = new NetworkConfig(this);
-        temperatureConfig = new TemperatureConfig(this);
         wirelessConfig = new WirelessConfig(this);
     }
 

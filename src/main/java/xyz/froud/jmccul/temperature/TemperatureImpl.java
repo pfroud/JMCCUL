@@ -4,6 +4,9 @@ import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
 import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
+import xyz.froud.jmccul.enums.RtdSensorType;
+import xyz.froud.jmccul.enums.TemperatureRejection;
 import xyz.froud.jmccul.enums.TemperatureScale;
 import xyz.froud.jmccul.enums.ThermocoupleSensorType;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
@@ -16,12 +19,20 @@ import java.nio.FloatBuffer;
 public class TemperatureImpl {
 
     private final DaqDevice DAQ_DEVICE;
+    private final int BOARD_NUMBER;
     private Integer channelCount;
 
     public TemperatureImpl(DaqDevice device) {
         DAQ_DEVICE = device;
+        BOARD_NUMBER = device.getBoardNumber();
     }
 
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumTempChans.htm">BoardConfig.GetNumTempChans()</a>
+     */
     public int getChannelCount() throws JMCCULException {
         if (channelCount == null) {
             // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L45
@@ -41,19 +52,49 @@ public class TemperatureImpl {
         return channelCount > 0;
     }
 
-    public void setThermocoupleType(int channel, ThermocoupleSensorType tc) throws JMCCULException {
-        Configuration.setInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                DAQ_DEVICE.getBoardNumber(),
-                channel,
-                MeasurementComputingUniversalLibrary.BICHANTCTYPE,
-                tc.VALUE
-        );
-    }
 
     /**
-     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm">cbTIn()</a>
-     * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions_for_NET/TIn.htm">TIn()</a>
+     * Reads an analog input channel, linearizes it according to the selected temperature sensor type, if required, and
+     * returns the temperature in units determined by the Scale argument.
+     * <p>
+     * Important! For an EXP board connected to an A/D board that does not have programmable gain (DAS08, DAS16,
+     * DAS16F), the A/D board range is read from the configuration file (cb.cfg). In most cases, set hardware-selectable
+     * ranges to ±5 V for thermocouples, and to 0 to 10 V for RTDs. Refer to the board-specific information in the
+     * Universal Library User's Guide or in the user manual for your board. If the board has programmable gains, the
+     * cbTIn() function sets the appropriate A/D range.
+     * <p>
+     * <b>Using CIO-EXP boards</b>
+     * <p>
+     * For CIO-EXP boards, the channel number is calculated using the formula<br> Chan = (ADChan × 16) + (16 +
+     * MuxChan)<br> where:
+     * <ul>
+     *    <li>ADChan is the A/D channel that is connected to the multiplexer.</li>
+     *    <li>MuxChan is a number ranging from 0 to 15 that specifies the channel number on a particular bank of the multiplexer board.</li>
+     * </ul>
+     * For example, you have an EXP16 connected to a CIO-DAS08 via the CIO-DAS08 channel 0.
+     * (Remember that DAS08 channels are numbered 0, 1, 2, 3, 4, 5, 6 and 7).
+     * If you connect a thermocouple to channel 5 of the EXP16, the value for Chan would be (0 × 16) + (16 + 5)= 0 + 21 = 21.
+     *
+     * <p>
+     *     <b>CJC channel</b>
+     * <p>
+     *     The CJC channel is set in the InstaCal installation and configuration program. If you have multiple EXP boards, the Universal Library will apply the CJC reading to the linearization formula in the following manner:
+     * <ul>
+     *
+     * <li>If you have chosen a CJC channel for the EXP board that the channel you are reading is on, it will use the CJC temp reading from that channel.</li>
+     * <li>If you left the CJC channel for the EXP board that the channel you are reading is on to NOT SET, the library will use the CJC reading from the next lower EXP board with a CJC channel selected.</li>
+     * </ul>
+     * For example: You have four CIO-EXP16 boards connected to a CIO-DAS08 on channel 0, 1, 2 and 3. You choose
+     * CIO-EXP16 #1 (connected to CIO-DAS08 channel 0) to have its CJC read on CIO-DAS08 channel 7, AND, you leave the
+     * CIO-EXP16's 2, 3 and 4 CJC channels to NOT SET. Result: The CIO-EXP boards will all use the CJC reading from
+     * CIO-EXP16 #1, connected to channel 7 for linearization. <i>It is important to keep the CIO-EXP boards in the same
+     * case and out of any breezes to ensure a clean CJC reading.</i>
+     *
+     * @param scale Specifies the temperature scale that the input will be converted to.
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm">cbTIn()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions_for_NET/TIn.htm">TIn()</a>
      */
     public float readTemperature(int channel, TemperatureScale scale) throws JMCCULException {
         final FloatBuffer temperatureFloat = FloatBuffer.allocate(1);
@@ -69,6 +110,251 @@ public class TemperatureImpl {
 
         JMCCULUtils.checkError(errorCode);
         return temperatureFloat.get();
+    }
+
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BITEMPAVG -> BI TEMP AVG -> boardInfo temperature average
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetTempAvg.htm">BoardConfig.GetTempAvg()</a>
+     */
+    public int getTemperatureScansToAverage() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BITEMPAVG
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetTempAvg.htm">BoardConfig.SetTempAvg()</a>
+     */
+    public void setTemperatureAverageCount(int count) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //it does not say what devNum does
+                MeasurementComputingUniversalLibrary.BITEMPAVG,
+                count
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BITEMPSCALE -> BI TEMP SCALE -> boardInfo temperature scale
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetTempScale.htm">BoardConfig.GetTempScale()</a>
+     */
+    public TemperatureScale getTemperatureScale() throws JMCCULException {
+        return TemperatureScale.parseInt(Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BITEMPSCALE
+        ));
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetTempScale.htm">BoardConfig.SetTempScale()</a>
+     */
+    public void setTemperatureScale(TemperatureScale temperatureScale) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BITEMPSCALE,
+                temperatureScale.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BITEMPREJFREQ -> BI TEMP REJ FREQ -> boardInfo temperature rejection frequency
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetTempRejFreq.htm">BoardConfig.GetTempRejFreq()</a>
+     */
+    public TemperatureRejection getRejectionFrequency(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
+        return TemperatureRejection.parseInt(
+                Configuration.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        baseOrExpansionBoard.VALUE,
+                        MeasurementComputingUniversalLibrary.BITEMPREJFREQ
+                )
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetTempRejFreq.htm">BoardConfig.SetTempRejFreq()</a>
+     */
+    public void setRejectionFrequency(BaseOrExpansionBoard baseOrExpansionBoard, TemperatureRejection rejection) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                baseOrExpansionBoard.VALUE,
+                MeasurementComputingUniversalLibrary.BITEMPREJFREQ,
+                rejection.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIDETECTOPENTC  -> BI DETECT OPEN TC -> boardInfo detect open thermocouple
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDetectOpenTC.htm">BoardConfig.GetDetectOpenTc()</a>
+     */
+    public boolean getOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                baseOrExpansionBoard.VALUE,
+                MeasurementComputingUniversalLibrary.BIDETECTOPENTC
+        ) == 1;
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDetectOpenTC.htm">BoardConfig.SetDetectOpenTc()</a>
+     */
+    public void setOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard, boolean enable) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                baseOrExpansionBoard.VALUE,
+                MeasurementComputingUniversalLibrary.BIDETECTOPENTC,
+                (enable ? 1 : 0)
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BINUMTEMPCHANS -> BI NUM TEMP CHANS -> boardInfo number of temperature channels
+     Readable? yes
+     Writable? NO
+     */
+
+
+    public int getTemperatureChannelCount() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BINUMTEMPCHANS
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BICHANTCTYPE -> BI CHAN TC TYPE  -> boardInfo channel thermocouple type
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetChanTcType.htm">BoardConfig.GetChanTcType()</a>
+     */
+    public ThermocoupleSensorType getThermocoupleSensorType(int channel) throws JMCCULException {
+        return ThermocoupleSensorType.parseInt(
+                Configuration.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        channel,
+                        MeasurementComputingUniversalLibrary.BICHANTCTYPE
+                )
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetChanTcType.htm">BoardConfig.SetChanTcType()</a>
+     */
+    public void setThermocoupleSensorType(int channel, ThermocoupleSensorType type) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                channel,
+                MeasurementComputingUniversalLibrary.BICHANTCTYPE,
+                type.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BICHANRTDTYPE -> BI CHAN RTD TYPE  -> boardInfo channel resistanceTemperatureDetector type
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetChanRtdType.htm">BoardConfig.GetChanRtdType()</a>
+     */
+    public RtdSensorType getRtdSensorType(int channel) throws JMCCULException {
+        return RtdSensorType.parseInt(
+                Configuration.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        channel,
+                        MeasurementComputingUniversalLibrary.BICHANRTDTYPE
+                )
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetChanRtdType.htm">BoardConfig.SetChanRtdType()</a>
+     */
+    public void setRtdSensorType(int channel, RtdSensorType rtdSensor) throws JMCCULException {
+        Configuration.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                channel,
+                MeasurementComputingUniversalLibrary.BICHANRTDTYPE,
+                rtdSensor.VALUE
+        );
     }
 
 }

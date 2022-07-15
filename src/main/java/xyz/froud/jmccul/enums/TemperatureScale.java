@@ -15,7 +15,12 @@ public enum TemperatureScale {
     CELSIUS(MeasurementComputingUniversalLibrary.CELSIUS),
     FAHRENHEIT(MeasurementComputingUniversalLibrary.FAHRENHEIT),
     KELVIN(MeasurementComputingUniversalLibrary.KELVIN),
+    /** Specify the VOLTS option to read the voltage input of a thermocouple. */
     VOLTS(MeasurementComputingUniversalLibrary.VOLTS),
+    /**
+     * Specify the NOSCALE option to retrieve raw data from the device. When NOSCALE is specified, calibrated data is
+     * returned, although a cold junction compensation (CJC) correction factor is not applied to the returned values.
+     */
     NO_SCALE(MeasurementComputingUniversalLibrary.NOSCALE);
 
     private static final Map<Integer, TemperatureScale> valueMap;
