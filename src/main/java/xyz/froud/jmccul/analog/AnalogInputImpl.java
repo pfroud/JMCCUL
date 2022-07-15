@@ -335,7 +335,9 @@ public class AnalogInputImpl {
      * @param range A/D range. If the selected A/D board does not have a programmable gain feature, this
      *         argument is ignored. If the A/D board does have programmable gain, set the Range argument to the desired
      *         A/D range. Refer to board specific information for a list of the supported A/D ranges of each board.
+     *
      * @return the value of the A/D sample.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn.htm">cbAIn()</a>
      * @see <a
@@ -369,7 +371,9 @@ public class AnalogInputImpl {
      * @param range A/D Range. If the selected A/D board does not have a programmable gain feature, this
      *         argument is ignored. If the A/D board does have programmable gain, set the Range argument to the desired
      *         A/D range. Refer to board specific information for a list of the supported A/D ranges of each board.
+     *
      * @return the value of the A/D sample.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAIn32.htm">cbAIn32()</a>
      * @see <a
@@ -405,7 +409,9 @@ public class AnalogInputImpl {
      *         gain via switches on the board. In either case, the range that the board is configured for must be passed
      *         to this function. Refer to board specific information for a list of the supported A/D ranges of each
      *         board.
+     *
      * @return the value in volts of the A/D sample.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn.htm">cbVIn()</a>
      * @see <a
@@ -440,7 +446,9 @@ public class AnalogInputImpl {
      *         gain via switches on the board. In either case, the range that the board is configured for must be passed
      *         to this function. Refer to board specific information for a list of the supported A/D ranges of each
      *         board.
+     *
      * @return the value in volts of the A/D sample.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm">cbVIn32()</a>
      * @see <a

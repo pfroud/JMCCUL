@@ -95,6 +95,7 @@ public class DigitalImpl {
      * @param portType The port (AUXPORT) whose bits are to be configured. The port specified must be bitwise
      * @param bitNumber The bit number to configure as input or output. configurable.
      * @param direction DIGITALOUT or DIGITALIN configures the specified bit for output or input, respectively.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigBit.htm">cbDConfigBit()</a>
      * @see <a
@@ -129,6 +130,7 @@ public class DigitalImpl {
      *         configurable. Check the board-specific information in the Universal Library User's Guide for details.
      * @param direction DIGITALOUT or DIGITALIN configures the entire eight or four bit port for output or
      *         input.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigPort.htm">cbDConfigPort()</a>
      * @see <a
@@ -156,8 +158,10 @@ public class DigitalImpl {
      *         to AUXPORT. For devices with both types of digital ports, set PortType to either FIRSTPORTA or AUXPORT,
      *         depending on which digital inputs you wish to read.
      * @param bitNumber Specifies the bit number within the single large port.
+     *
      * @return False for logic low or true for logic high. Logic high does not necessarily mean 5 V – refer to the
      *         device hardware user guide for chip input specifications.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitIn.htm">cbDBitIn()</a>
      * @see <a
@@ -187,6 +191,7 @@ public class DigitalImpl {
      *
      * @param portType The digital port to read. Some hardware allows readback of the state of the output using
      *         this function; refer to the board-specific information in the Universal Library User's Guide.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm">cbDIn()</a>
      * @see <a
@@ -215,6 +220,7 @@ public class DigitalImpl {
      *
      * @param portType The digital port to read. Some hardware allows readback of the output state using this
      *         function; refer to board-specific information in the Universal Library User's Guide.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn32.htm">cbDIn32()</a>
      * @see <a
@@ -250,6 +256,7 @@ public class DigitalImpl {
      *         configured for output.
      * @param value The value to set the bit to. False for logic low or true for logic high. Logic high does not
      *         necessarily mean 5 V – refer to the device hardware user guide for chip input specifications.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitOut.htm">cbDBitOut()</a>
      * @see <a
@@ -281,6 +288,7 @@ public class DigitalImpl {
      *         be programmed as input or output. For the first of these types, set PortType to FIRSTPORTA. For the
      *         latter two types, set PortType to AUXPORT. For devices with both types of digital ports, set PortType to
      *         either FIRSTPORTA or AUXPORT, depending on the digital port you want to set.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut.htm">cbDOut()</a>
      * @see <a
@@ -310,6 +318,7 @@ public class DigitalImpl {
      *         be programmed as input or output. For the first of these types, set PortType to FIRSTPORTA. For the
      *         latter two types, set PortType to AUXPORT. For devices with both types of digital ports, set PortType to
      *         either FIRSTPORTA or AUXPORT, depending on the digital port you want to set.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOut32.htm">cbDOut32()</a>
      * @see <a

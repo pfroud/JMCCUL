@@ -109,6 +109,7 @@ public class TemperatureImpl {
      * case and out of any breezes to ensure a clean CJC reading.</i>
      *
      * @param scale Specifies the temperature scale that the input will be converted to.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm">cbTIn()</a>
      * @see <a

@@ -619,6 +619,7 @@ public class BoardConfig {
      * Returns the terminal count output status for a specified bit.
      *
      * @return Returns True when the terminal count output is enabled, and False when disabled.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a

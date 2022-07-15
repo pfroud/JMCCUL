@@ -178,6 +178,7 @@ public class AnalogOutputImpl {
      *         Exception: using 16-bit boards with Basic range is –32,768 to 32,767. Refer to the discussion on <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/Users_Guide/Overview/UL_Interface.htm#signed%20integers">16-bit
      *         values using a signed integer data type</a> for more information.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/CBAOut.htm">cbAOut()</a>
      * @see <a
@@ -227,6 +228,7 @@ public class AnalogOutputImpl {
      *         the board. If the D/A board does not have a programmable gain, this argument is ignored.
      * @param options Bit fields that control various options. This field may contain any combination of
      *         non-contradictory choices from the values listed in the Options argument values section below.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOutScan.htm">cbAOutScan()</a>
      * @see <a
@@ -287,6 +289,7 @@ public class AnalogOutputImpl {
      *         the device. If it doesn't, the output voltage will not match the voltage specified in the DataValue
      *         argument.
      * @param value The voltage value to be written.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm">cbVOut()</a>
      * @see <a
