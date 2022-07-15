@@ -5,10 +5,6 @@ import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
 import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
-import xyz.froud.jmccul.enums.RtdSensorType;
-import xyz.froud.jmccul.enums.TemperatureRejection;
-import xyz.froud.jmccul.enums.TemperatureScale;
-import xyz.froud.jmccul.enums.ThermocoupleSensorType;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.FloatBuffer;

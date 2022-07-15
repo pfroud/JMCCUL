@@ -3,7 +3,7 @@ package xyz.froud.jmccul_examples.analog_input;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.enums.AnalogRange;
+import xyz.froud.jmccul.analog.AnalogRange;
 
 import java.util.Optional;
 

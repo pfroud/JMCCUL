@@ -1,4 +1,4 @@
-package xyz.froud.jmccul.enums;
+package xyz.froud.jmccul.analog;
 
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
@@ -15,7 +15,10 @@ public enum DacUpdateMode {
     /** Values written with cbAOut() or cbAOutScan() are automatically output by the DAC channels. */
     IMMEDIATE(MeasurementComputingUniversalLibrary.UPDATEIMMEDIATE),
 
-    /** Values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call {@link xyz.froud.jmccul.config.AnalogOutputConfig#updateAnalogOutput()}. */
+    /**
+     * Values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call
+     * {@link xyz.froud.jmccul.config.AnalogOutputConfig#updateAnalogOutput()}.
+     */
     ON_COMMAND(MeasurementComputingUniversalLibrary.UPDATEONCOMMAND);
 
     private static final Map<Integer, DacUpdateMode> valueMap;

@@ -3,8 +3,8 @@ package xyz.froud.jmccul_examples.temperature;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.enums.TemperatureScale;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.temperature.TemperatureScale;
 
 import java.util.Optional;
 

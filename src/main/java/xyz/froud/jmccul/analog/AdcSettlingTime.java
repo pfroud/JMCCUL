@@ -1,4 +1,4 @@
-package xyz.froud.jmccul.enums;
+package xyz.froud.jmccul.analog;
 
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 

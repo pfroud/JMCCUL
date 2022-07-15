@@ -1,4 +1,4 @@
-package xyz.froud.jmccul.enums;
+package xyz.froud.jmccul.analog;
 
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
@@ -9,9 +9,13 @@ import java.util.Map;
  * This enum is used for both digital-to-analog and analog-to-digital operations.
  *
  * @author Peter Froud
- * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm#Misc/Supported_A_D_Ranges.htm">Supported A/D Ranges</a>
+ * @see <a
+ *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm#Misc/Supported_A_D_Ranges.htm">Supported
+ *         A/D Ranges</a>
  * @see <a href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/Enumerations/MccDaq.Range.htm">MccDaq.Range</a>
- * @see <a href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/enums.py#L652">ULRange enum in Python library</a>
+ * @see <a
+ *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/enums.py#L652">ULRange
+ *         enum in Python library</a>
  */
 public enum AnalogRange {
     BIPOLAR_60_VOLTS(MeasurementComputingUniversalLibrary.BIP60VOLTS, RangeType.BIPOLAR, 60),
