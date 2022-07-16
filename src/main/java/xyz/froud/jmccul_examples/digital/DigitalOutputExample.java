@@ -66,11 +66,11 @@ public class DigitalOutputExample {
         //                       eight bits: 76453210
         final short valueToWrite = (short) 0b10110110;
         System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(valueToWrite));
-        device.digital.outputPort(port.getPortType(), valueToWrite);
+        device.digital.output.port(port.getPortType(), valueToWrite);
 
         System.out.println("Now setting each bit on individually");
         for (int bitIdx = 0; bitIdx < port.getBitCount(); bitIdx++) {
-            device.digital.outputBit(port.getPortType(), bitIdx, true);
+            device.digital.output.bit(port.getPortType(), bitIdx, true);
         }
 
     }
@@ -81,7 +81,7 @@ public class DigitalOutputExample {
         for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
             final DaqDevice device = new DaqDevice(descriptor);
 
-            if (device.digital.isDigitalIOSupported()) {
+            if (device.digital.isSupported()) {
 
                 final Optional<DigitalPort> optionalPortToUse
                         = Arrays.stream(device.digital.getPorts())

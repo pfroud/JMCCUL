@@ -47,7 +47,7 @@ public class PrintDeviceInfo {
                     System.out.println("  FACTORY_SERIAL_NUMBER = " + device.getFactorySerialNumber());
 //                    System.out.println("  PRODUCT_ID = " + device.PRODUCT_ID);
                     // TODO look at the user device identifier thing
-                    System.out.println("  Is digital I/O supported?   " + device.digital.isDigitalIOSupported());
+                    System.out.println("  Is digital I/O supported?   " + device.digital.isSupported());
                     System.out.println("  Is analog input supported?  " + device.analogInput.isAnalogInputSupported());
                     System.out.println("  Is analog output supported? " + device.analogOutput.isAnalogOutputSupported());
                     System.out.println("  Is temperature supported?   " + device.temperature.isTemperatureInputSupported());

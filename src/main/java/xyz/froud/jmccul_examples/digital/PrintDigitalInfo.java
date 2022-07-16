@@ -37,7 +37,7 @@ public class PrintDigitalInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.digital.isDigitalIOSupported()
+                d -> d.digital.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
