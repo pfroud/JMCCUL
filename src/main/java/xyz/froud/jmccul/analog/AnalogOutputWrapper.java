@@ -65,8 +65,8 @@ public class AnalogOutputWrapper {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ao_info.py#L37">is_supported
      *         in ao_info.py</a>
      */
-    public boolean isAnalogOutputSupported() throws JMCCULException {
-        return getDacChannelCount() > 0;
+    public boolean isSupported() throws JMCCULException {
+        return getChannelCount() > 0;
     }
 
 
@@ -331,7 +331,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACForceSense.htm">BoardConfig.GetDACForceSense()</a>
      */
-    public boolean getDacForceSense(int channel) throws JMCCULException {
+    public boolean getForceSense(int channel) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -354,7 +354,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACForceSense.htm">BoardConfig.SetDACForceSense()</a>
      */
-    public void setDacForceSense(int channel, boolean sense) throws JMCCULException {
+    public void setForceSense(int channel, boolean sense) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -379,7 +379,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACRange.htm">BoardConfig.GetDACRange()</a>
      */
-    public AnalogRange getDacRange() throws JMCCULException {
+    public AnalogRange getRange() throws JMCCULException {
         return AnalogRange.parseInt(
                 Configuration.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -396,7 +396,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACRange.htm">BoardConfig.SetDACRange()</a>
      */
-    public void setDacRange(int channel, AnalogRange range) throws JMCCULException {
+    public void setRange(int channel, AnalogRange range) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -418,7 +418,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDacResolution.htm">BoardConfig.GetDacResolution()</a>
      */
-    public int getDacResolution() throws JMCCULException {
+    public int getResolution() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -436,13 +436,13 @@ public class AnalogOutputWrapper {
     /**
      * Whether values written to the DAC get saved to non-volatile memory on the DAQ board.
      *
-     * @see #setDacStartup
+     * @see #setStartup
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
      */
-    public boolean getDacStartup(int channel) throws JMCCULException {
+    public boolean getStartup(int channel) throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -457,18 +457,18 @@ public class AnalogOutputWrapper {
      * Each time a DAC board is powered up, the board reads DAC values stored in onboard non-volatile memory and sets
      * the DAC output to those values.
      * <p>
-     * To store the current DAC values as start-up values: first, call {@code setDACStartup(true)}. Then, each time you
+     * To store the current DAC values as start-up values: first, call {@code setStartup(true)}. Then, each time you
      * call AOut() or AOutScan(), the value written for each channel is stored in non-volatile memory on the DAQ board.
-     * The last value written to a particular channel when {@code getDacStartup() == true} is the value that channel
-     * will be set to at power up. Call {@code setDACStartup(false)} stop storing values in non-volatile memory on the
-     * DAQ board.
+     * The last value written to a particular channel when {@code getStartup() == true} is the value that channel will
+     * be set to at power up. Call {@code setStartup(false)} stop storing values in non-volatile memory on the DAQ
+     * board.
      *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
      */
-    public void setDacStartup(boolean enable) throws JMCCULException {
+    public void setStartup(boolean enable) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -492,7 +492,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACRetrigCount.htm">BoardConfig.GetDACRetrigCount()</a>
      */
-    public int getDacTriggerCount() throws JMCCULException {
+    public int getTriggerCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -509,7 +509,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACRetrigCount.htm">BoardConfig.SetDACRetrigCount()</a>
      */
-    public void setDacTriggerCount(int triggerCount) throws JMCCULException {
+    public void setTriggerCount(int triggerCount) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -526,13 +526,13 @@ public class AnalogOutputWrapper {
      */
 
     /**
-     * @see #setDacUpdateMode
+     * @see #setUpdateMode
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACUpdateMode.htm">BoardConfig.GetDACUpdateMode()</a>
      */
-    public DacUpdateMode getDacUpdateMode() throws JMCCULException {
+    public DacUpdateMode getUpdateMode() throws JMCCULException {
         return DacUpdateMode.parseInt(
                 Configuration.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
@@ -554,7 +554,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACUpdateMode.htm">BoardConfig.GetDACUpdateMode()</a>
      */
-    public void setDacUpdateMode(DacUpdateMode updateMode) throws JMCCULException {
+    public void setUpdateMode(DacUpdateMode updateMode) throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -576,7 +576,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumDaChans.htm">BoardConfig.GetNumDaChans()</a>
      */
-    public int getDacChannelCount() throws JMCCULException {
+    public int getChannelCount() throws JMCCULException {
         return Configuration.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -592,7 +592,7 @@ public class AnalogOutputWrapper {
 
     /**
      * Updates the voltage values on analog output channels. This method is only useful if you first call
-     * {@link #setDacUpdateMode} with {@link DacUpdateMode#ON_COMMAND}.
+     * {@link #setUpdateMode} with {@link DacUpdateMode#ON_COMMAND}.
      *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
@@ -611,7 +611,7 @@ public class AnalogOutputWrapper {
 
     /*
     // BIDACSETTLETIME is not in my JNA thing
-    public void setDacSettlingTime() throws JMCCULException {
+    public void setSettlingTime() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,

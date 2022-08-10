@@ -31,10 +31,10 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see TemperatureWrapper#getTemperatureScale()
- * @see TemperatureWrapper#setTemperatureScale(TemperatureScale)
+ * @see TemperatureWrapper#getUnits()
+ * @see TemperatureWrapper#setUnits(TemperatureUnit)
  */
-public enum TemperatureScale {
+public enum TemperatureUnit {
 
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     CELSIUS(MeasurementComputingUniversalLibrary.CELSIUS),
@@ -48,23 +48,23 @@ public enum TemperatureScale {
      */
     NO_SCALE(MeasurementComputingUniversalLibrary.NOSCALE);
 
-    private static final Map<Integer, TemperatureScale> valueMap;
+    private static final Map<Integer, TemperatureUnit> valueMap;
 
     static {
-        final TemperatureScale[] allEnumValues = TemperatureScale.values();
+        final TemperatureUnit[] allEnumValues = TemperatureUnit.values();
         valueMap = new HashMap<>(allEnumValues.length, 1);
-        for (TemperatureScale type : allEnumValues) {
+        for (TemperatureUnit type : allEnumValues) {
             valueMap.put(type.VALUE, type);
         }
     }
 
-    public static TemperatureScale parseInt(int value) {
+    public static TemperatureUnit parseInt(int value) {
         return valueMap.get(value);
     }
 
     public final int VALUE;
 
-    TemperatureScale(int value) {
+    TemperatureUnit(int value) {
         VALUE = value;
     }
 

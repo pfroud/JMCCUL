@@ -50,9 +50,9 @@ public class PrintDeviceInfo {
 //                    System.out.println("  PRODUCT_ID = " + device.PRODUCT_ID);
                     // TODO look at the user device identifier thing
                     System.out.println("  Is digital I/O supported?   " + device.digital.isSupported());
-                    System.out.println("  Is analog input supported?  " + device.analog.input.isAnalogInputSupported());
-                    System.out.println("  Is analog output supported? " + device.analog.output.isAnalogOutputSupported());
-                    System.out.println("  Is temperature supported?   " + device.temperature.isTemperatureInputSupported());
+                    System.out.println("  Is analog input supported?  " + device.analog.input.isSupported());
+                    System.out.println("  Is analog output supported? " + device.analog.output.isSupported());
+                    System.out.println("  Is temperature supported?   " + device.temperature.isSupported());
                     System.out.println("  Is counter supported?       " + device.counter.isCounterSupported());
                 }
                 System.out.println();

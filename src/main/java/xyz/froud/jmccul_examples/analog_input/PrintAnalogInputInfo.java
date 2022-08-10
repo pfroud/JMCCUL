@@ -38,20 +38,20 @@ public class PrintAnalogInputInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analog.input.isAnalogInputSupported()
+                d -> d.analog.input.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
             try (DaqDevice device = optionalDevice.get()) {
                 System.out.println("Analog input info for this device: " + device);
-                System.out.println("getAdcChannelCount = " + device.analog.input.getAdcChannelCount());
+                System.out.println("getChannelCount = " + device.analog.input.getChannelCount());
                 System.out.println("getResolution = " + device.analog.input.getResolution());
                 System.out.println("getPacketSize = " + device.analog.input.getPacketSize());
-                System.out.println("getTriggerResolution = " + device.analog.input.getAnalogTriggerResolution());
+                System.out.println("getTriggerResolution = " + device.analog.input.getTriggerResolution());
                 System.out.println("getSupportedRanges = " + device.analog.input.getSupportedRanges());
-                System.out.println("getAnalogTriggerRange = " + device.analog.input.getAnalogTriggerRange());
+                System.out.println("getTriggerRange = " + device.analog.input.getTriggerRange());
                 System.out.println("isVoltageInputSupported = " + device.analog.input.isVoltageInputSupported());
-                System.out.println("isAnalogTriggerSupported = " + device.analog.input.isAnalogTriggerSupported());
+                System.out.println("isAnalogTriggerSupported = " + device.analog.input.isTriggerSupported());
                 System.out.println("isGainQueueSupported = " + device.analog.input.isGainQueueSupported());
                 System.out.println("isScanSupported = " + device.analog.input.isScanSupported());
             }

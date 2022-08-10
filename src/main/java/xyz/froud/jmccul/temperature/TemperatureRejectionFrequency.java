@@ -24,6 +24,7 @@
 
 package xyz.froud.jmccul.temperature;
 
+import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.util.HashMap;
@@ -31,38 +32,33 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see TemperatureWrapper#getThermocoupleSensorType(int)
- * @see TemperatureWrapper#setThermocoupleSensorType(int, ThermocoupleSensorType)
+ * @see TemperatureWrapper#getRejectionFrequency(BaseOrExpansionBoard)
+ * @see TemperatureWrapper#setRejectionFrequency(BaseOrExpansionBoard, TemperatureRejectionFrequency)
  */
-public enum ThermocoupleSensorType {
+public enum TemperatureRejectionFrequency {
 
-    NOT_SET(0),
-    J(MeasurementComputingUniversalLibrary.TC_TYPE_J),
-    K(MeasurementComputingUniversalLibrary.TC_TYPE_K),
-    S(MeasurementComputingUniversalLibrary.TC_TYPE_S),
-    R(MeasurementComputingUniversalLibrary.TC_TYPE_R),
-    B(MeasurementComputingUniversalLibrary.TC_TYPE_B),
-    E(MeasurementComputingUniversalLibrary.TC_TYPE_E),
-    T(MeasurementComputingUniversalLibrary.TC_TYPE_T),
-    N(MeasurementComputingUniversalLibrary.TC_TYPE_N);
+    NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
+    OFF(0),
+    FIFTY_HERTZ(50),
+    SIXTY_HERTZ(60);
 
-    private static final Map<Integer, ThermocoupleSensorType> valueMap;
+    private static final Map<Integer, TemperatureRejectionFrequency> valueMap;
 
     static {
-        final ThermocoupleSensorType[] allEnumValues = ThermocoupleSensorType.values();
+        final TemperatureRejectionFrequency[] allEnumValues = TemperatureRejectionFrequency.values();
         valueMap = new HashMap<>(allEnumValues.length, 1);
-        for (ThermocoupleSensorType type : allEnumValues) {
+        for (TemperatureRejectionFrequency type : allEnumValues) {
             valueMap.put(type.VALUE, type);
         }
     }
 
-    public static ThermocoupleSensorType parseInt(int value) {
+    public static TemperatureRejectionFrequency parseInt(int value) {
         return valueMap.get(value);
     }
 
     public final int VALUE;
 
-    ThermocoupleSensorType(int value) {
+    TemperatureRejectionFrequency(int value) {
         VALUE = value;
     }
 

@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see AnalogInputWrapper#getAnalogInputChannelType(int)
- * @see AnalogInputWrapper#setAnalogInputChannelType(int, AnalogInputChannelType)
+ * @see AnalogInputWrapper#getChannelType(int)
+ * @see AnalogInputWrapper#setChannelType(int, AnalogInputChannelType)
  */
 public enum AnalogInputChannelType {
 

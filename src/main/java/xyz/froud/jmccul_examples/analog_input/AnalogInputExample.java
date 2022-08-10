@@ -39,7 +39,7 @@ public class AnalogInputExample {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analog.input.isAnalogInputSupported()
+                d -> d.analog.input.isSupported()
         );
 
         if (optionalDevice.isPresent()) {

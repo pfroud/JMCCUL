@@ -40,7 +40,7 @@ public class AnalogOutputExample {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analog.output.isAnalogOutputSupported()
+                d -> d.analog.output.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
@@ -60,7 +60,7 @@ public class AnalogOutputExample {
 
         final AnalogRange rangeToUse = device.analog.output.getSupportedRanges().get(0);
 
-        final int max = (1 << device.analog.output.getDacResolution()) - 1;
+        final int max = (1 << device.analog.output.getResolution()) - 1;
         final int middle = (int) Math.round(max / 2.0);
 
         device.analog.output.write(0, rangeToUse, (short) 0);

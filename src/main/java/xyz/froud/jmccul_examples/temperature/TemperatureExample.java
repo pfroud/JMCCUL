@@ -28,7 +28,7 @@ import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
-import xyz.froud.jmccul.temperature.TemperatureScale;
+import xyz.froud.jmccul.temperature.TemperatureUnit;
 
 import java.util.Optional;
 
@@ -40,7 +40,7 @@ public class TemperatureExample {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.temperature.isTemperatureInputSupported()
+                d -> d.temperature.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
@@ -59,7 +59,7 @@ public class TemperatureExample {
         // TODO set thermocouple type!!!!
         try {
             System.out.printf("Temperature is %f C\n",
-                    device.temperature.read(0, TemperatureScale.CELSIUS));
+                    device.temperature.read(0, TemperatureUnit.CELSIUS));
         } catch (JMCCULException ex) {
             if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.OPENCONNECTION) {
                 System.out.println("The thermocouple connection is open.");

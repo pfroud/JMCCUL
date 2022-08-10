@@ -38,13 +38,13 @@ public class PrintTemperatureInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.temperature.isTemperatureInputSupported()
+                d -> d.temperature.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
             try (DaqDevice device = optionalDevice.get()) {
                 System.out.println("Temperature input info for this device: " + device);
-                System.out.println("CHANNEL_COUNT = " + device.temperature.getChannelCount());
+                System.out.println("getChannelCount = " + device.temperature.getChannelCount());
             }
         } else {
             System.out.println("Didn't find a device which supports temperature input.");
