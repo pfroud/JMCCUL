@@ -109,7 +109,7 @@ public class Configuration {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////
-     GIVERSION -> GI NUM BOARDS -> globalInfo maximum number of boards
+     GINUMBOARDS -> GI NUM BOARDS -> globalInfo maximum number of boards
      Readable? yes
      Writable? NO
      */
