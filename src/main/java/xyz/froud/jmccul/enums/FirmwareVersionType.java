@@ -32,6 +32,7 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see xyz.froud.jmccul.config.BoardConfig#getVersion(FirmwareVersionType)
  */
 public enum FirmwareVersionType {
 

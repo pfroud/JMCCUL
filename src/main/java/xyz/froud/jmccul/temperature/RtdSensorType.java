@@ -31,6 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see TemperatureWrapper#getRtdSensorType(int)
+ * @see TemperatureWrapper#setRtdSensorType(int, RtdSensorType)
  */
 public enum RtdSensorType {
 

@@ -31,6 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see AnalogOutputWrapper#getDacUpdateMode()
+ * @see AnalogOutputWrapper#setDacUpdateMode(DacUpdateMode)
  */
 public enum DacUpdateMode {
 
@@ -41,7 +43,7 @@ public enum DacUpdateMode {
 
     /**
      * Values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call
-     * {@link xyz.froud.jmccul.config.AnalogOutputConfig#updateAnalogOutput()}.
+     * {@link AnalogOutputWrapper#update()}.
      */
     ON_COMMAND(MeasurementComputingUniversalLibrary.UPDATEONCOMMAND);
 

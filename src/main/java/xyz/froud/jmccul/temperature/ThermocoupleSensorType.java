@@ -31,6 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see TemperatureWrapper#getThermocoupleSensorType(int)
+ * @see TemperatureWrapper#setThermocoupleSensorType(int, ThermocoupleSensorType)
  */
 public enum ThermocoupleSensorType {
 

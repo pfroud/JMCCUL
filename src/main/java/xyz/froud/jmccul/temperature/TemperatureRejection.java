@@ -24,6 +24,7 @@
 
 package xyz.froud.jmccul.temperature;
 
+import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see TemperatureWrapper#getRejectionFrequency(BaseOrExpansionBoard)
+ * @see TemperatureWrapper#setRejectionFrequency(BaseOrExpansionBoard, TemperatureRejection)
  */
 public enum TemperatureRejection {
 

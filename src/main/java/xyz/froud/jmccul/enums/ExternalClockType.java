@@ -24,6 +24,7 @@
 
 package xyz.froud.jmccul.enums;
 
+import xyz.froud.jmccul.config.BoardConfig;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see BoardConfig#getExternalClockType()
+ * @see BoardConfig#setExternalClockType(ExternalClockType)
  */
 public enum ExternalClockType {
 

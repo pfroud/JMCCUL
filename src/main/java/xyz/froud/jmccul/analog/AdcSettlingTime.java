@@ -31,13 +31,11 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see AnalogInputWrapper#getAdcSettlingTime()
+ * @see AnalogInputWrapper#setAdcSettlingTime(AdcSettlingTime)
  */
 public enum AdcSettlingTime {
 
-    /*
-    BoardInfo
-    BIADCSETTLETIME
-     */
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     DEFAULT(MeasurementComputingUniversalLibrary.SETTLE_DEFAULT),
     ONE_MICROSECOND(MeasurementComputingUniversalLibrary.SETTLE_1us),

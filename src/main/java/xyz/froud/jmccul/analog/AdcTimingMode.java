@@ -31,13 +31,11 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see AnalogInputWrapper#getAdcTimingMode()
+ * @see AnalogInputWrapper#setAdcTimingMode(AdcTimingMode)
  */
 public enum AdcTimingMode {
 
-    /*
-    BoardInfo
-    BIADTIMINGMODE
-     */
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     HIGH_SPEED(1),
     SIXTY_HERTZ_REJECTION(8),

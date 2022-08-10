@@ -31,6 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see xyz.froud.jmccul.config.BoardConfig#getCalibrationTableType(BaseOrExpansionBoard)
+ * @see xyz.froud.jmccul.config.BoardConfig#setCalibrationTableType(CalibrationTableType)
  */
 public enum CalibrationTableType {
 

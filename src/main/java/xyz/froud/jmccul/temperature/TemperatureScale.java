@@ -31,10 +31,11 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see TemperatureWrapper#getTemperatureScale()
+ * @see TemperatureWrapper#setTemperatureScale(TemperatureScale)
  */
 public enum TemperatureScale {
 
-    // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Enumerations/MccDaq.TempScale.htm
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     CELSIUS(MeasurementComputingUniversalLibrary.CELSIUS),
     FAHRENHEIT(MeasurementComputingUniversalLibrary.FAHRENHEIT),

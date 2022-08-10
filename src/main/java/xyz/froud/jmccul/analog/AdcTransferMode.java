@@ -31,13 +31,11 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see AnalogInputWrapper#getAdcDataTransferMode()
+ * @see AnalogInputWrapper#setAdcDataTransferMode(AdcTransferMode)
  */
 public enum AdcTransferMode {
 
-    /*
-    BoardInfo
-    BIADXFERMODE
-     */
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     KERNEL(MeasurementComputingUniversalLibrary.XFER_KERNEL),
     USER(MeasurementComputingUniversalLibrary.XFER_USER);

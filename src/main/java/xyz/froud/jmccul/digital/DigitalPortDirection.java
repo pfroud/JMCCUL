@@ -28,6 +28,8 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  * @author Peter Froud
+ * @see DigitalWrapper#configureBit(DigitalPortType, int, DigitalPortDirection)
+ * @see DigitalWrapper#configurePort(DigitalPortType, DigitalPortDirection)
  */
 public enum DigitalPortDirection {
     OUTPUT(MeasurementComputingUniversalLibrary.DIGITALOUT),

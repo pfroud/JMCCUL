@@ -40,6 +40,10 @@ import java.util.Map;
  * @see <a
  *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/enums.py#L652">ULRange
  *         enum in Python library</a>
+ * @see AnalogInputWrapper#getAdcRange()
+ * @see AnalogInputWrapper#setAdcRange(AnalogRange)
+ * @see AnalogOutputWrapper#getDacRange()
+ * @see AnalogOutputWrapper#setDacRange(int, AnalogRange)
  */
 public enum AnalogRange {
     BIPOLAR_60_VOLTS(MeasurementComputingUniversalLibrary.BIP60VOLTS, RangeType.BIPOLAR, 60),

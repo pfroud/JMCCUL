@@ -31,13 +31,11 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
+ * @see AnalogInputWrapper#getAnalogInputChannelType(int)
+ * @see AnalogInputWrapper#setAnalogInputChannelType(int, AnalogInputChannelType)
  */
 public enum AnalogInputChannelType {
 
-    /*
-    InfoType: BoardInfo
-    ConfigItem: BIADCHANTYPE
-     */
     NOT_USED(MeasurementComputingUniversalLibrary.NOTUSED),
     VOLTAGE(MeasurementComputingUniversalLibrary.AI_CHAN_TYPE_VOLTAGE),
     CURRENT(MeasurementComputingUniversalLibrary.AI_CHAN_TYPE_CURRENT),
