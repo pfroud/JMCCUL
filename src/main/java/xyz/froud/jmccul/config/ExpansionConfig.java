@@ -354,4 +354,24 @@ public class ExpansionConfig {
         );
     }
 
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     GINUMEXPBOARDS -> GI NUM EXP BOARDS -> globalInfo number of expansion boards
+
+     Readable? yes
+     Writable? no
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     */
+    public int getMaxExpansionBoardCount() throws JMCCULException {
+        return Configuration.getInt(
+                MeasurementComputingUniversalLibrary.EXPANSIONINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.GINUMEXPBOARDS
+        );
+    }
+
 }
