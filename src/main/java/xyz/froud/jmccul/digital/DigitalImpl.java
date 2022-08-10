@@ -75,7 +75,7 @@ public class DigitalImpl {
         if (portCount == null) {
             portCount = Configuration.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
-                    DAQ_DEVICE.getBoardNumber(),
+                    BOARD_NUMBER,
                     0,
                     MeasurementComputingUniversalLibrary.BIDINUMDEVS
             );
@@ -108,7 +108,7 @@ public class DigitalImpl {
     public void configureBit(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
         // configure an individual bit. Not all devices support doing this.
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(
-                DAQ_DEVICE.getBoardNumber(),
+                BOARD_NUMBER,
                 portType.VALUE,
                 bitNumber,
                 direction.VALUE
@@ -142,7 +142,7 @@ public class DigitalImpl {
      */
     public void configurePort(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(
-                DAQ_DEVICE.getBoardNumber(),
+                BOARD_NUMBER,
                 portType.VALUE,
                 direction.VALUE
         );
