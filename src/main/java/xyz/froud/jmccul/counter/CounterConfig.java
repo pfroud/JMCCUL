@@ -1,4 +1,6 @@
 /*
+ * The MIT License.
+ *
  * Copyright (c) 2022 Peter Froud.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,10 +22,11 @@
  * SOFTWARE.
  */
 
-package xyz.froud.jmccul.config;
+package xyz.froud.jmccul.counter;
 
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
