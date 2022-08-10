@@ -40,7 +40,7 @@ public class AnalogOutputExample {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analogOutput.isAnalogOutputSupported()
+                d -> d.analog.output.isAnalogOutputSupported()
         );
 
         if (optionalDevice.isPresent()) {
@@ -58,37 +58,37 @@ public class AnalogOutputExample {
 
     private static void doAnalogOutput(DaqDevice device) throws JMCCULException {
 
-        final AnalogRange rangeToUse = device.analogOutput.getSupportedRanges().get(0);
+        final AnalogRange rangeToUse = device.analog.output.getSupportedRanges().get(0);
 
-        final int max = (1 << device.analogOutput.getDacResolution()) - 1;
+        final int max = (1 << device.analog.output.getDacResolution()) - 1;
         final int middle = (int) Math.round(max / 2.0);
 
-        device.analogOutput.write(0, rangeToUse, (short) 0);
+        device.analog.output.write(0, rangeToUse, (short) 0);
         delay(1000);
-        device.analogOutput.write(0, rangeToUse, (short) middle);
+        device.analog.output.write(0, rangeToUse, (short) middle);
         delay(1000);
-        device.analogOutput.write(0, rangeToUse, (short) max);
+        device.analog.output.write(0, rangeToUse, (short) max);
         delay(1000);
-        device.analogOutput.write(0, rangeToUse, (short) middle);
+        device.analog.output.write(0, rangeToUse, (short) middle);
         delay(1000);
-        device.analogOutput.write(0, rangeToUse, (short) 0);
+        device.analog.output.write(0, rangeToUse, (short) 0);
 
     }
 
     private static void doVoltageOutput(DaqDevice device) throws JMCCULException {
 
-        final AnalogRange rangeToUse = device.analogOutput.getSupportedRanges().get(0);
+        final AnalogRange rangeToUse = device.analog.output.getSupportedRanges().get(0);
         final double middle = ((rangeToUse.MAXIMUM - rangeToUse.MINIMUM) / 2.0) + rangeToUse.MINIMUM;
 
-        device.analogOutput.writeVoltage(0, rangeToUse, (float) rangeToUse.MINIMUM);
+        device.analog.output.writeVoltage(0, rangeToUse, (float) rangeToUse.MINIMUM);
         delay(1000);
-        device.analogOutput.writeVoltage(0, rangeToUse, (float) middle);
+        device.analog.output.writeVoltage(0, rangeToUse, (float) middle);
         delay(1000);
-        device.analogOutput.writeVoltage(0, rangeToUse, (float) rangeToUse.MAXIMUM);
+        device.analog.output.writeVoltage(0, rangeToUse, (float) rangeToUse.MAXIMUM);
         delay(1000);
-        device.analogOutput.writeVoltage(0, rangeToUse, (float) middle);
+        device.analog.output.writeVoltage(0, rangeToUse, (float) middle);
         delay(1000);
-        device.analogOutput.writeVoltage(0, rangeToUse, (float) rangeToUse.MINIMUM);
+        device.analog.output.writeVoltage(0, rangeToUse, (float) rangeToUse.MINIMUM);
 
     }
 

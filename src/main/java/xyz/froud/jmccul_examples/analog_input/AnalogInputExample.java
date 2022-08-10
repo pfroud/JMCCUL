@@ -39,7 +39,7 @@ public class AnalogInputExample {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analogInput.isAnalogInputSupported()
+                d -> d.analog.input.isAnalogInputSupported()
         );
 
         if (optionalDevice.isPresent()) {
@@ -56,16 +56,16 @@ public class AnalogInputExample {
 
     private static void doAnalogInput(DaqDevice device) throws JMCCULException {
 
-        final AnalogRange rangeToUse = device.analogInput.getSupportedRanges().get(0);
+        final AnalogRange rangeToUse = device.analog.input.getSupportedRanges().get(0);
         System.out.println("Using this range: " + rangeToUse);
 
         System.out.println("Reading the raw ADC value:");
-        System.out.println(device.analogInput.read(0, rangeToUse));
-        System.out.println(device.analogInput.read32(0, rangeToUse));
+        System.out.println(device.analog.input.read(0, rangeToUse));
+        System.out.println(device.analog.input.read32(0, rangeToUse));
 
         System.out.println("Reading it as voltage:");
-        System.out.println(device.analogInput.readVoltage(0, rangeToUse));
-        System.out.println(device.analogInput.readVoltage32(0, rangeToUse));
+        System.out.println(device.analog.input.readVoltage(0, rangeToUse));
+        System.out.println(device.analog.input.readVoltage32(0, rangeToUse));
 
     }
 

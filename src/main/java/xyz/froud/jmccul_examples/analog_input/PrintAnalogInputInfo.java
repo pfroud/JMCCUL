@@ -38,22 +38,22 @@ public class PrintAnalogInputInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analogInput.isAnalogInputSupported()
+                d -> d.analog.input.isAnalogInputSupported()
         );
 
         if (optionalDevice.isPresent()) {
             try (DaqDevice device = optionalDevice.get()) {
                 System.out.println("Analog input info for this device: " + device);
-                System.out.println("getAdcChannelCount = " + device.analogInput.getAdcChannelCount());
-                System.out.println("getResolution = " + device.analogInput.getResolution());
-                System.out.println("getPacketSize = " + device.analogInput.getPacketSize());
-                System.out.println("getTriggerResolution = " + device.analogInput.getAnalogTriggerResolution());
-                System.out.println("getSupportedRanges = " + device.analogInput.getSupportedRanges());
-                System.out.println("getAnalogTriggerRange = " + device.analogInput.getAnalogTriggerRange());
-                System.out.println("isVoltageInputSupported = " + device.analogInput.isVoltageInputSupported());
-                System.out.println("isAnalogTriggerSupported = " + device.analogInput.isAnalogTriggerSupported());
-                System.out.println("isGainQueueSupported = " + device.analogInput.isGainQueueSupported());
-                System.out.println("isScanSupported = " + device.analogInput.isScanSupported());
+                System.out.println("getAdcChannelCount = " + device.analog.input.getAdcChannelCount());
+                System.out.println("getResolution = " + device.analog.input.getResolution());
+                System.out.println("getPacketSize = " + device.analog.input.getPacketSize());
+                System.out.println("getTriggerResolution = " + device.analog.input.getAnalogTriggerResolution());
+                System.out.println("getSupportedRanges = " + device.analog.input.getSupportedRanges());
+                System.out.println("getAnalogTriggerRange = " + device.analog.input.getAnalogTriggerRange());
+                System.out.println("isVoltageInputSupported = " + device.analog.input.isVoltageInputSupported());
+                System.out.println("isAnalogTriggerSupported = " + device.analog.input.isAnalogTriggerSupported());
+                System.out.println("isGainQueueSupported = " + device.analog.input.isGainQueueSupported());
+                System.out.println("isScanSupported = " + device.analog.input.isScanSupported());
             }
         } else {
             System.out.println("Didn't find a device which supports analog input.");

@@ -38,16 +38,16 @@ public class PrintAnalogOutputInfo {
     public static void main(String[] args) throws JMCCULException {
 
         final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analogOutput.isAnalogOutputSupported()
+                d -> d.analog.output.isAnalogOutputSupported()
         );
 
         if (optionalDevice.isPresent()) {
             try (DaqDevice device = optionalDevice.get()) {
                 System.out.println("Analog output info for this device: " + device);
-                System.out.println("getDacChannelCount = " + device.analogOutput.getDacChannelCount());
-                System.out.println("getDacResolution = " + device.analogOutput.getDacResolution());
-                System.out.println("getSupportedRanges = " + device.analogOutput.getSupportedRanges());
-                System.out.println("isVoltageOutputSupported = " + device.analogOutput.isVoltageOutputSupported());
+                System.out.println("getDacChannelCount = " + device.analog.output.getDacChannelCount());
+                System.out.println("getDacResolution = " + device.analog.output.getDacResolution());
+                System.out.println("getSupportedRanges = " + device.analog.output.getSupportedRanges());
+                System.out.println("isVoltageOutputSupported = " + device.analog.output.isVoltageOutputSupported());
             }
         } else {
             System.out.println("Didn't find a device which supports analog input.");
