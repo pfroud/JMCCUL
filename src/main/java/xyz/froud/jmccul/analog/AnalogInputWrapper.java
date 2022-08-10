@@ -44,7 +44,7 @@ import java.util.List;
  * @author Peter Froud
  * @see <a href="https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ai_info.py">ai_info.py</a>
  */
-public class AnalogInputImpl {
+public class AnalogInputWrapper {
 
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
@@ -62,7 +62,7 @@ public class AnalogInputImpl {
     private Boolean isGainQueueSupported;
     private Boolean isScanSupported;
 
-    public AnalogInputImpl(DaqDevice device) {
+    public AnalogInputWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
     }

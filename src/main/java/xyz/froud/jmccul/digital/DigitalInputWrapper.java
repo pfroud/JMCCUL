@@ -35,12 +35,12 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-public class DigitalInputImpl {
+public class DigitalInputWrapper {
 
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
 
-    public DigitalInputImpl(DaqDevice device) {
+    public DigitalInputWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
     }

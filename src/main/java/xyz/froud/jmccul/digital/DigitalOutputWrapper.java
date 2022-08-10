@@ -32,13 +32,13 @@ import xyz.froud.jmccul.JMCCULUtils;
 import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
-public class DigitalOutputImpl {
+public class DigitalOutputWrapper {
 
 
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
 
-    public DigitalOutputImpl(DaqDevice device) {
+    public DigitalOutputWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
     }

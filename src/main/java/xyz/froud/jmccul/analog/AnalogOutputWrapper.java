@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @author Peter Froud
  */
-public class AnalogOutputImpl {
+public class AnalogOutputWrapper {
 
     /*
     https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ao_info.py
@@ -54,7 +54,7 @@ public class AnalogOutputImpl {
     private List<AnalogRange> supportedRanges;
     private Boolean isVoltageOutputSupported;
 
-    public AnalogOutputImpl(DaqDevice device) {
+    public AnalogOutputWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
     }

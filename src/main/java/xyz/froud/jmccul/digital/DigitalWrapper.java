@@ -33,7 +33,7 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 /**
  * @author Peter Froud
  */
-public class DigitalImpl {
+public class DigitalWrapper {
 
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
@@ -41,15 +41,15 @@ public class DigitalImpl {
     private DigitalPort[] ports;
     private Integer portCount;
 
-    public final DigitalOutputImpl output;
-    public final DigitalInputImpl input;
+    public final DigitalOutputWrapper output;
+    public final DigitalInputWrapper input;
 
-    public DigitalImpl(DaqDevice device) {
+    public DigitalWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
 
-        output = new DigitalOutputImpl(device);
-        input = new DigitalInputImpl(device);
+        output = new DigitalOutputWrapper(device);
+        input = new DigitalInputWrapper(device);
 
 
     }

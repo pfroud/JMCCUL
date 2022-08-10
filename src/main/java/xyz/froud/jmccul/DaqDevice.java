@@ -24,19 +24,19 @@
 
 package xyz.froud.jmccul;
 
-import xyz.froud.jmccul.analog.AnalogInputImpl;
-import xyz.froud.jmccul.analog.AnalogOutputImpl;
+import xyz.froud.jmccul.analog.AnalogInputWrapper;
+import xyz.froud.jmccul.analog.AnalogOutputWrapper;
 import xyz.froud.jmccul.config.BoardConfig;
 import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.config.ExpansionConfig;
 import xyz.froud.jmccul.config.NetworkConfig;
 import xyz.froud.jmccul.config.WirelessConfig;
 import xyz.froud.jmccul.counter.CounterConfig;
-import xyz.froud.jmccul.counter.CounterImpl;
-import xyz.froud.jmccul.digital.DigitalImpl;
+import xyz.froud.jmccul.counter.CounterWrapper;
+import xyz.froud.jmccul.digital.DigitalWrapper;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
-import xyz.froud.jmccul.temperature.TemperatureImpl;
+import xyz.froud.jmccul.temperature.TemperatureWrapper;
 
 import java.nio.ByteBuffer;
 
@@ -91,11 +91,11 @@ public class DaqDevice implements AutoCloseable {
     private String factorySerialNumber;
     private String boardName;
 
-    public final DigitalImpl digital;
-    public final AnalogOutputImpl analogOutput;
-    public final AnalogInputImpl analogInput;
-    public final TemperatureImpl temperature;
-    public final CounterImpl counter;
+    public final DigitalWrapper digital;
+    public final AnalogOutputWrapper analogOutput;
+    public final AnalogInputWrapper analogInput;
+    public final TemperatureWrapper temperature;
+    public final CounterWrapper counter;
 
     public final BoardConfig boardConfig;
     public final CounterConfig counterConfig;
@@ -113,11 +113,11 @@ public class DaqDevice implements AutoCloseable {
         // TODO can get the product name (any maybe mroe stuff) from the descriptor?
         productID = descriptor.ProductID;
 
-        digital = new DigitalImpl(this);
-        analogOutput = new AnalogOutputImpl(this);
-        analogInput = new AnalogInputImpl(this);
-        temperature = new TemperatureImpl(this);
-        counter = new CounterImpl(this);
+        digital = new DigitalWrapper(this);
+        analogOutput = new AnalogOutputWrapper(this);
+        analogInput = new AnalogInputWrapper(this);
+        temperature = new TemperatureWrapper(this);
+        counter = new CounterWrapper(this);
 
         boardConfig = new BoardConfig(this);
         counterConfig = new CounterConfig(this);

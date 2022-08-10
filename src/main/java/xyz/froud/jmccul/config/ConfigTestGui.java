@@ -27,6 +27,7 @@ package xyz.froud.jmccul.config;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.DeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.counter.CounterConfig;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
 import javax.swing.BorderFactory;

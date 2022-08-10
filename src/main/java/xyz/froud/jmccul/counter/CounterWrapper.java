@@ -32,13 +32,13 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 /**
  * @author Peter Froud
  */
-public class CounterImpl {
+public class CounterWrapper {
 
     // https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ctr_info.py
     private final DaqDevice DAQ_DEVICE;
     private Integer channelCount;
 
-    public CounterImpl(DaqDevice device) {
+    public CounterWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
     }
 

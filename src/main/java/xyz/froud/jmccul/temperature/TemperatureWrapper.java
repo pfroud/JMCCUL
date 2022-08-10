@@ -36,13 +36,13 @@ import java.nio.FloatBuffer;
 /**
  * @author Peter Froud
  */
-public class TemperatureImpl {
+public class TemperatureWrapper {
 
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
     private Integer channelCount;
 
-    public TemperatureImpl(DaqDevice device) {
+    public TemperatureWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
     }
