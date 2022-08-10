@@ -59,7 +59,7 @@ public class TemperatureExample {
         // TODO set thermocouple type!!!!
         try {
             System.out.printf("Temperature is %f C\n",
-                    device.temperature.readTemperature(0, TemperatureScale.CELSIUS));
+                    device.temperature.read(0, TemperatureScale.CELSIUS));
         } catch (JMCCULException ex) {
             if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.OPENCONNECTION) {
                 System.out.println("The thermocouple connection is open.");

@@ -66,13 +66,13 @@ public class DigitalInputExample {
         }
 
         System.out.println("Reading the whole port:");
-        final short portInput = device.digital.input.port(port.getPortType());
+        final short portInput = device.digital.input.readPort(port.getPortType());
         System.out.println("0b" + Integer.toBinaryString(portInput));
 
         System.out.println("Reading one bit at a time:");
         System.out.print("0b");
         for (int bitIndex = port.getBitCount() - 1; bitIndex >= 0; bitIndex--) {
-            boolean bitInput = device.digital.input.bit(port.getPortType(), bitIndex);
+            boolean bitInput = device.digital.input.readBit(port.getPortType(), bitIndex);
             final char zeroOrOne = bitInput ? '1' : '0';
             System.out.print(zeroOrOne);
         }

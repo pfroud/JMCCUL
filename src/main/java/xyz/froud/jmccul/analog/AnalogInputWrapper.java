@@ -146,9 +146,9 @@ public class AnalogInputWrapper {
                 for (AnalogRange rangeToCheck : AnalogRange.values()) {
                     try {
                         if (getResolution() <= 16) {
-                            analogInput(0, rangeToCheck);
+                            read(0, rangeToCheck);
                         } else {
-                            analogInput32(0, rangeToCheck);
+                            read32(0, rangeToCheck);
                         }
                         supportedRanges.add(rangeToCheck);
                     } catch (JMCCULException ex) {
@@ -210,7 +210,7 @@ public class AnalogInputWrapper {
                 isVoltageInputSupported = false;
             } else {
                 try {
-                    voltageInput(0, supportedRanges.get(0));
+                    readVoltage(0, supportedRanges.get(0));
                     isVoltageInputSupported = true;
                 } catch (JMCCULException ex) {
                     ex.throwIfErrorIsNetworkDeviceInUse();
@@ -345,7 +345,7 @@ public class AnalogInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AIn.htm">AIn()</a>
      */
-    public short analogInput(int channel, AnalogRange range) throws JMCCULException {
+    public short read(int channel, AnalogRange range) throws JMCCULException {
         final ShortBuffer buf = ShortBuffer.allocate(1);
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAIn(
                 BOARD_NUMBER,
@@ -381,7 +381,7 @@ public class AnalogInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AIn32.htm">AIn32()</a>
      */
-    public long analogInput32(int channel, AnalogRange range) throws JMCCULException {
+    public long read32(int channel, AnalogRange range) throws JMCCULException {
 
         final NativeLongByReference nlbr = new NativeLongByReference(new NativeLong());
 
@@ -419,7 +419,7 @@ public class AnalogInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/VIn.htm">VIn()</a>
      */
-    public float voltageInput(int channel, AnalogRange range) throws JMCCULException {
+    public float readVoltage(int channel, AnalogRange range) throws JMCCULException {
 
         final FloatBuffer buf = FloatBuffer.allocate(1);
 
@@ -456,7 +456,7 @@ public class AnalogInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/VIn32.htm">VIn32()</a>
      */
-    public double voltageInput32(int channel, AnalogRange range) throws JMCCULException {
+    public double readVoltage32(int channel, AnalogRange range) throws JMCCULException {
 
         final DoubleBuffer buf = DoubleBuffer.allocate(1);
 

@@ -63,15 +63,15 @@ public class AnalogOutputExample {
         final int max = (1 << device.analogOutput.getDacResolution()) - 1;
         final int middle = (int) Math.round(max / 2.0);
 
-        device.analogOutput.analogOutput(0, rangeToUse, (short) 0);
+        device.analogOutput.write(0, rangeToUse, (short) 0);
         delay(1000);
-        device.analogOutput.analogOutput(0, rangeToUse, (short) middle);
+        device.analogOutput.write(0, rangeToUse, (short) middle);
         delay(1000);
-        device.analogOutput.analogOutput(0, rangeToUse, (short) max);
+        device.analogOutput.write(0, rangeToUse, (short) max);
         delay(1000);
-        device.analogOutput.analogOutput(0, rangeToUse, (short) middle);
+        device.analogOutput.write(0, rangeToUse, (short) middle);
         delay(1000);
-        device.analogOutput.analogOutput(0, rangeToUse, (short) 0);
+        device.analogOutput.write(0, rangeToUse, (short) 0);
 
     }
 
@@ -80,15 +80,15 @@ public class AnalogOutputExample {
         final AnalogRange rangeToUse = device.analogOutput.getSupportedRanges().get(0);
         final double middle = ((rangeToUse.MAXIMUM - rangeToUse.MINIMUM) / 2.0) + rangeToUse.MINIMUM;
 
-        device.analogOutput.voltageOutput(0, rangeToUse, (float) rangeToUse.MINIMUM);
+        device.analogOutput.writeVoltage(0, rangeToUse, (float) rangeToUse.MINIMUM);
         delay(1000);
-        device.analogOutput.voltageOutput(0, rangeToUse, (float) middle);
+        device.analogOutput.writeVoltage(0, rangeToUse, (float) middle);
         delay(1000);
-        device.analogOutput.voltageOutput(0, rangeToUse, (float) rangeToUse.MAXIMUM);
+        device.analogOutput.writeVoltage(0, rangeToUse, (float) rangeToUse.MAXIMUM);
         delay(1000);
-        device.analogOutput.voltageOutput(0, rangeToUse, (float) middle);
+        device.analogOutput.writeVoltage(0, rangeToUse, (float) middle);
         delay(1000);
-        device.analogOutput.voltageOutput(0, rangeToUse, (float) rangeToUse.MINIMUM);
+        device.analogOutput.writeVoltage(0, rangeToUse, (float) rangeToUse.MINIMUM);
 
     }
 

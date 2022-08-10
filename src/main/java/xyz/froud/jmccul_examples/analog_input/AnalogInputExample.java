@@ -60,12 +60,12 @@ public class AnalogInputExample {
         System.out.println("Using this range: " + rangeToUse);
 
         System.out.println("Reading the raw ADC value:");
-        System.out.println(device.analogInput.analogInput(0, rangeToUse));
-        System.out.println(device.analogInput.analogInput32(0, rangeToUse));
+        System.out.println(device.analogInput.read(0, rangeToUse));
+        System.out.println(device.analogInput.read32(0, rangeToUse));
 
         System.out.println("Reading it as voltage:");
-        System.out.println(device.analogInput.voltageInput(0, rangeToUse));
-        System.out.println(device.analogInput.voltageInput32(0, rangeToUse));
+        System.out.println(device.analogInput.readVoltage(0, rangeToUse));
+        System.out.println(device.analogInput.readVoltage32(0, rangeToUse));
 
     }
 

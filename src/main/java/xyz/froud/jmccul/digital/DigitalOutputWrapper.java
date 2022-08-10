@@ -69,7 +69,7 @@ public class DigitalOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DBitOut.htm">DBitOut()</a>
      */
-    public void bit(DigitalPortType portType, int bitNumber, boolean value) throws JMCCULException {
+    public void writeBit(DigitalPortType portType, int bitNumber, boolean value) throws JMCCULException {
         final int zeroOrOne = value ? 1 : 0;
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDBitOut(
                 DAQ_DEVICE.getBoardNumber(),
@@ -101,7 +101,7 @@ public class DigitalOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DOut.htm">DOut()</a>
      */
-    public void port(DigitalPortType portType, short value) throws JMCCULException {
+    public void writePort(DigitalPortType portType, short value) throws JMCCULException {
         // Java short is 16-bit signed integer
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOut(
                 DAQ_DEVICE.getBoardNumber(),
@@ -131,7 +131,7 @@ public class DigitalOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DOut32.htm">DOut32()</a>
      */
-    public void port32(DigitalPortType portType, int value) throws JMCCULException {
+    public void writePort32(DigitalPortType portType, int value) throws JMCCULException {
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDOut32(
                 DAQ_DEVICE.getBoardNumber(),
                 portType.VALUE,

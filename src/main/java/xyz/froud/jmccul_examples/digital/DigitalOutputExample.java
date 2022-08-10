@@ -68,11 +68,11 @@ public class DigitalOutputExample {
         //                       eight bits: 76453210
         final short valueToWrite = (short) 0b10110110;
         System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(valueToWrite));
-        device.digital.output.port(port.getPortType(), valueToWrite);
+        device.digital.output.writePort(port.getPortType(), valueToWrite);
 
         System.out.println("Now setting each bit on individually");
         for (int bitIdx = 0; bitIdx < port.getBitCount(); bitIdx++) {
-            device.digital.output.bit(port.getPortType(), bitIdx, true);
+            device.digital.output.writeBit(port.getPortType(), bitIdx, true);
         }
 
     }

@@ -68,7 +68,7 @@ public class DigitalInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DBitIn.htm">DBitIn()</a>
      */
-    public boolean bit(DigitalPortType portType, int bitNumber) throws JMCCULException {
+    public boolean readBit(DigitalPortType portType, int bitNumber) throws JMCCULException {
         final ShortBuffer buf = ShortBuffer.allocate(1);
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDBitIn(
                 DAQ_DEVICE.getBoardNumber(),
@@ -98,7 +98,7 @@ public class DigitalInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DIn.htm">DIn()</a>
      */
-    public short port(DigitalPortType portType) throws JMCCULException {
+    public short readPort(DigitalPortType portType) throws JMCCULException {
         final ShortBuffer buf = ShortBuffer.allocate(1);
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDIn(
                 DAQ_DEVICE.getBoardNumber(),
@@ -127,7 +127,7 @@ public class DigitalInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DIn32.htm">DIn32()</a>
      */
-    public int port32(DigitalPortType portType) throws JMCCULException {
+    public int readPort32(DigitalPortType portType) throws JMCCULException {
         final IntBuffer buf = IntBuffer.allocate(1);
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDIn32(
                 DAQ_DEVICE.getBoardNumber(),

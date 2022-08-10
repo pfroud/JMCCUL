@@ -126,7 +126,7 @@ public class AnalogOutputWrapper {
                 // try all possible analog ranges
                 for (AnalogRange rangeToCheck : AnalogRange.values()) {
                     try {
-                        analogOutput(0, rangeToCheck, (short) 0);
+                        write(0, rangeToCheck, (short) 0);
                         supportedRanges.add(rangeToCheck);
                     } catch (JMCCULException ex) {
                         ex.throwIfErrorIsNetworkDeviceInUse();
@@ -151,7 +151,7 @@ public class AnalogOutputWrapper {
                 isVoltageOutputSupported = false;
             } else {
                 try {
-                    voltageOutput(0, getSupportedRanges().get(0), 0);
+                    writeVoltage(0, getSupportedRanges().get(0), 0);
                     isVoltageOutputSupported = true;
                 } catch (JMCCULException ex) {
                     ex.throwIfErrorIsNetworkDeviceInUse();
@@ -187,7 +187,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AOut.htm">AOut()</a>
      */
 
-    public void analogOutput(int channel, AnalogRange range, short value) throws JMCCULException {
+    public void write(int channel, AnalogRange range, short value) throws JMCCULException {
         // The value must be between zero and 2^(resolution)-1.
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/CBAOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAOut(
@@ -236,7 +236,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AOutScan.htm">AOutScan()</a>
      */
-    public void analogOutputScan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, int options) throws JMCCULException {
+    public void scan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, int options) throws JMCCULException {
 
         /*
         For 16-bit data, create the buffer with cbWinBufAlloc().
@@ -297,7 +297,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/VOut.htm">VOut()</a>
      */
-    public void voltageOutput(int channel, AnalogRange range, float value) throws JMCCULException {
+    public void writeVoltage(int channel, AnalogRange range, float value) throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbVOut(
                 DAQ_DEVICE.getBoardNumber(),
@@ -546,7 +546,7 @@ public class AnalogOutputWrapper {
     /**
      * <ul>
      *      <li>If the value is {@link DacUpdateMode#IMMEDIATE}, then values written with cbAOut() or cbAOutScan() are automatically output by the DAC channels.</li>
-     *      <li>If the value is {@link DacUpdateMode#ON_COMMAND}, then values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call {@link #updateAnalogOutput()}.</li>
+     *      <li>If the value is {@link DacUpdateMode#ON_COMMAND}, then values written with cbAOut() or cbAOutScan() are not output by the DAC channels until you call {@link #update()}.</li>
      * </ul>
      *
      * @see <a
@@ -599,7 +599,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/DACUpdate.htm">BoardConfig.DACUpdate()</a>
      */
-    public void updateAnalogOutput() throws JMCCULException {
+    public void update() throws JMCCULException {
         Configuration.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
