@@ -25,8 +25,6 @@
 package xyz.froud.jmccul.enums;
 
 
-import xyz.froud.jmccul.config.BoardConfig;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +32,8 @@ import java.util.Map;
  * @author Peter Froud
  * @see <a
  *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetSyncMode.htm">BoardConfig.SetSyncMode()</a>
- * @see BoardConfig#getSyncMode()
- * @see BoardConfig#setSyncMode(SyncMode)
+ * @see xyz.froud.jmccul.config.BoardConfig#getSyncMode()
+ * @see xyz.froud.jmccul.config.BoardConfig#setSyncMode(SyncMode)
  */
 public enum SyncMode {
 
