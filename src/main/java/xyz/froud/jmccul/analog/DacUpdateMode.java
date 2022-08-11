@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see AnalogOutputWrapper#getDacUpdateMode()
- * @see AnalogOutputWrapper#setDacUpdateMode(DacUpdateMode)
+ * @see AnalogOutputWrapper#getUpdateMode()
+ * @see AnalogOutputWrapper#setUpdateMode(DacUpdateMode)
  */
 public enum DacUpdateMode {
 

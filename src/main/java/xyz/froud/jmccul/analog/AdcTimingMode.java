@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see AnalogInputWrapper#getAdcTimingMode()
- * @see AnalogInputWrapper#setAdcTimingMode(AdcTimingMode)
+ * @see AnalogInputWrapper#getTimingMode()
+ * @see AnalogInputWrapper#setTimingMode(AdcTimingMode)
  */
 public enum AdcTimingMode {
 

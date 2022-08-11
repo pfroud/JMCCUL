@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see AnalogInputWrapper#getAdcSettlingTime()
- * @see AnalogInputWrapper#setAdcSettlingTime(AdcSettlingTime)
+ * @see AnalogInputWrapper#getSettlingTime()
+ * @see AnalogInputWrapper#setSettlingTime(AdcSettlingTime)
  */
 public enum AdcSettlingTime {
 

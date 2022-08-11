@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * @author Peter Froud
- * @see AnalogInputWrapper#getAdcDataTransferMode()
- * @see AnalogInputWrapper#setAdcDataTransferMode(AdcTransferMode)
+ * @see AnalogInputWrapper#getDataTransferMode()
+ * @see AnalogInputWrapper#setDataTransferMode(AdcTransferMode)
  */
 public enum AdcTransferMode {
 
