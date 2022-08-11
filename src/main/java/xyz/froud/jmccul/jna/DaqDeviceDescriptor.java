@@ -114,7 +114,6 @@ public class DaqDeviceDescriptor extends Structure {
         return Arrays.asList("ProductName", "ProductID", "InterfaceType", "DevString", "UniqueID", "NUID", "Reserved");
     }
 
-    /** @author Peter Froud */
     @Override
     public String toString() {
         final String interfaceTypeString;
@@ -144,12 +143,10 @@ public class DaqDeviceDescriptor extends Structure {
 
     }
 
-    /** @author Peter Froud */
     public String getUniqueID() {
         return new String(UniqueID).trim();
     }
 
-    /** @author Peter Froud */
     public String getProductName() {
         return new String(ProductName).trim();
     }
