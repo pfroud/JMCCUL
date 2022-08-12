@@ -88,6 +88,7 @@ public class DaqDevice implements AutoCloseable {
     private final int productID;
     private String factorySerialNumber;
     private String boardName;
+    private boolean isOpen = false;
 
     public final DigitalWrapper digital;
     public final AnalogWrapper analog;
@@ -105,6 +106,7 @@ public class DaqDevice implements AutoCloseable {
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbCreateDaqDevice(boardNumber, descriptor);
         JMCCULUtils.checkError(errorCode);
         nextBoardNumber++;
+        isOpen = true;
 
         // TODO can get the product name (any maybe mroe stuff) from the descriptor?
         productID = descriptor.ProductID;
@@ -182,6 +184,11 @@ public class DaqDevice implements AutoCloseable {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbReleaseDaqDevice(boardNumber);
         JMCCULUtils.checkError(errorCode);
+        isOpen = false;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
     }
 
 }
