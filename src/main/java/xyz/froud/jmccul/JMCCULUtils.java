@@ -54,12 +54,29 @@ public class JMCCULUtils {
         }
     }
 
+    /**
+     * Returns the board number of the DAQ device specified by the descriptor, or –1 if the DAQ device hasn't been
+     * created in the library yet.
+     *
+     * @return The board number or –1.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm">cbGetBoardNumber()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/GetBoardNumber.htm">GetBoardNumber()</a>
+     */
     public static int getBoardNumberForDescriptor(DaqDeviceDescriptor descriptor) {
-        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm
-        // the returned value is the board number. no error codes.
         return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(descriptor);
     }
 
+    /**
+     * Gets the revision level of Universal Library DLL.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions/cbGetRevision.htm">cbGetRevision()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions_for_NET/GetRevision.htm">GetRevision()</a>
+     */
     public static float getDLLRevision() throws JMCCULException {
         /*
         VXD apparently is an old deviCe driver system for Windows 2, 3, and 9x.
