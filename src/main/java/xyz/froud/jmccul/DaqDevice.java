@@ -30,7 +30,6 @@ import xyz.froud.jmccul.config.Configuration;
 import xyz.froud.jmccul.config.ExpansionConfig;
 import xyz.froud.jmccul.config.NetworkConfig;
 import xyz.froud.jmccul.config.WirelessConfig;
-import xyz.froud.jmccul.counter.CounterConfig;
 import xyz.froud.jmccul.counter.CounterWrapper;
 import xyz.froud.jmccul.digital.DigitalWrapper;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
@@ -96,7 +95,6 @@ public class DaqDevice implements AutoCloseable {
     public final CounterWrapper counter;
 
     public final BoardConfig boardConfig;
-    public final CounterConfig counterConfig;
     public final ExpansionConfig expansionConfig;
     public final NetworkConfig networkConfig;
     public final WirelessConfig wirelessConfig;
@@ -117,7 +115,6 @@ public class DaqDevice implements AutoCloseable {
         counter = new CounterWrapper(this);
 
         boardConfig = new BoardConfig(this);
-        counterConfig = new CounterConfig(this);
         expansionConfig = new ExpansionConfig(this);
         networkConfig = new NetworkConfig(this);
         wirelessConfig = new WirelessConfig(this);
