@@ -125,11 +125,19 @@ public class DeviceDiscovery {
     public static Optional<DaqDevice> findFirstDeviceMatching(PredicateThrowsJMCCULException<DaqDevice> predicate) throws JMCCULException {
         // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
         for (DaqDeviceDescriptor descriptor : findDescriptors()) {
-            DaqDevice device = new DaqDevice(descriptor);
-            if (predicate.test(device)) {
-                return Optional.of(device);
-            } else {
-                device.close();
+
+            /*
+            If the descriptor already has a board number assigned to it,
+            trying to create the DaqDevice will throw error code 1027
+            "specified DAQ device already created."
+             */
+            if (JMCCULUtils.getBoardNumberForDescriptor(descriptor) == -1) {
+                DaqDevice device = new DaqDevice(descriptor);
+                if (predicate.test(device)) {
+                    return Optional.of(device);
+                } else {
+                    device.close();
+                }
             }
         }
         return Optional.empty();
