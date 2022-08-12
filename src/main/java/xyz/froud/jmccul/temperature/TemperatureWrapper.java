@@ -67,9 +67,9 @@ public class TemperatureWrapper {
 
     }
 
-    public boolean isSupported() {
+    public boolean isSupported() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L50
-        return channelCount > 0;
+        return getChannelCount() > 0;
     }
 
 
