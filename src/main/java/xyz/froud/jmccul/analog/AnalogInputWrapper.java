@@ -391,7 +391,7 @@ public class AnalogInputWrapper {
                 channel,
                 range.VALUE,
                 nlbr,
-                0
+                0 //reserved for future use
         );
         JMCCULUtils.checkError(errorCode);
         return nlbr.getValue().longValue();
