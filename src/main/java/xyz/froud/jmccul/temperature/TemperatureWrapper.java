@@ -117,7 +117,7 @@ public class TemperatureWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions_for_NET/TIn.htm">TIn()</a>
      */
-    public float read(int channel, TemperatureUnit scale) throws JMCCULException {
+    public float read(int channel, TemperatureUnit scale, TemperatureInputOptions... options) throws JMCCULException {
         final FloatBuffer temperatureFloat = FloatBuffer.allocate(1);
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm
@@ -126,7 +126,7 @@ public class TemperatureWrapper {
                 channel,
                 scale.VALUE,
                 temperatureFloat,
-                0// TODO support options
+                TemperatureInputOptions.arrayToInt(options)
         );
 
         JMCCULUtils.checkError(errorCode);

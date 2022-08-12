@@ -34,7 +34,6 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -237,7 +236,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AOutScan.htm">AOutScan()</a>
      */
-    public void scan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, EnumSet<AnalogOutputScanOptions> options) throws JMCCULException {
+    public void scan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, AnalogOutputScanOptions... options) throws JMCCULException {
 
         /*
         For 16-bit data, create the buffer with cbWinBufAlloc().
@@ -272,17 +271,10 @@ public class AnalogOutputWrapper {
                 /* long *Rate    */ rateByReference, // returns the value of the actual rate set, which may be different from the requested rate due to pacer limitations.
                 /* int Range     */ range.VALUE,
                 /* int MemHandle */ windowsBuffer,
-                /* int           */ options.stream().mapToInt(e -> e.VALUE).reduce(0, (n, m) -> n | m)
+                /* int options   */ AnalogOutputScanOptions.arrayToInt(options)
         );
         JMCCULUtils.checkError(errorCodeAOutScan);
 
-    }
-
-    /**
-     * Same as {@link #scan(int, int, long, long, AnalogRange, short[], java.util.EnumSet)} but with no options.
-     */
-    public void scan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values) throws JMCCULException {
-        scan(lowChannel, highChannel, count, rateHz, range, values, EnumSet.noneOf(AnalogOutputScanOptions.class));
     }
 
     /**

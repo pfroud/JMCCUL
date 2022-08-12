@@ -3,6 +3,7 @@ package xyz.froud.jmccul.analog;
 
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -126,4 +127,7 @@ public enum AnalogOutputScanOptions {
         VALUE = value;
     }
 
+    public static int arrayToInt(AnalogOutputScanOptions[] optionsArray) {
+        return Arrays.stream(optionsArray).map(e -> e.VALUE).reduce(0, (i1, i2) -> i1 | i2);
+    }
 }
