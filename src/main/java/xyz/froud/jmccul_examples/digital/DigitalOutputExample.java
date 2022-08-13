@@ -25,13 +25,10 @@
 package xyz.froud.jmccul_examples.digital;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.digital.DigitalPort;
 import xyz.froud.jmccul.digital.DigitalPortDirection;
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -41,18 +38,18 @@ public class DigitalOutputExample {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DeviceAndDigitalPort> optionalDeviceAndPort = findDeviceAndPortWhichSupportDigitalOutput();
+        final Optional<DigitalPort> optionalPort = DigitalExampleUtils.findPortWhichSupports(DigitalPort::isOutputSupported);
 
-        if (optionalDeviceAndPort.isPresent()) {
-            try (DeviceAndDigitalPort deviceAndPort = optionalDeviceAndPort.get()) {
-                final DaqDevice device = deviceAndPort.device;
-                final DigitalPort port = deviceAndPort.port;
+        if (optionalPort.isPresent()) {
+            final DigitalPort port = optionalPort.get();
+            final DaqDevice device = port.getDaqDevice();
 
-                System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
-                        device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
+            System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
+                    device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
 
-                doDigitalOutput(device, port);
-            }
+            doDigitalOutput(device, port);
+            device.close();
+
         } else {
             System.out.println("Didn't find a device which supports digital output.");
         }
@@ -61,7 +58,7 @@ public class DigitalOutputExample {
 
     private static void doDigitalOutput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
-        if (port.isPortConfigurable()) {
+        if (port.isDirectionOfEntirePortSettable()) {
             device.digital.setPortDirection(port.getPortType(), DigitalPortDirection.OUTPUT);
         }
 
@@ -70,37 +67,11 @@ public class DigitalOutputExample {
         System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(valueToWrite));
         device.digital.output.writePort(port.getPortType(), valueToWrite);
 
-        System.out.println("Now setting each bit on individually");
+        System.out.println("Now setting each bit to logic-high individually");
         for (int bitIdx = 0; bitIdx < port.getBitCount(); bitIdx++) {
             device.digital.output.writeBit(port.getPortType(), bitIdx, true);
         }
 
-    }
-
-    private static Optional<DeviceAndDigitalPort> findDeviceAndPortWhichSupportDigitalOutput() throws JMCCULException {
-        final DaqDeviceDescriptor[] allDeviceDescriptors = DaqDeviceDiscovery.findDescriptors();
-
-        for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
-            final DaqDevice device = new DaqDevice(descriptor);
-
-            if (device.digital.isSupported()) {
-
-                final Optional<DigitalPort> optionalPortToUse
-                        = Arrays.stream(device.digital.getPorts())
-                        .filter(DigitalPort::isOutputSupported)
-                        .findFirst();
-
-                if (optionalPortToUse.isPresent()) {
-                    DeviceAndDigitalPort rv = new DeviceAndDigitalPort();
-                    rv.device = device;
-                    rv.port = optionalPortToUse.get();
-                    return Optional.of(rv);
-                }
-            }
-            device.close();
-        }
-
-        return Optional.empty();
     }
 
 }

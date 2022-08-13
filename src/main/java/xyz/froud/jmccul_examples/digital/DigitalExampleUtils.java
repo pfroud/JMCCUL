@@ -25,19 +25,38 @@
 package xyz.froud.jmccul_examples.digital;
 
 import xyz.froud.jmccul.DaqDevice;
+import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.digital.DigitalPort;
+import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
-/**
- * @author Peter Froud
- */
-class DeviceAndDigitalPort implements AutoCloseable {
+import java.util.Optional;
 
-    DaqDevice device;
-    DigitalPort port;
+public class DigitalExampleUtils {
 
-    @Override
-    public void close() throws JMCCULException {
-        device.close();
+    /** Same as {@link java.util.function.Predicate} but it throws a JMCCUL exception. */
+    @FunctionalInterface
+    interface PredicateThrowsJMCCULException<T> {
+        boolean test(T t) throws JMCCULException;
     }
+
+    static Optional<DigitalPort> findPortWhichSupports(PredicateThrowsJMCCULException<DigitalPort> predicate) throws JMCCULException {
+        final DaqDeviceDescriptor[] allDeviceDescriptors = DaqDeviceDiscovery.findDescriptors();
+
+        for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
+            final DaqDevice device = new DaqDevice(descriptor);
+            if (device.digital.isSupported()) {
+                for (DigitalPort port : device.digital.getPorts()) {
+                    if (predicate.test(port)) {
+                        return Optional.of(port);
+                    }
+                }
+            }
+            // Checked all ports on the device, none satisfy the predicate.
+            device.close();
+        }
+        // Checked all devices, none have a port that satisfies the predicate.
+        return Optional.empty();
+    }
+
 }

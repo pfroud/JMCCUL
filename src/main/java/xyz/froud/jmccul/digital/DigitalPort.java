@@ -72,6 +72,10 @@ public class DigitalPort {
         }
     }
 
+    public DaqDevice getDaqDevice() {
+        return DAQ_DEVICE;
+    }
+
     /**
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDevType.htm">DioConfig.GetDevType()</a>
@@ -222,7 +226,7 @@ public class DigitalPort {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L113">is_bit_configurable
      *         in class PortInfo in dio_info.py</a>
      */
-    public boolean isIndividualBitConfigurable() throws JMCCULException {
+    public boolean isDirectionOfIndividualBitSettable() throws JMCCULException {
         if (_isIndividualBitConfigurable == null) {
 
             if ((getInputMask() & getOutputMask()) == 0) {
@@ -261,7 +265,7 @@ public class DigitalPort {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L130">is_port_configurable
      *         in class PortInfo in dio_info.py</a>
      */
-    public boolean isPortConfigurable() throws JMCCULException {
+    public boolean isDirectionOfEntirePortSettable() throws JMCCULException {
         if (_isPortConfigurable == null) {
             if ((getInputMask() & getOutputMask()) == 0) {
                 try {
@@ -291,7 +295,7 @@ public class DigitalPort {
      *         in class PortInfo in dio_info.py</a>
      */
     public boolean isInputSupported() throws JMCCULException {
-        return (getInputMask() > 0) || isPortConfigurable();
+        return (getInputMask() > 0) || isDirectionOfEntirePortSettable();
     }
 
     /**
@@ -300,7 +304,7 @@ public class DigitalPort {
      *         in class PortInfo in dio_info.py</a>
      */
     public boolean isOutputSupported() throws JMCCULException {
-        return (getOutputMask() > 0) || isPortConfigurable();
+        return (getOutputMask() > 0) || isDirectionOfEntirePortSettable();
     }
 
     /**

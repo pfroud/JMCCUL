@@ -52,14 +52,14 @@ public class PrintDigitalInfo {
                 for (int i = 0; i < ports.length; i++) {
                     final DigitalPort port = ports[i];
                     System.out.printf("Port %d / %d: %s\n", i + 1, ports.length, port.toString());
-                    System.out.println("   getBitCount    = " + port.getBitCount());
+                    System.out.println("   getBitCount   = " + port.getBitCount());
                     System.out.println("   getInputMask  = " + port.getInputMask());
                     System.out.println("   getOutputMask = " + port.getOutputMask());
                     System.out.println("   getFirstBit   = " + port.getFirstBit());
                     System.out.println("   isOutputSupported  = " + port.isOutputSupported());
                     System.out.println("   isInputSupported   = " + port.isInputSupported());
-                    System.out.println("   isPortConfigurable = " + port.isPortConfigurable());
-                    System.out.println("   isBitConfigurable  = " + port.isIndividualBitConfigurable());
+                    System.out.println("   isDirectionOfEntirePortSettable     = " + port.isDirectionOfEntirePortSettable());
+                    System.out.println("   isDirectionOfIndividualBitSettable  = " + port.isDirectionOfIndividualBitSettable());
                     System.out.println("   isInputScanSupported  = " + port.isInputScanSupported());
                     System.out.println("   isOutputScanSupported = " + port.isOutputScanSupported());
                 }
