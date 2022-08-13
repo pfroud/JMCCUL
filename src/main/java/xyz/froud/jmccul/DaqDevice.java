@@ -100,6 +100,12 @@ public class DaqDevice implements AutoCloseable {
     public final NetworkConfig networkConfig;
     public final WirelessConfig wirelessConfig;
 
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm">cbCreateDaqDevice()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/CreateDaqDevice.htm">CreateDaqDevice()</a>
+     */
     public DaqDevice(DaqDeviceDescriptor descriptor) throws JMCCULException {
         boardNumber = nextBoardNumber;
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm

@@ -25,6 +25,7 @@
 package xyz.froud.jmccul.jna;
 
 import com.sun.jna.Structure;
+import xyz.froud.jmccul.DaqDeviceInterfaceType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -111,36 +112,15 @@ public class DaqDeviceDescriptor extends Structure {
 
     @Override
     protected List<String> getFieldOrder() {
-        return Arrays.asList("ProductName", "ProductID", "InterfaceType", "DevString", "UniqueID", "NUID", "Reserved");
+        return Arrays.asList("ProductName", "ProductID", "DaqDeviceInterfaceType", "DevString", "UniqueID", "NUID", "Reserved");
     }
 
     @Override
     public String toString() {
-        final String interfaceTypeString;
-        final String labelForUniqueID;
-        switch (InterfaceType) {
-            case MeasurementComputingUniversalLibrary.DaqDeviceInterface.USB_IFC -> {
-                interfaceTypeString = "USB";
-                labelForUniqueID = "factory serial number";
-            }
-            case MeasurementComputingUniversalLibrary.DaqDeviceInterface.BLUETOOTH_IFC -> {
-                interfaceTypeString = "Bluetooth";
-                labelForUniqueID = "MAC address";
-            }
-            case MeasurementComputingUniversalLibrary.DaqDeviceInterface.ETHERNET_IFC -> {
-                interfaceTypeString = "Ethernet";
-                labelForUniqueID = "MAC address";
-            }
-            default -> {
-                interfaceTypeString = "(unknown)";
-                labelForUniqueID = "unknown";
-            }
-        }
-
+        final DaqDeviceInterfaceType theInterface = DaqDeviceInterfaceType.parseInt(InterfaceType);
         return "product name \"" + getProductName() + "\" (productID " + ProductID
-                + "); interface type " + interfaceTypeString + "; "
-                + labelForUniqueID + " \"" + getUniqueID() + "\" (" + NUID + ")";
-
+                + "); interface type " + theInterface.DISPLAY_NAME + "; "
+                + theInterface.LABEL_FOR_UNIQUE_ID + " \"" + getUniqueID() + "\" (" + NUID + ")";
     }
 
     public String getUniqueID() {

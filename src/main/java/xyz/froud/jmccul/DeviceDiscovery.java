@@ -40,19 +40,29 @@ import static xyz.froud.jmccul.JMCCULUtils.checkError;
 public class DeviceDiscovery {
 
     /**
-     * @param interfaceTypeBitMask use either:
-     *         <ul>
-     *             <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ANY_IFC}</li>
-     *                 <li>Or create a bit mask by OR-ing together any of these items:
-     *                 <ul>
-     *                     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#USB_IFC}</li>
-     *                     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#BLUETOOTH_IFC}</li>
-     *                     <li>{@link MeasurementComputingUniversalLibrary.DaqDeviceInterface#ETHERNET_IFC}</li>
-     *                 </ul>
-     *             </li>
-     *         </ul>
+     * Detects USB, Bluetooth and/or Ethernet DAQ devices, and returns device descriptors of the detected devices.
+     * <p>
+     * This function detects Ethernet DAQ devices on the same subnet as the host PC. To detect Ethernet DAQ devices on a
+     * different subnet than the host PC, use cbGetNetDeviceDescriptor().
+     * <p>
+     * You may optionally filter DAQ devices by interface type. If no interface types are specified for the filter, then
+     * the filter is set to {@link xyz.froud.jmccul.DaqDeviceInterfaceType#ANY}. So, these three calls do the same
+     * thing:
+     * <ul>
+     *     <li>{@code findDescriptors()}</li>
+     *     <li>{@code findDescriptors(DaqDeviceInterfaceType.ANY)}</li>
+     *     <li>{@code findDescriptors(DaqDeviceInterfaceType.USB, DaqDeviceInterfaceType.BLUETOOTH, DaqDeviceInterfaceType.ETHERNET)}</li>
+     * </ul>
+     *
+     * @param interfaceTypeFilter which interface type(s) should be searched for DAQ devices. If no interface
+     *         types are specified, then all interface types are searched.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm">cbGetDaqDeviceInventory()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/GetDaqDeviceInventory.htm">GetDaqDeviceInventory()</a>
      */
-    public static DaqDeviceDescriptor[] findDescriptors(int interfaceTypeBitMask) throws JMCCULException {
+    public static DaqDeviceDescriptor[] findDescriptors(DaqDeviceInterfaceType... interfaceTypeFilter) throws JMCCULException {
 
         // Can be any arbitrary number, just needed so C can allocate stuff
         final int MAX_DEVICE_COUNT = 16;
@@ -70,6 +80,13 @@ public class DeviceDiscovery {
          */
         final IntBuffer deviceCount = IntBuffer.wrap(new int[]{MAX_DEVICE_COUNT});
 
+        final int interfaceBitMask;
+        if (interfaceTypeFilter.length == 0) {
+            interfaceBitMask = DaqDeviceInterfaceType.ANY.VALUE;
+        } else {
+            interfaceBitMask = DaqDeviceInterfaceType.bitwiseOr(interfaceTypeFilter);
+        }
+
         /*
         https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm
         About the DaqDeviceDescriptor argument:
@@ -80,7 +97,7 @@ public class DeviceDiscovery {
 
         According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the array.
          */
-        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(interfaceTypeBitMask, buffer[0], deviceCount);
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(interfaceBitMask, buffer[0], deviceCount);
         checkError(errorCode);
 
         // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
@@ -88,10 +105,6 @@ public class DeviceDiscovery {
 
         // The buffer still has MAX_DEVICE_COUNT elements in it. Return a subarray with only found devices.
         return Arrays.copyOf(buffer, devicesFoundCount);
-    }
-
-    public static DaqDeviceDescriptor[] findDescriptors() throws JMCCULException {
-        return findDescriptors(MeasurementComputingUniversalLibrary.DaqDeviceInterface.ANY_IFC);
     }
 
     public static Optional<DaqDevice> findByBoardName(String desiredBoardName) throws JMCCULException {
