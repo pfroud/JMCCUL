@@ -25,7 +25,7 @@
 package xyz.froud.jmccul_examples.digital;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DeviceDiscovery;
+import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.digital.DigitalPort;
 import xyz.froud.jmccul.digital.DigitalPortDirection;
@@ -78,7 +78,7 @@ public class DigitalOutputExample {
     }
 
     private static Optional<DeviceAndDigitalPort> findDeviceAndPortWhichSupportDigitalOutput() throws JMCCULException {
-        final DaqDeviceDescriptor[] allDeviceDescriptors = DeviceDiscovery.findDescriptors();
+        final DaqDeviceDescriptor[] allDeviceDescriptors = DaqDeviceDiscovery.findDescriptors();
 
         for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
             final DaqDevice device = new DaqDevice(descriptor);

@@ -25,7 +25,7 @@
 package xyz.froud.jmccul_examples.analog_output;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DeviceDiscovery;
+import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class PrintAnalogOutputInfo {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
+        final Optional<DaqDevice> optionalDevice = DaqDeviceDiscovery.findFirstDeviceMatching(
                 d -> d.analog.output.isSupported()
         );
 

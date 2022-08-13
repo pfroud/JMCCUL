@@ -25,7 +25,7 @@
 package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DeviceDiscovery;
+import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
@@ -35,7 +35,7 @@ import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 public class PrintDeviceInfo {
 
     public static void main(String[] args) throws JMCCULException {
-        final DaqDeviceDescriptor[] descriptors = DeviceDiscovery.findDescriptors();
+        final DaqDeviceDescriptor[] descriptors = DaqDeviceDiscovery.findDescriptors();
         if (descriptors.length == 0) {
             System.out.println("No daq devices found!");
         } else {

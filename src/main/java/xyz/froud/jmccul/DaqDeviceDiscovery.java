@@ -37,7 +37,7 @@ import static xyz.froud.jmccul.JMCCULUtils.checkError;
 /**
  * @author Peter Froud
  */
-public class DeviceDiscovery {
+public class DaqDeviceDiscovery {
 
     /**
      * Detects USB, Bluetooth and/or Ethernet DAQ devices, and returns device descriptors of the detected devices.

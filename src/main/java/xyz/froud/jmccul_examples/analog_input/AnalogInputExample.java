@@ -25,7 +25,7 @@
 package xyz.froud.jmccul_examples.analog_input;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DeviceDiscovery;
+import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.analog.AnalogRange;
 
@@ -38,7 +38,7 @@ public class AnalogInputExample {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DaqDevice> optionalDevice = DeviceDiscovery.findFirstDeviceMatching(
+        final Optional<DaqDevice> optionalDevice = DaqDeviceDiscovery.findFirstDeviceMatching(
                 d -> d.analog.input.isSupported()
         );
 
