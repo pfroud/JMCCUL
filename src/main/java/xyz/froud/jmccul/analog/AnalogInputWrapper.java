@@ -29,7 +29,7 @@ import com.sun.jna.ptr.NativeLongByReference;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.DoubleBuffer;
@@ -85,7 +85,7 @@ public class AnalogInputWrapper {
      */
     public int getResolution() throws JMCCULException {
         if (resolution == null) {
-            resolution = Configuration.getInt(
+            resolution = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     BOARD_NUMBER,
                     0,
@@ -132,7 +132,7 @@ public class AnalogInputWrapper {
 
             // Check if the board has a switch-selectable, or only one, range.
             // I do not really understand this so I am not repalcing this call with getRange().
-            final int hardRange = Configuration.getInt(
+            final int hardRange = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     BOARD_NUMBER,
                     0,
@@ -493,7 +493,7 @@ public class AnalogInputWrapper {
      */
     public AnalogRange getRange() throws JMCCULException {
         return AnalogRange.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, //devNum is ignored
@@ -513,7 +513,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetRange.htm">BoardConfig.SetRange()</a>
      */
     public void setRange(AnalogRange range) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -535,7 +535,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumAdChans.htm">BoardConfig.GetNumAdChans()</a>
      */
     public int getChannelCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -550,7 +550,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetNumAdChans.htm">BoardConfig.SetNumAdChans()</a>
      */
     public void setChannelCount(int n) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -572,7 +572,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetAdDataRate.htm">BoardConfig.GetAdDataRate()</a>
      */
     public int getDataRate(int channel) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -587,7 +587,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAdDataRate.htm">BoardConfig.SetAdDataRate()</a>
      */
     public void setDataRate(int channel, int dataRate) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -610,7 +610,7 @@ public class AnalogInputWrapper {
      */
     public AdcTransferMode getDataTransferMode() throws JMCCULException {
         return AdcTransferMode.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, //devNum is ignored
@@ -625,7 +625,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAdXferMode.htm">BoardConfig.SetAdXferMode()</a>
      */
     public void setDataTransferMode(AdcTransferMode transferMode) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -650,7 +650,7 @@ public class AnalogInputWrapper {
      */
     public AdcSettlingTime getSettlingTime() throws JMCCULException {
         return AdcSettlingTime.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, //devNum is ignored
@@ -665,7 +665,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAdSettlingTime.htm">BoardConfig.SetAdSettlingTime()</a>
      */
     public void setSettlingTime(AdcSettlingTime settleTime) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -688,7 +688,7 @@ public class AnalogInputWrapper {
      */
     public AdcTimingMode getTimingMode() throws JMCCULException {
         return AdcTimingMode.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, //devNum is ignored
@@ -703,7 +703,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAdTimingMode.htm">BoardConfig.SetAdTimingMode()</a>
      */
     public void setTimingMode(AdcTimingMode newTimingMode) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -729,7 +729,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetAdRetrigCount.htm">BoardConfig.GetAdRetrigCount()</a>
      */
     public int getTriggerCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -748,7 +748,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAdRetrigCount.htm">BoardConfig.SetAdRetrigCount()</a>
      */
     public void setTriggerCount(int triggerCount) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -779,7 +779,7 @@ public class AnalogInputWrapper {
         3
         According to the dot net docs, the number is the channel to use as the trigger source.
          */
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -794,7 +794,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAdTrigSource.htm">BoardConfig.SetAdTrigSource()</a>
      */
     public void setTriggerSourceChannel(int channel, int n) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -817,7 +817,7 @@ public class AnalogInputWrapper {
      */
     public AnalogInputChannelType getChannelType(int channel) throws JMCCULException {
         return AnalogInputChannelType.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         channel,
@@ -833,7 +833,7 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetAIChanType.htm">BoardConfig.SetAIChanType()</a>
      */
     public void setChannelType(int channel, AnalogInputChannelType channelType) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -851,7 +851,7 @@ public class AnalogInputWrapper {
      */
     public int getChannelMode(int channel) throws JMCCULException {
         // you set this with cbAChanInputMode(). confirmed in the dot ent docs for GetChanAIMode().
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -867,7 +867,7 @@ public class AnalogInputWrapper {
      */
     public int getMode() throws JMCCULException {
         // you set this with cbAInputMode(). confirmed in the dot net docs for GetAIMode().
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored

@@ -61,7 +61,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetBaseAdr.htm">BoardConfig.GetBaseAdr()</a>
      */
     public int getBaseAddress() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -78,7 +78,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetBaseAdr.htm">BoardConfig.SetBaseAdr()</a>
      */
     public void setBaseAddress(int baseAddress) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -103,7 +103,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetBoardType.htm">BoardConfig.GetBoardType()</a>
      */
     public int getBoardType() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -125,7 +125,7 @@ public class BoardConfig {
      */
     public CalibrationTableType getCalibrationTableType(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return CalibrationTableType.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         baseOrExpansionBoard.VALUE,
@@ -141,7 +141,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetCalTableType.htm">BoardConfig.SetCalTableType()</a>
      */
     public void setCalibrationTableType(CalibrationTableType calTable) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -163,7 +163,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetClock.htm">BoardConfig.GetClock()</a>
      */
     public int getClockFrequencyMegahertz() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored when getting
@@ -179,7 +179,7 @@ public class BoardConfig {
      */
     public void setClockFrequencyMegahertz(int channel, int clockFrequency) throws JMCCULException {
         // todo only supports 1, 4,6 or 10
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel, //devNum is the channel when setting
@@ -201,7 +201,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDmaChan.htm">BoardConfig.GetDmaChan()</a>
      */
     public int getDmaChannel() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -217,7 +217,7 @@ public class BoardConfig {
      */
     public void setDmaChannel(int dmaChannel) throws JMCCULException {
         // todo can only be 0, 1, or 3
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -240,7 +240,7 @@ public class BoardConfig {
      */
     public int getDataTranslationBoardNumber() throws JMCCULException {
         // Data Translation, acquired by Measurement Computing in 2015
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0,//devNum is ignored
@@ -261,7 +261,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetExtClockType.htm">BoardConfig.GetExtClockType()</a>
      */
     public ExternalClockType getExternalClockType() throws JMCCULException {
-        return ExternalClockType.parseInt(Configuration.getInt(
+        return ExternalClockType.parseInt(ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devnum is ignored`
@@ -276,7 +276,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetExtClockType.htm">BoardConfig.SetExtClockType()</a>
      */
     public void setExternalClockType(ExternalClockType externalClockType) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -298,7 +298,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetExtInPacerEdge.htm">BoardConfig.GetExtInPacerEdge()</a>
      */
     public ExternalPacerClockEdge getInputPacerClockEdge() throws JMCCULException {
-        return ExternalPacerClockEdge.parseInt(Configuration.getInt(
+        return ExternalPacerClockEdge.parseInt(ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -313,7 +313,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetExtInPacerEdge.htm">BoardConfig.SetExtInPacerEdge()</a>
      */
     public void setInputPacerClockEdge(ExternalPacerClockEdge externalPacerClockEdge) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -335,7 +335,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetExtOutPacerEdge.htm">BoardConfig.GetExtOutPacerEdge()</a>
      */
     public ExternalPacerClockEdge getOutputPacerClockEdge() throws JMCCULException {
-        return ExternalPacerClockEdge.parseInt(Configuration.getInt(
+        return ExternalPacerClockEdge.parseInt(ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -350,7 +350,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetExtOutPacerEdge.htm">BoardConfig.SetExtOutPacerEdge()</a>
      */
     public void setOutputPacerClockEdge(ExternalPacerClockEdge externalPacerClockEdge) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -370,7 +370,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetOutputPacerOut.htm">BoardConfig.GetOutputPacerOut()</a>
      */
     public boolean getOutputPacerClockEnable() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //they don't say whether devnum is ignored
@@ -385,7 +385,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetOutputPacerOut.htm">BoardConfig.GetOutputPacerOut()</a>
      */
     public void setOutputPacerClockEnable(boolean enable) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //they don't say whether devnum is ignored
@@ -410,7 +410,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetInputPacerOut.htm">BoardConfig.GetInputPacerOut()</a>
      */
     public boolean getInputPacerClockEnable() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -425,7 +425,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetInputPacerOut.htm">BoardConfig.SetInputPacerOut()</a>
      */
     public void setInputPacerClockEnable(boolean enable) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -447,7 +447,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetIntEdge.htm">BoardConfig.GetIntEdge()</a>
      */
     public InterruptClockEdge getInterruptEdge() throws JMCCULException {
-        return InterruptClockEdge.parseInt(Configuration.getInt(
+        return InterruptClockEdge.parseInt(ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -462,7 +462,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetIntEdge.htm">BoardConfig.SetIntEdge()</a>
      */
     public void setInterruptEdge(InterruptClockEdge edge) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -484,7 +484,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetIntLevel.htm">BoardConfig.GetIntLevel()</a>
      */
     public int getInterruptLevel() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -500,7 +500,7 @@ public class BoardConfig {
      */
     public void setInterruptLevel(int level) throws JMCCULException {
         // 0 for none, or 1 to 15.
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -522,7 +522,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumIoPorts.htm">BoardConfig.GetNumIoPorts()</a>
      */
     public int getIoPortCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -545,7 +545,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetPatternTrigPort.htm">BoardConfig.GetPatternTrigPort()</a>
      */
     public int getPatternTriggerPort() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -561,7 +561,7 @@ public class BoardConfig {
      */
     public void setPatternTriggerPort(int port) throws JMCCULException {
         // it can only be AUXPORT0 or AUXPORT1
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -585,7 +585,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetSyncMode.htm">BoardConfig.GetSyncMode()</a>
      */
     public SyncMode getSyncMode() throws JMCCULException {
-        return SyncMode.parseInt(Configuration.getInt(
+        return SyncMode.parseInt(ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -602,7 +602,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setSyncMode(SyncMode syncMode) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -628,7 +628,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/IsTerminalCountStatusBitEnabled().htm">BoardConfig.IsTerminalCountOutputEnabled()</a>
      */
     public boolean getTerminalCountOutputStatus(int bitNumber) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 bitNumber,
@@ -645,7 +645,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/EnableTerminalCountStatusBit.htm">BoardConfig.EnableTerminalCountStatusBit()</a>
      */
     public void setTerminalCountOutputStatus(int bitNumber, boolean status) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 bitNumber,
@@ -667,7 +667,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetWaitState.htm">BoardConfig.GetWaitState()</a>
      */
     public boolean getWaitStateJumper() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -682,7 +682,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetWaitState.htm">BoardConfig.SetWaitState()</a>
      */
     public void setWaitStateJumper(boolean jumper) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //not specified whether devNum is ignored
@@ -703,7 +703,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setCalPinVoltage(int calPinVoltage) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -725,7 +725,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceVersion.htm">BoardConfig.GetDeviceVersion()</a>
      */
     public String getVersion(FirmwareVersionType version) throws JMCCULException {
-        return Configuration.getString(
+        return ConfigurationWrapper.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 version.VALUE,
@@ -752,7 +752,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceSerialNum.htm">BoardConfig.GetDeviceSerialNum()</a>
      */
     public String getFactorySerialNumber(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
-        return Configuration.getString(
+        return ConfigurationWrapper.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 baseOrExpansionBoard.VALUE,
@@ -777,7 +777,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceUniqueID.htm">BoardConfig.GetDeviceUniqueId()</a>
      */
     public String getUniqueID() throws JMCCULException {
-        return Configuration.getString(
+        return ConfigurationWrapper.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //not specified what DevNum does
@@ -803,7 +803,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetUserDeviceId.htm">BoardConfig.GetUserDeviceId()</a>
      */
     public int getUserSpecifiedSerialNumber() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -816,7 +816,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setUserSpecifiedSerialNumber(int n) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -841,7 +841,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetUserDeviceIdNum.htm">BoardConfig.GetUserDeviceIdNum()</a>
      */
     public String getUserSpecifiedID() throws JMCCULException {
-        return Configuration.getString(
+        return ConfigurationWrapper.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -857,7 +857,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetUserDeviceId.htm">BoardConfig.SetUserDeviceId()</a>
      */
     public void setUserSpecifiedID(String str) throws JMCCULException {
-        Configuration.setString(
+        ConfigurationWrapper.setString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -882,7 +882,7 @@ public class BoardConfig {
      */
     public int getUserSpecifiedString() throws JMCCULException {
         //todo the docs are probably wrong, this should probably use the getString instead of getInt
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -901,7 +901,7 @@ public class BoardConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setHideLoginDialog(boolean hide) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored

@@ -27,7 +27,7 @@ package xyz.froud.jmccul.digital;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -73,7 +73,7 @@ public class DigitalWrapper {
      */
     public int getPortCount() throws JMCCULException {
         if (portCount == null) {
-            portCount = Configuration.getInt(
+            portCount = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     BOARD_NUMBER,
                     0,

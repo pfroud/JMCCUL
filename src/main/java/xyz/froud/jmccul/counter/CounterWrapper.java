@@ -26,7 +26,7 @@ package xyz.froud.jmccul.counter;
 
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
@@ -47,7 +47,7 @@ public class CounterWrapper {
     private int getChannelCount() throws JMCCULException {
         if (channelCount == null) {
             // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ctr_info.py#L28
-            channelCount = Configuration.getInt(
+            channelCount = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
                     0,
@@ -73,7 +73,7 @@ public class CounterWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterDeviceCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -92,7 +92,7 @@ public class CounterWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterTriggerCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -105,7 +105,7 @@ public class CounterWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setCounterTriggerCount(int trigCount) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -125,7 +125,7 @@ public class CounterWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterNumber(int dev) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.COUNTERINFO,
                 BOARD_NUMBER,
                 dev,
@@ -151,7 +151,7 @@ public class CounterWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getCounterType(int idx) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.COUNTERINFO,
                 BOARD_NUMBER,
                 idx,

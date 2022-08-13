@@ -52,7 +52,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetBoardType_Expansion.htm">ExpansionConfig.GetBoardType()</a>
      */
     public int getExpansionBoardType() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -73,7 +73,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetUsesExps.htm">BoardConfig.GetUsesExps()</a>
      */
     public boolean isExpansionBoardSupported() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -94,7 +94,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetMuxAdChan1.htm">ExpansionConfig.GetMuxAdChan1()</a>
      */
     public int getExpansionBoardChannel1() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -109,7 +109,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetMuxAdChan1.htm">ExpansionConfig.SetMuxAdChan1()</a>
      */
     public void setExpansionBoardChannel1(int ch) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -131,7 +131,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetMuxAdChan2.htm">ExpansionConfig.GetMuxAdChan2()</a>
      */
     public int getExpansionBoardChannel2() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -146,7 +146,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetMuxAdChan2.htm">ExpansionConfig.SetMuxAdChan2()</a>
      */
     public void setExpansionBoardChannel2(int ch) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -170,7 +170,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetRange1.htm">ExpansionConfig.GetRange1()</a>
      */
     public int getExpansionBoardRange1() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -185,7 +185,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetRange1.htm">ExpansionConfig.SetRange1()</a>
      */
     public void setExpansionBoardRange1(int ch) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -209,7 +209,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetRange2.htm">ExpansionConfig.GetRange2()</a>
      */
     public int getExpansionBoardRange2() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -224,7 +224,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetRange2.htm">ExpansionConfig.SetRange2()</a>
      */
     public void setExpansionBoardRange2(int ch) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -246,7 +246,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetCjcChan.htm">ExpansionConfig.GetCjcChan()</a>
      */
     public int getExpansionCjcChannel() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -261,7 +261,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetCjcChan.htm">ExpansionConfig.SetCjcChan()</a>
      */
     public void setExpansionCjcChannel(int ch) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -288,7 +288,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetThermType.htm">ExpansionConfig.GetThermType()</a>
      */
     public int getExpansionThermocoupleType() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -303,7 +303,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/SetThermType.htm">ExpansionConfig.SetThermType()</a>
      */
     public void setExpansionThermocoupleType(int type) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //don't know what devNum does
@@ -326,7 +326,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Expansion_Board_Functions_for_NET/GetNumExpChans.htm">ExpansionConfig.GetNumExpChans()</a>
      */
     public int getExpansionChannelCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -346,7 +346,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getExpansionParentBoard() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -366,7 +366,7 @@ public class ExpansionConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getMaxExpansionBoardCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.EXPANSIONINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored

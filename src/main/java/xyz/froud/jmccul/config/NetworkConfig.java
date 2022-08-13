@@ -52,7 +52,7 @@ public class NetworkConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNetConnectionCode.htm">BoardConfig.GetNetConnectionCode()</a>
      */
     public int getNetworkConnectionCode() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -67,7 +67,7 @@ public class NetworkConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetNetConnectionCode.htm">BoardConfig.SetNetConnectionCode()</a>
      */
     public void setNetworkConnectionCode(int code) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -87,7 +87,7 @@ public class NetworkConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      */
     public int getNetworkIoTimeoutMillisec() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -100,7 +100,7 @@ public class NetworkConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setNetworkIoTimeoutMillisec(int timeoutMillisec) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -122,7 +122,7 @@ public class NetworkConfig {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceMacAddress.htm">BoardConfig.GetDeviceMacAddress()</a>
      */
     public String getMacAddress() throws JMCCULException {
-        return Configuration.getString(
+        return ConfigurationWrapper.getString(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored

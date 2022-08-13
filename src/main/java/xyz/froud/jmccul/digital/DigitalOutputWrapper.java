@@ -29,7 +29,7 @@ import com.sun.jna.ptr.NativeLongByReference;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 public class DigitalOutputWrapper {
@@ -206,7 +206,7 @@ public class DigitalOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDoRetrigCount.htm">BoardConfig.GetDoRetrigCount()</a>
      */
     public int getTriggerCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -221,7 +221,7 @@ public class DigitalOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDoRetrigCount.htm">BoardConfig.SetDoRetrigCount()</a>
      */
     public void setTriggerCount(int trigCount) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored

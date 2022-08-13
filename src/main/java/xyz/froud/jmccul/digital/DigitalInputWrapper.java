@@ -29,7 +29,7 @@ import com.sun.jna.ptr.NativeLongByReference;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.IntBuffer;
@@ -220,7 +220,7 @@ public class DigitalInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDisoFilter.htm">BoardConfig.GetDisoFilter()</a>
      */
     public boolean getAcFilter(int bitNumber) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 bitNumber,
@@ -235,7 +235,7 @@ public class DigitalInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDisoFilter.htm">BoardConfig.SetDisoFilter()</a>
      */
     public void setAcFilter(int bitNumber, boolean enable) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 bitNumber,
@@ -256,7 +256,7 @@ public class DigitalInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setDebounceTime(int n) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -276,7 +276,7 @@ public class DigitalInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
      */
     public void setDebounceState(int n) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -301,7 +301,7 @@ public class DigitalInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDiRetrigCount.htm">BoardConfig.GetDiRetrigCount()</a>
      */
     public int getTriggerCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -319,7 +319,7 @@ public class DigitalInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDiRetrigCount.htm">BoardConfig.SetDiRetrigCount()</a>
      */
     public void setTriggerCount(int count) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored

@@ -26,7 +26,7 @@ package xyz.froud.jmccul;
 
 import xyz.froud.jmccul.analog.AnalogWrapper;
 import xyz.froud.jmccul.config.BoardConfig;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.config.ExpansionConfig;
 import xyz.froud.jmccul.config.NetworkConfig;
 import xyz.froud.jmccul.config.WirelessConfig;
@@ -153,7 +153,7 @@ public class DaqDevice implements AutoCloseable {
     public String getFactorySerialNumber() throws JMCCULException {
         if (factorySerialNumber == null) {
             final int DEVICE_NUMBER_BASE_BOARD = 0; //set to 1 to get the factory serial number of an expansion board
-            factorySerialNumber = Configuration.getString(
+            factorySerialNumber = ConfigurationWrapper.getString(
                     CONFIG_TYPE_BOARD_INFO,
                     boardNumber,
                     DEVICE_NUMBER_BASE_BOARD,
@@ -171,7 +171,7 @@ public class DaqDevice implements AutoCloseable {
         BIUSERDEVIDNUM.
          */
         final int DEVICE_NUMBER_DEFAULT = 0;
-        return Configuration.getString(
+        return ConfigurationWrapper.getString(
                 CONFIG_TYPE_BOARD_INFO,
                 boardNumber,
                 DEVICE_NUMBER_DEFAULT,

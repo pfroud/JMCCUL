@@ -29,7 +29,7 @@ import com.sun.jna.ptr.NativeLongByReference;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.ShortBuffer;
@@ -112,7 +112,7 @@ public class AnalogOutputWrapper {
             if (isRangeIgnored) {
                 // Try and get the range configured in InstaCal
                 try {
-                    int range = Configuration.getInt(
+                    int range = ConfigurationWrapper.getInt(
                             MeasurementComputingUniversalLibrary.BOARDINFO,
                             DAQ_DEVICE.getBoardNumber(),
                             0,
@@ -332,7 +332,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACForceSense.htm">BoardConfig.GetDACForceSense()</a>
      */
     public boolean getForceSense(int channel) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -355,7 +355,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACForceSense.htm">BoardConfig.SetDACForceSense()</a>
      */
     public void setForceSense(int channel, boolean sense) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -381,7 +381,7 @@ public class AnalogOutputWrapper {
      */
     public AnalogRange getRange() throws JMCCULException {
         return AnalogRange.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, // devNum is ignored - probably wrong though
@@ -397,7 +397,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACRange.htm">BoardConfig.SetDACRange()</a>
      */
     public void setRange(int channel, AnalogRange range) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -419,7 +419,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDacResolution.htm">BoardConfig.GetDacResolution()</a>
      */
     public int getResolution() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -443,7 +443,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
      */
     public boolean getStartup(int channel) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel, //devNum is the channel when getting
@@ -469,7 +469,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
      */
     public void setStartup(boolean enable) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored when setting
@@ -493,7 +493,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACRetrigCount.htm">BoardConfig.GetDACRetrigCount()</a>
      */
     public int getTriggerCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -510,7 +510,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACRetrigCount.htm">BoardConfig.SetDACRetrigCount()</a>
      */
     public void setTriggerCount(int triggerCount) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -534,7 +534,7 @@ public class AnalogOutputWrapper {
      */
     public DacUpdateMode getUpdateMode() throws JMCCULException {
         return DacUpdateMode.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         0, //devNum is ignored
@@ -555,7 +555,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACUpdateMode.htm">BoardConfig.GetDACUpdateMode()</a>
      */
     public void setUpdateMode(DacUpdateMode updateMode) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -577,7 +577,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumDaChans.htm">BoardConfig.GetNumDaChans()</a>
      */
     public int getChannelCount() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -600,7 +600,7 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/DACUpdate.htm">BoardConfig.DACUpdate()</a>
      */
     public void update() throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is not used

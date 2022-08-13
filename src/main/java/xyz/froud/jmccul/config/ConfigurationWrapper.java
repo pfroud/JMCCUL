@@ -34,7 +34,7 @@ import java.nio.IntBuffer;
 /**
  * @author Peter Froud
  */
-public class Configuration {
+public class ConfigurationWrapper {
 
     public static int getInt(int infoType, int boardNumber, int deviceNumber, int configItem) throws JMCCULException {
         final IntBuffer buf = IntBuffer.allocate(1);

@@ -27,7 +27,7 @@ package xyz.froud.jmccul.temperature;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
@@ -56,7 +56,7 @@ public class TemperatureWrapper {
     public int getChannelCount() throws JMCCULException {
         if (channelCount == null) {
             // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L45
-            channelCount = Configuration.getInt(
+            channelCount = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
                     0, //device number
@@ -147,7 +147,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetTempAvg.htm">BoardConfig.GetTempAvg()</a>
      */
     public int getScansToAverage() throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -162,7 +162,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetTempAvg.htm">BoardConfig.SetTempAvg()</a>
      */
     public void setScansToAverage(int count) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //it does not say what devNum does
@@ -184,7 +184,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetTempScale.htm">BoardConfig.GetTempScale()</a>
      */
     public TemperatureUnit getUnits() throws JMCCULException {
-        return TemperatureUnit.parseInt(Configuration.getInt(
+        return TemperatureUnit.parseInt(ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -199,7 +199,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetTempScale.htm">BoardConfig.SetTempScale()</a>
      */
     public void setUnits(TemperatureUnit temperatureUnit) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 0, //devNum is ignored
@@ -222,7 +222,7 @@ public class TemperatureWrapper {
      */
     public TemperatureRejectionFrequency getRejectionFrequency(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return TemperatureRejectionFrequency.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         baseOrExpansionBoard.VALUE,
@@ -238,7 +238,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetTempRejFreq.htm">BoardConfig.SetTempRejFreq()</a>
      */
     public void setRejectionFrequency(BaseOrExpansionBoard baseOrExpansionBoard, TemperatureRejectionFrequency rejection) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 baseOrExpansionBoard.VALUE,
@@ -260,7 +260,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDetectOpenTC.htm">BoardConfig.GetDetectOpenTc()</a>
      */
     public boolean getOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 baseOrExpansionBoard.VALUE,
@@ -275,7 +275,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDetectOpenTC.htm">BoardConfig.SetDetectOpenTc()</a>
      */
     public void setOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard, boolean enable) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 baseOrExpansionBoard.VALUE,
@@ -299,7 +299,7 @@ public class TemperatureWrapper {
      */
     public ThermocoupleType getThermocoupleType(int channel) throws JMCCULException {
         return ThermocoupleType.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         channel,
@@ -315,7 +315,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetChanTcType.htm">BoardConfig.SetChanTcType()</a>
      */
     public void setThermocoupleType(int channel, ThermocoupleType type) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,
@@ -338,7 +338,7 @@ public class TemperatureWrapper {
      */
     public RtdSensorType getRtdSensorType(int channel) throws JMCCULException {
         return RtdSensorType.parseInt(
-                Configuration.getInt(
+                ConfigurationWrapper.getInt(
                         MeasurementComputingUniversalLibrary.BOARDINFO,
                         BOARD_NUMBER,
                         channel,
@@ -354,7 +354,7 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetChanRtdType.htm">BoardConfig.SetChanRtdType()</a>
      */
     public void setRtdSensorType(int channel, RtdSensorType rtdSensor) throws JMCCULException {
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
                 channel,

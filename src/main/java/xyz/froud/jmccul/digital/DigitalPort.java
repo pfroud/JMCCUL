@@ -29,7 +29,7 @@ import com.sun.jna.ptr.NativeLongByReference;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.config.Configuration;
+import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.ShortBuffer;
@@ -142,7 +142,7 @@ public class DigitalPort {
     }
 
     private int getConfigItem(int item) throws JMCCULException {
-        return Configuration.getInt(
+        return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.DIGITALINFO,
                 DAQ_DEVICE.getBoardNumber(),
                 PORT_INDEX,
@@ -180,7 +180,7 @@ public class DigitalPort {
      */
     public void setDirectionCheckEnabled(boolean enable) throws JMCCULException {
         final boolean disable = !enable;
-        Configuration.setInt(
+        ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.DIGITALINFO,
                 DAQ_DEVICE.getBoardNumber(),
                 PORT_INDEX,
