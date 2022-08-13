@@ -471,6 +471,91 @@ public class AnalogInputWrapper {
         return buf.get();
     }
 
+    /**
+     * Scans a range of A/D channels and stores the samples in an array. cbAInScan() reads the specified number of A/D
+     * samples at the specified sampling rate from the specified range of A/D channels from the specified board. If the
+     * A/D board has programmable gain, then it sets the gain to the specified range. The collected data is returned to
+     * the data array.
+     * <p>
+     * <b>Important:</b> In order to understand the functions, you must read the board-specific information found in
+     * the Universal Library User's Guide. The example programs should be examined and run prior to attempting any
+     * programming of your own. Following this advice will save you hours of frustration, and possibly time wasted
+     * holding for technical support.
+     * <p>
+     * This note, which appears elsewhere, is especially applicable to this function. Now is the time to read the board
+     * specific information for your board that is contained in the Universal Library User's Guide. We suggest that you
+     * make a copy of this information for reference as you read this manual and examine the example programs.
+     *
+     * @param lowChan The first A/D channel in the scan. When cbALoadQueue() is used, the channel count is
+     *         determined by the total number of entries in the channel gain queue, and LowChan is ignored.
+     * @param highChan The last A/D channel in the scan. When cbALoadQueue() is used, the channel count is
+     *         determined by the total number of entries in the channel gain queue, and HighChan is ignored.
+     *         <p>
+     *         Low / High Channel number: The maximum allowable channel depends on which type of A/D board is being
+     *         used. For boards that have both single ended and differential inputs the maximum allowable channel number
+     *         also depends on how the board is configured. For example, a CIO-DAS1600 has 8 channels for differential,
+     *         16 for single ended.
+     * @param count The number of A/D samples to collect. Specifies the total number of A/D samples that will be
+     *         collected. If more than one channel is being sampled, the number of samples collected per channel is
+     *         equal to Count / (HighChan – LowChan + 1).
+     * @param rateHz The rate at which samples are acquired, in samples per second per channel.
+     *         <p>
+     *         For example, if you sample four channels, 0 to 3, at a rate of 10,000 scans per second (10 kHz), the
+     *         resulting A/D converter rate is 40 kHz: four channels at 10,000 samples per channel per second. This is
+     *         different from some software where you specify the total A/D chip rate. In those systems, the per channel
+     *         rate is equal to the A/D rate divided by the number of channels in a scan.
+     *         <p>
+     *         The channel count is determined by the LowChan and HighChan parameters. Channel Count = (HighChan -
+     *         LowChan + 1).
+     *         <p>
+     *         When cbALoadQueue is used, the channel count is determined by the total number of entries in the channel
+     *         gain queue. LowChan and HighChan are ignored.
+     *         <p>
+     *         Rate also returns the value of the actual rate set, which may be different from the requested rate
+     *         because of pacer limitations.
+     *         <p>
+     *         Caution! You will generate an error if you specify a total A/D rate beyond the capability of the board.
+     *         For example, if you specify LowChan = 0, HighChan = 7 (8 channels total), and Rate = 20,000, and you are
+     *         using a CIO-DAS16/JR, you will get an error – you have specified a total rate of 8*20,000 = 160,000, but
+     *         the CIO-DAS16/JR is capable of converting only 120,000 samples per second.
+     *         <p>
+     *         The maximum sampling rate depends on the A/D board that is being used. It is also dependent on the
+     *         sampling mode options.
+     * @param range A/D range code. If the selected A/D board does not have a programmable range feature, this
+     *         argument is ignored. Otherwise, set the Range argument to any range that is supported by the selected A/D
+     *         board. Refer to board specific information for a list of the supported A/D ranges of each board.
+     * @param options Bit fields that control various options. This field may contain any combination of
+     *         non-contradictory choices from the values listed in the Options argument values section below.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAInScan.htm">cbAInScan()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AInScan.htm">AInScan()</a>
+     */
+    public void scan(int lowChan, int highChan, long count, long rateHz, AnalogRange range, AnalogInputScanOptions... options) throws JMCCULException {
+
+        final NativeLongByReference rateByReference = new NativeLongByReference(new NativeLong(rateHz));
+
+        // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbWinBufAlloc.htm
+        final MeasurementComputingUniversalLibrary.HGLOBAL windowsBuffer = MeasurementComputingUniversalLibrary.INSTANCE.cbWinBufAlloc(new NativeLong(count));
+
+        // TODO how do I put data into the buffer?????
+
+        final int errorCodeCbAInScan = MeasurementComputingUniversalLibrary.INSTANCE.cbAInScan(
+                /* int boardNum  */ BOARD_NUMBER,
+                /* int LowChan   */ lowChan,
+                /* int highChan  */ highChan,
+                /* long Count    */ new NativeLong(count),
+                /* long *Rate    */ rateByReference,
+                /* int Range     */ range.VALUE,
+                /* int MemHandle */ windowsBuffer,
+                /* int Options   */ AnalogInputScanOptions.bitwiseOr(options)
+
+        );
+        JMCCULUtils.checkError(errorCodeCbAInScan);
+
+    }
+
 
     /* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BIRANGE -> BI RANGE -> boardInfo range
