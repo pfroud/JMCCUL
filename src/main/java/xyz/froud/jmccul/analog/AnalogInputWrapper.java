@@ -49,18 +49,22 @@ public class AnalogInputWrapper {
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
 
-    private Integer channelCount;
-    private Integer resolution;
-    private Integer packetSize;
-    private Integer triggerResolution;
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+     */
+    private Integer _channelCount;
+    private Integer _resolution;
+    private Integer _packetSize;
+    private Integer _triggerResolution;
 
-    private List<AnalogRange> supportedRanges;
-    private AnalogRange analogTriggerRange;
+    private List<AnalogRange> _supportedRanges;
+    private AnalogRange _analogTriggerRange;
 
-    private Boolean isVoltageInputSupported;
-    private Boolean isAnalogTriggerSupported;
-    private Boolean isGainQueueSupported;
-    private Boolean isScanSupported;
+    private Boolean _isVoltageInputSupported;
+    private Boolean _isAnalogTriggerSupported;
+    private Boolean _isGainQueueSupported;
+    private Boolean _isScanSupported;
 
     public AnalogInputWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
@@ -84,15 +88,15 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetAdResolution.htm">BoardConfig.GetAdResolution()</a>
      */
     public int getResolution() throws JMCCULException {
-        if (resolution == null) {
-            resolution = ConfigurationWrapper.getInt(
+        if (_resolution == null) {
+            _resolution = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     BOARD_NUMBER,
                     0,
                     MeasurementComputingUniversalLibrary.BIADRES
             );
         }
-        return resolution;
+        return _resolution;
     }
 
     /**
@@ -101,7 +105,7 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public boolean isScanSupported() throws JMCCULException {
-        if (isScanSupported == null) {
+        if (_isScanSupported == null) {
             try {
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
                         BOARD_NUMBER,
@@ -111,13 +115,13 @@ public class AnalogInputWrapper {
                         MeasurementComputingUniversalLibrary.AIFUNCTION
                 );
                 JMCCULUtils.checkError(errorCode);
-                isScanSupported = true;
+                _isScanSupported = true;
             } catch (JMCCULException ex) {
                 ex.throwIfErrorIsNetworkDeviceInUse();
-                isScanSupported = false;
+                _isScanSupported = false;
             }
         }
-        return isScanSupported;
+        return _isScanSupported;
 
     }
 
@@ -127,8 +131,8 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public List<AnalogRange> getSupportedRanges() throws JMCCULException {
-        if (supportedRanges == null) {
-            supportedRanges = new ArrayList<>();
+        if (_supportedRanges == null) {
+            _supportedRanges = new ArrayList<>();
 
             // Check if the board has a switch-selectable, or only one, range.
             // I do not really understand this so I am not repalcing this call with getRange().
@@ -140,7 +144,7 @@ public class AnalogInputWrapper {
             );
 
             if (hardRange >= 0) {
-                supportedRanges.add(AnalogRange.parseInt(hardRange));
+                _supportedRanges.add(AnalogRange.parseInt(hardRange));
             } else {
                 // try all the ranges
                 for (AnalogRange rangeToCheck : AnalogRange.values()) {
@@ -150,14 +154,14 @@ public class AnalogInputWrapper {
                         } else {
                             read32(0, rangeToCheck);
                         }
-                        supportedRanges.add(rangeToCheck);
+                        _supportedRanges.add(rangeToCheck);
                     } catch (JMCCULException ex) {
                         ex.throwIfErrorIsNetworkDeviceInUse();
                     }
                 }
             }
         }
-        return supportedRanges;
+        return _supportedRanges;
     }
 
     /**
@@ -165,7 +169,6 @@ public class AnalogInputWrapper {
      * packet size as the total_count for a_in_scan when using the CONTINUOUS option in BLOCKIO mode.
      * <p>
      * For all other hardware, this method will return 1.
-     *
      * <table summary="Packet sizes by product">
      *      <thead>
      *          <tr><th>Hardware</th> <th>Product ID</th> <th>Packet size</th></tr>
@@ -188,14 +191,14 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public int getPacketSize() {
-        if (packetSize == null) {
-            packetSize = switch (DAQ_DEVICE.getProductID()) {
+        if (_packetSize == null) {
+            _packetSize = switch (DAQ_DEVICE.getProductID()) {
                 case 122 -> 64;
                 case 130, 161, 240 -> 31;
                 default -> 1;
             };
         }
-        return packetSize;
+        return _packetSize;
     }
 
     /**
@@ -204,21 +207,21 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public boolean isVoltageInputSupported() throws JMCCULException {
-        if (isVoltageInputSupported == null) {
+        if (_isVoltageInputSupported == null) {
             final List<AnalogRange> supportedRanges = getSupportedRanges();
             if (supportedRanges.isEmpty()) {
-                isVoltageInputSupported = false;
+                _isVoltageInputSupported = false;
             } else {
                 try {
                     readVoltage(0, supportedRanges.get(0));
-                    isVoltageInputSupported = true;
+                    _isVoltageInputSupported = true;
                 } catch (JMCCULException ex) {
                     ex.throwIfErrorIsNetworkDeviceInUse();
-                    isVoltageInputSupported = false;
+                    _isVoltageInputSupported = false;
                 }
             }
         }
-        return isVoltageInputSupported;
+        return _isVoltageInputSupported;
     }
 
     /**
@@ -227,9 +230,9 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public int getTriggerResolution() {
-        if (triggerResolution == null) {
+        if (_triggerResolution == null) {
 
-            triggerResolution = switch (DAQ_DEVICE.getProductID()) {
+            _triggerResolution = switch (DAQ_DEVICE.getProductID()) {
                 /*
                 Twelve-bit boards:
                     PCI-DAS6030, 6031, 6032, 6033, 6052
@@ -245,7 +248,7 @@ public class AnalogInputWrapper {
                 default -> 0;
             };
         }
-        return triggerResolution;
+        return _triggerResolution;
 
     }
 
@@ -255,7 +258,7 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public AnalogRange getTriggerRange() throws JMCCULException {
-        if (analogTriggerRange == null) {
+        if (_analogTriggerRange == null) {
             int trigSource;
             try {
                 trigSource = getTriggerSourceChannel(0);
@@ -265,12 +268,12 @@ public class AnalogInputWrapper {
             }
 
             if (getTriggerResolution() > 0 && trigSource <= 0) {
-                analogTriggerRange = AnalogRange.BIPOLAR_10_VOLTS;
+                _analogTriggerRange = AnalogRange.BIPOLAR_10_VOLTS;
             } else {
-                analogTriggerRange = AnalogRange.UNKNOWN;
+                _analogTriggerRange = AnalogRange.UNKNOWN;
             }
         }
-        return analogTriggerRange;
+        return _analogTriggerRange;
     }
 
     /**
@@ -279,7 +282,7 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public boolean isTriggerSupported() throws JMCCULException {
-        if (isAnalogTriggerSupported == null) {
+        if (_isAnalogTriggerSupported == null) {
             try {
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbSetTrigger(
                         BOARD_NUMBER,
@@ -288,13 +291,13 @@ public class AnalogInputWrapper {
                         (short) 0
                 );
                 JMCCULUtils.checkError(errorCode);
-                isAnalogTriggerSupported = true;
+                _isAnalogTriggerSupported = true;
             } catch (JMCCULException ex) {
                 ex.throwIfErrorIsNetworkDeviceInUse();
-                isAnalogTriggerSupported = false;
+                _isAnalogTriggerSupported = false;
             }
         }
-        return isAnalogTriggerSupported;
+        return _isAnalogTriggerSupported;
     }
 
     /**
@@ -303,7 +306,7 @@ public class AnalogInputWrapper {
      *         in ai_info.py</a>
      */
     public boolean isGainQueueSupported() throws JMCCULException {
-        if (isGainQueueSupported == null) {
+        if (_isGainQueueSupported == null) {
             try {
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbALoadQueue(
                         BOARD_NUMBER,
@@ -312,13 +315,13 @@ public class AnalogInputWrapper {
                         0
                 );
                 JMCCULUtils.checkError(errorCode);
-                isGainQueueSupported = true;
+                _isGainQueueSupported = true;
             } catch (JMCCULException ex) {
                 ex.throwIfErrorIsNetworkDeviceInUse();
-                isGainQueueSupported = false;
+                _isGainQueueSupported = false;
             }
         }
-        return isGainQueueSupported;
+        return _isGainQueueSupported;
 
     }
 
@@ -620,12 +623,15 @@ public class AnalogInputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumAdChans.htm">BoardConfig.GetNumAdChans()</a>
      */
     public int getChannelCount() throws JMCCULException {
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BINUMADCHANS
-        );
+        if (_channelCount == null) {
+            _channelCount = ConfigurationWrapper.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    BOARD_NUMBER,
+                    0, //devNum is ignored
+                    MeasurementComputingUniversalLibrary.BINUMADCHANS
+            );
+        }
+        return _channelCount;
     }
 
     /**

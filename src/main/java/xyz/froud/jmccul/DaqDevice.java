@@ -86,8 +86,13 @@ public class DaqDevice implements AutoCloseable {
 
     private final int boardNumber;
     private final int productID;
-    private String factorySerialNumber;
-    private String boardName;
+
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+     */
+    private String _factorySerialNumber;
+    private String _boardName;
     private boolean isOpen = false;
 
     public final DigitalWrapper digital;
@@ -138,22 +143,22 @@ public class DaqDevice implements AutoCloseable {
 
     public String getBoardName() throws JMCCULException {
         // TODO can we get this from the descriptor in the constructor?
-        if (boardName == null) {
+        if (_boardName == null) {
             final ByteBuffer buf = ByteBuffer.allocate(BOARD_NAME_LENGTH);
 
             // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetBoardName.htm
             final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardName(boardNumber, buf);
 
             JMCCULUtils.checkError(errorCode);
-            boardName = new String(buf.array()).trim();
+            _boardName = new String(buf.array()).trim();
         }
-        return boardName;
+        return _boardName;
     }
 
     public String getFactorySerialNumber() throws JMCCULException {
-        if (factorySerialNumber == null) {
+        if (_factorySerialNumber == null) {
             final int DEVICE_NUMBER_BASE_BOARD = 0; //set to 1 to get the factory serial number of an expansion board
-            factorySerialNumber = ConfigurationWrapper.getString(
+            _factorySerialNumber = ConfigurationWrapper.getString(
                     CONFIG_TYPE_BOARD_INFO,
                     boardNumber,
                     DEVICE_NUMBER_BASE_BOARD,
@@ -161,7 +166,7 @@ public class DaqDevice implements AutoCloseable {
                     CONFIG_ITEM_LENGTH
             );
         }
-        return factorySerialNumber;
+        return _factorySerialNumber;
     }
 
     private String getUserDeviceIdentifier() throws JMCCULException {
@@ -182,7 +187,7 @@ public class DaqDevice implements AutoCloseable {
 
     @Override
     public String toString() {
-        return "model " + boardName + ", serial number " + factorySerialNumber;
+        return "model " + _boardName + ", serial number " + _factorySerialNumber;
     }
 
     @Override

@@ -38,8 +38,12 @@ public class DigitalWrapper {
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
 
-    private DigitalPort[] ports;
-    private Integer portCount;
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+    */
+    private DigitalPort[] _ports;
+    private Integer _portCount;
 
     public final DigitalOutputWrapper output;
     public final DigitalInputWrapper input;
@@ -55,14 +59,14 @@ public class DigitalWrapper {
     }
 
     public DigitalPort[] getPorts() throws JMCCULException {
-        if (ports == null) {
+        if (_ports == null) {
             final int portCount = getPortCount();
-            ports = new DigitalPort[portCount];
+            _ports = new DigitalPort[portCount];
             for (int i = 0; i < portCount; i++) {
-                ports[i] = new DigitalPort(DAQ_DEVICE, i);
+                _ports[i] = new DigitalPort(DAQ_DEVICE, i);
             }
         }
-        return ports;
+        return _ports;
     }
 
     /**
@@ -72,15 +76,15 @@ public class DigitalWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDiNumDevs.htm">BoardConfig.GetDiNumDevs()</a>
      */
     public int getPortCount() throws JMCCULException {
-        if (portCount == null) {
-            portCount = ConfigurationWrapper.getInt(
+        if (_portCount == null) {
+            _portCount = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     BOARD_NUMBER,
                     0,
                     MeasurementComputingUniversalLibrary.BIDINUMDEVS
             );
         }
-        return portCount;
+        return _portCount;
     }
 
     /**

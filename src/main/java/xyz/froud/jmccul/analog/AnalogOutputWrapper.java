@@ -40,19 +40,21 @@ import java.util.List;
  * Analog output = digital to analog = "DAC"
  *
  * @author Peter Froud
+ * @see <a href="https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ao_info.py">ao_info.py</a>
  */
 public class AnalogOutputWrapper {
 
-    /*
-    https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ao_info.py
-     */
     private final int BOARD_NUMBER;
     private final DaqDevice DAQ_DEVICE;
 
-    private Integer channelCount;
-    private Integer resolution;
-    private List<AnalogRange> supportedRanges;
-    private Boolean isVoltageOutputSupported;
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+     */
+    private Integer _channelCount;
+    private Integer _resolution;
+    private List<AnalogRange> _supportedRanges;
+    private Boolean _isVoltageOutputSupported;
 
     public AnalogOutputWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
@@ -87,9 +89,9 @@ public class AnalogOutputWrapper {
      *         in ao_info.py</a>
      */
     public List<AnalogRange> getSupportedRanges() throws JMCCULException {
-        if (supportedRanges == null) {
+        if (_supportedRanges == null) {
 
-            supportedRanges = new ArrayList<>();
+            _supportedRanges = new ArrayList<>();
 
             // Check if the range is ignored by passing a bogus range in
             boolean isRangeIgnored = false;
@@ -118,7 +120,7 @@ public class AnalogOutputWrapper {
                             0,
                             MeasurementComputingUniversalLibrary.BIDACRANGE
                     );
-                    supportedRanges.add(AnalogRange.parseInt(range));
+                    _supportedRanges.add(AnalogRange.parseInt(range));
                 } catch (JMCCULException ex) {
                     ex.throwIfErrorIsNetworkDeviceInUse();
                 }
@@ -127,7 +129,7 @@ public class AnalogOutputWrapper {
                 for (AnalogRange rangeToCheck : AnalogRange.values()) {
                     try {
                         write(0, rangeToCheck, (short) 0);
-                        supportedRanges.add(rangeToCheck);
+                        _supportedRanges.add(rangeToCheck);
                     } catch (JMCCULException ex) {
                         ex.throwIfErrorIsNetworkDeviceInUse();
                     }
@@ -136,7 +138,7 @@ public class AnalogOutputWrapper {
             }
         }
 
-        return supportedRanges;
+        return _supportedRanges;
 
     }
 
@@ -146,20 +148,20 @@ public class AnalogOutputWrapper {
      *         in ao_info.py</a>
      */
     public boolean isVoltageOutputSupported() throws JMCCULException {
-        if (isVoltageOutputSupported == null) {
+        if (_isVoltageOutputSupported == null) {
             if (getSupportedRanges().isEmpty()) {
-                isVoltageOutputSupported = false;
+                _isVoltageOutputSupported = false;
             } else {
                 try {
                     writeVoltage(0, getSupportedRanges().get(0), 0);
-                    isVoltageOutputSupported = true;
+                    _isVoltageOutputSupported = true;
                 } catch (JMCCULException ex) {
                     ex.throwIfErrorIsNetworkDeviceInUse();
-                    isVoltageOutputSupported = false;
+                    _isVoltageOutputSupported = false;
                 }
             }
         }
-        return isVoltageOutputSupported;
+        return _isVoltageOutputSupported;
     }
 
     /**
@@ -419,12 +421,15 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDacResolution.htm">BoardConfig.GetDacResolution()</a>
      */
     public int getResolution() throws JMCCULException {
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BIDACRES
-        );
+        if (_resolution == null) {
+            _resolution = ConfigurationWrapper.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    BOARD_NUMBER,
+                    0, //devNum is ignored
+                    MeasurementComputingUniversalLibrary.BIDACRES
+            );
+        }
+        return _resolution;
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -577,12 +582,15 @@ public class AnalogOutputWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumDaChans.htm">BoardConfig.GetNumDaChans()</a>
      */
     public int getChannelCount() throws JMCCULException {
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BINUMDACHANS
-        );
+        if (_channelCount == null) {
+            _channelCount = ConfigurationWrapper.getInt(
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    BOARD_NUMBER,
+                    0, //devNum is ignored
+                    MeasurementComputingUniversalLibrary.BINUMDACHANS
+            );
+        }
+        return _channelCount;
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -45,14 +45,18 @@ public class DigitalPort {
     private final DaqDevice DAQ_DEVICE;
     public final int PORT_INDEX;
 
-    private DigitalPortType portType;
-    private Integer bitCount;
-    private Integer inputMask;
-    private Integer outputMask;
-    private Boolean isPortConfigurable;
-    private Boolean isIndividualBitConfigurable;
-    private Boolean isInputScanSupported;
-    private Boolean isOutputScanSupported;
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+     */
+    private DigitalPortType _portType;
+    private Integer _bitCount;
+    private Integer _inputMask;
+    private Integer _outputMask;
+    private Boolean _isPortConfigurable;
+    private Boolean _isIndividualBitConfigurable;
+    private Boolean _isInputScanSupported;
+    private Boolean _isOutputScanSupported;
 
     DigitalPort(DaqDevice device, int portIndex) {
         DAQ_DEVICE = device;
@@ -61,7 +65,11 @@ public class DigitalPort {
 
     @Override
     public String toString() {
-        return portType.name();
+        try {
+            return getPortType().name();
+        } catch (JMCCULException e) {
+            return "DigitalPort instance. Exception when getting the port type: " + e;
+        }
     }
 
     /**
@@ -69,11 +77,11 @@ public class DigitalPort {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDevType.htm">DioConfig.GetDevType()</a>
      */
     public DigitalPortType getPortType() throws JMCCULException {
-        if (portType == null) {
+        if (_portType == null) {
             final int portTypeInt = getConfigItem(MeasurementComputingUniversalLibrary.DIDEVTYPE);
-            portType = DigitalPortType.parseInt(portTypeInt);
+            _portType = DigitalPortType.parseInt(portTypeInt);
         }
-        return portType;
+        return _portType;
     }
 
     /**
@@ -84,10 +92,10 @@ public class DigitalPort {
      */
 
     public int getBitCount() throws JMCCULException {
-        if (bitCount == null) {
-            bitCount = getConfigItem(MeasurementComputingUniversalLibrary.DINUMBITS);
+        if (_bitCount == null) {
+            _bitCount = getConfigItem(MeasurementComputingUniversalLibrary.DINUMBITS);
         }
-        return bitCount;
+        return _bitCount;
     }
 
     /**
@@ -109,15 +117,15 @@ public class DigitalPort {
      *         in class PortInfo in dio_info.py</a>
      */
     public int getInputMask() throws JMCCULException {
-        if (inputMask == null) {
-            inputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIINMASK);
+        if (_inputMask == null) {
+            _inputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIINMASK);
         }
-        return inputMask;
+        return _inputMask;
     }
 
     /**
-     * Use getInputMask() and getOutputMask() to to determine if an AuxPort is configurable. If you apply both methods
-     * to the same port, and both configVal parameters returned have input and output bits that overlap, the port is not
+     * Use getInputMask() and getOutputMask() to determine if an AuxPort is configurable. If you apply both methods to
+     * the same port, and both configVal parameters returned have input and output bits that overlap, the port is not
      * configurable. You can determine overlapping bits by ANDing both parameters.
      * <p>
      * For example, the PCI-DAS08 board has seven bits of digital I/O (four outputs and three inputs). For this board,
@@ -135,10 +143,10 @@ public class DigitalPort {
      */
 
     public int getOutputMask() throws JMCCULException {
-        if (outputMask == null) {
-            outputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIOUTMASK);
+        if (_outputMask == null) {
+            _outputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIOUTMASK);
         }
-        return outputMask;
+        return _outputMask;
     }
 
     private int getConfigItem(int item) throws JMCCULException {
@@ -156,7 +164,6 @@ public class DigitalPort {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetCurVal.htm">DioConfig.GetCurVal</a>
      */
-
     public int getPresentValue() throws JMCCULException {
         return getConfigItem(MeasurementComputingUniversalLibrary.DICURVAL);
     }
@@ -195,13 +202,13 @@ public class DigitalPort {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L77">first_bit
      *         in class PortInfo in dio_info.py</a>
      */
-    public int getFirstBit() {
+    public int getFirstBit() throws JMCCULException {
         /*
         A few devices (USB-SSR08 for example) start at FIRSTPORTCL and
         number the bits as if FIRSTPORTA and FIRSTPORTB exist for
         compatibility with older digital peripherals.
          */
-        if ((PORT_INDEX == 0) && (portType == DigitalPortType.FIRST_PORT_C_LOW)) {
+        if ((PORT_INDEX == 0) && (getPortType() == DigitalPortType.FIRST_PORT_C_LOW)) {
             return 16;
         } else {
             return 0;
@@ -215,36 +222,36 @@ public class DigitalPort {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L113">is_bit_configurable
      *         in class PortInfo in dio_info.py</a>
      */
-    public boolean isIndividualBitConfigurable() {
-        if (isIndividualBitConfigurable == null) {
+    public boolean isIndividualBitConfigurable() throws JMCCULException {
+        if (_isIndividualBitConfigurable == null) {
 
-            if ((inputMask & outputMask) == 0) {
+            if ((getInputMask() & getOutputMask()) == 0) {
                 // TODO simplify nested if statements
                 // AUXPORT might be configurable, check if we can configure it
-                if (portType == DigitalPortType.AUX_PORT) {
+                if (getPortType() == DigitalPortType.AUX_PORT) {
                     try {
                         // check if we can configure an individual bit in the port
 
-                        final int errorCode1 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(DAQ_DEVICE.getBoardNumber(), portType.VALUE, getFirstBit(), DigitalPortDirection.OUTPUT.VALUE);
+                        final int errorCode1 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(DAQ_DEVICE.getBoardNumber(), getPortType().VALUE, getFirstBit(), DigitalPortDirection.OUTPUT.VALUE);
                         JMCCULUtils.checkError(errorCode1);
 
-                        final int errorCode2 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(DAQ_DEVICE.getBoardNumber(), portType.VALUE, getFirstBit(), DigitalPortDirection.INPUT.VALUE);
+                        final int errorCode2 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(DAQ_DEVICE.getBoardNumber(), getPortType().VALUE, getFirstBit(), DigitalPortDirection.INPUT.VALUE);
                         JMCCULUtils.checkError(errorCode2);
 
-                        isIndividualBitConfigurable = true;
+                        _isIndividualBitConfigurable = true;
                     } catch (JMCCULException ex) {
-                        isIndividualBitConfigurable = false;
+                        _isIndividualBitConfigurable = false;
                     }
                 } else {
                     // portType is not AUX_PORT
-                    isIndividualBitConfigurable = false;
+                    _isIndividualBitConfigurable = false;
                 }
             } else {
                 // (inputMask & outputMask) is not zero
-                isIndividualBitConfigurable = false;
+                _isIndividualBitConfigurable = false;
             }
         }
-        return isIndividualBitConfigurable;
+        return _isIndividualBitConfigurable;
     }
 
     /**
@@ -255,27 +262,27 @@ public class DigitalPort {
      *         in class PortInfo in dio_info.py</a>
      */
     public boolean isPortConfigurable() throws JMCCULException {
-        if (isPortConfigurable == null) {
-            if ((inputMask & outputMask) == 0) {
+        if (_isPortConfigurable == null) {
+            if ((getInputMask() & getOutputMask()) == 0) {
                 try {
                     // check if we can configure the port
 
-                    final int errorCode1 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(DAQ_DEVICE.getBoardNumber(), portType.VALUE, DigitalPortDirection.OUTPUT.VALUE);
+                    final int errorCode1 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(DAQ_DEVICE.getBoardNumber(), getPortType().VALUE, DigitalPortDirection.OUTPUT.VALUE);
                     JMCCULUtils.checkError(errorCode1);
 
-                    final int errorCode2 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(DAQ_DEVICE.getBoardNumber(), portType.VALUE, DigitalPortDirection.INPUT.VALUE);
+                    final int errorCode2 = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(DAQ_DEVICE.getBoardNumber(), getPortType().VALUE, DigitalPortDirection.INPUT.VALUE);
                     JMCCULUtils.checkError(errorCode2);
 
-                    isPortConfigurable = true;
+                    _isPortConfigurable = true;
                 } catch (JMCCULException ex) {
                     ex.throwIfErrorIsNetworkDeviceInUse();
-                    isPortConfigurable = false;
+                    _isPortConfigurable = false;
                 }
             } else {
-                isPortConfigurable = false;
+                _isPortConfigurable = false;
             }
         }
-        return isPortConfigurable;
+        return _isPortConfigurable;
     }
 
     /**
@@ -283,8 +290,8 @@ public class DigitalPort {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L87">supports_input
      *         in class PortInfo in dio_info.py</a>
      */
-    public boolean isInputSupported() {
-        return (inputMask > 0) || isPortConfigurable;
+    public boolean isInputSupported() throws JMCCULException {
+        return (getInputMask() > 0) || isPortConfigurable();
     }
 
     /**
@@ -292,8 +299,8 @@ public class DigitalPort {
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L109">supports_output
      *         in class PortInfo in dio_info.py</a>
      */
-    public boolean isOutputSupported() {
-        return (outputMask > 0) || isPortConfigurable;
+    public boolean isOutputSupported() throws JMCCULException {
+        return (getOutputMask() > 0) || isPortConfigurable();
     }
 
     /**
@@ -302,7 +309,7 @@ public class DigitalPort {
      *         in class PortInfo in dio_info.py</a>
      */
     public boolean isInputScanSupported() throws JMCCULException {
-        if (isInputScanSupported == null) {
+        if (_isInputScanSupported == null) {
         /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
@@ -323,13 +330,13 @@ public class DigitalPort {
                         MeasurementComputingUniversalLibrary.DIFUNCTION
                 );
                 JMCCULUtils.checkError(errorCode);
-                isInputScanSupported = true;
+                _isInputScanSupported = true;
             } catch (JMCCULException ex) {
                 ex.throwIfErrorIsNetworkDeviceInUse();
-                isInputScanSupported = false;
+                _isInputScanSupported = false;
             }
         }
-        return isInputScanSupported;
+        return _isInputScanSupported;
     }
 
     /**
@@ -338,7 +345,7 @@ public class DigitalPort {
      *         in class PortInfo in dio_info.py</a>
      */
     public boolean isOutputScanSupported() throws JMCCULException {
-        if (isOutputScanSupported == null) {
+        if (_isOutputScanSupported == null) {
         /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
@@ -359,12 +366,12 @@ public class DigitalPort {
                         MeasurementComputingUniversalLibrary.DOFUNCTION
                 );
                 JMCCULUtils.checkError(errorCode);
-                isOutputScanSupported = true;
+                _isOutputScanSupported = true;
             } catch (JMCCULException ex) {
                 ex.throwIfErrorIsNetworkDeviceInUse();
-                isOutputScanSupported = false;
+                _isOutputScanSupported = false;
             }
         }
-        return isOutputScanSupported;
+        return _isOutputScanSupported;
     }
 }

@@ -40,7 +40,12 @@ public class TemperatureWrapper {
 
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
-    private Integer channelCount;
+
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+    */
+    private Integer _channelCount;
 
     public TemperatureWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
@@ -54,16 +59,16 @@ public class TemperatureWrapper {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumTempChans.htm">BoardConfig.GetNumTempChans()</a>
      */
     public int getChannelCount() throws JMCCULException {
-        if (channelCount == null) {
+        if (_channelCount == null) {
             // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ai_info.py#L45
-            channelCount = ConfigurationWrapper.getInt(
+            _channelCount = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
                     0, //device number
                     MeasurementComputingUniversalLibrary.BINUMTEMPCHANS
             );
         }
-        return channelCount;
+        return _channelCount;
 
     }
 

@@ -31,13 +31,18 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 /**
  * @author Peter Froud
+ * @see <a href="https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ctr_info.py">ctr_info.py</a>
  */
 public class CounterWrapper {
 
-    // https://github.com/mccdaq/mcculw/blob/master/mcculw/device_info/ctr_info.py
     private final DaqDevice DAQ_DEVICE;
     private final int BOARD_NUMBER;
-    private Integer channelCount;
+
+    /*
+    Underscore prefix means the field is lazy-loaded in the getter method.
+    It is a reminder to call the getter method instead of reading the field directly.
+    */
+    private Integer _channelCount;
 
     public CounterWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
@@ -45,16 +50,16 @@ public class CounterWrapper {
     }
 
     private int getChannelCount() throws JMCCULException {
-        if (channelCount == null) {
+        if (_channelCount == null) {
             // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ctr_info.py#L28
-            channelCount = ConfigurationWrapper.getInt(
+            _channelCount = ConfigurationWrapper.getInt(
                     MeasurementComputingUniversalLibrary.BOARDINFO,
                     DAQ_DEVICE.getBoardNumber(),
                     0,
                     MeasurementComputingUniversalLibrary.BICINUMDEVS
             );
         }
-        return channelCount;
+        return _channelCount;
     }
 
     public boolean isCounterSupported() throws JMCCULException {
