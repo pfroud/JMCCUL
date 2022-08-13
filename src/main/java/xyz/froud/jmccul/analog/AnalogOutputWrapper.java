@@ -271,7 +271,7 @@ public class AnalogOutputWrapper {
                 /* long *Rate    */ rateByReference, // returns the value of the actual rate set, which may be different from the requested rate due to pacer limitations.
                 /* int Range     */ range.VALUE,
                 /* int MemHandle */ windowsBuffer,
-                /* int options   */ AnalogOutputScanOptions.arrayToInt(options)
+                /* int options   */ AnalogOutputScanOptions.bitwiseOr(options)
         );
         JMCCULUtils.checkError(errorCodeAOutScan);
 

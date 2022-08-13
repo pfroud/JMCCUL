@@ -126,7 +126,7 @@ public class TemperatureWrapper {
                 channel,
                 scale.VALUE,
                 temperatureFloat,
-                TemperatureInputOptions.arrayToInt(options)
+                TemperatureInputOptions.bitwiseOr(options)
         );
 
         JMCCULUtils.checkError(errorCode);

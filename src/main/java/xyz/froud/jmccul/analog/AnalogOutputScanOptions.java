@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Peter Froud
  * @see xyz.froud.jmccul.analog.AnalogOutputWrapper#scan(int, int, long, long, AnalogRange, short[],
- *         java.util.EnumSet)
+ *         AnalogOutputScanOptions...)
  * @see <a
  *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAOutScan.htm">cbAOutScan()</a>
  */
@@ -127,7 +127,7 @@ public enum AnalogOutputScanOptions {
         VALUE = value;
     }
 
-    public static int arrayToInt(AnalogOutputScanOptions[] optionsArray) {
+    public static int bitwiseOr(AnalogOutputScanOptions[] optionsArray) {
         return Arrays.stream(optionsArray).map(e -> e.VALUE).reduce(0, (i1, i2) -> i1 | i2);
     }
 }

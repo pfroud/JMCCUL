@@ -54,7 +54,7 @@ public enum TemperatureInputOptions {
         VALUE = value;
     }
 
-    public static int arrayToInt(TemperatureInputOptions[] optionsArray) {
+    public static int bitwiseOr(TemperatureInputOptions[] optionsArray) {
         return Arrays.stream(optionsArray).map(e -> e.VALUE).reduce(0, (i1, i2) -> i1 | i2);
     }
 
