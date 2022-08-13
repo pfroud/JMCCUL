@@ -219,7 +219,7 @@ public class DigitalInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDisoFilter.htm">BoardConfig.GetDisoFilter()</a>
      */
-    public boolean getAcFilter(int bitNumber) throws JMCCULException {
+    public boolean isAcFilterEnabled(int bitNumber) throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -234,7 +234,7 @@ public class DigitalInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDisoFilter.htm">BoardConfig.SetDisoFilter()</a>
      */
-    public void setAcFilter(int bitNumber, boolean enable) throws JMCCULException {
+    public void setAcFilterEnabled(int bitNumber, boolean enable) throws JMCCULException {
         ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,

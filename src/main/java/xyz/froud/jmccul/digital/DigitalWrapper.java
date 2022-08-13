@@ -105,8 +105,7 @@ public class DigitalWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DConfigBit.htm">DConfigBit()</a>
      */
-    public void configureBit(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
-        // configure an individual bit. Not all devices support doing this.
+    public void setBitDirection(DigitalPortType portType, int bitNumber, DigitalPortDirection direction) throws JMCCULException {
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(
                 BOARD_NUMBER,
                 portType.VALUE,
@@ -140,7 +139,7 @@ public class DigitalWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DConfigPort.htm">DConfigPort()</a>
      */
-    public void configurePort(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
+    public void setPortDirection(DigitalPortType portType, DigitalPortDirection direction) throws JMCCULException {
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(
                 BOARD_NUMBER,
                 portType.VALUE,

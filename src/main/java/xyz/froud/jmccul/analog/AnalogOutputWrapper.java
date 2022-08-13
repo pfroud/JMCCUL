@@ -331,7 +331,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACForceSense.htm">BoardConfig.GetDACForceSense()</a>
      */
-    public boolean getForceSense(int channel) throws JMCCULException {
+    public boolean isRemoteSenseEnabled(int channel) throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -354,7 +354,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDACForceSense.htm">BoardConfig.SetDACForceSense()</a>
      */
-    public void setForceSense(int channel, boolean sense) throws JMCCULException {
+    public void setRemoteSenseEnabled(int channel, boolean sense) throws JMCCULException {
         ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -436,13 +436,13 @@ public class AnalogOutputWrapper {
     /**
      * Whether values written to the DAC get saved to non-volatile memory on the DAQ board.
      *
-     * @see #setStartup
+     * @see #setSaveDacValues
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
      */
-    public boolean getStartup(int channel) throws JMCCULException {
+    public boolean isSaveDacValues(int channel) throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -454,8 +454,8 @@ public class AnalogOutputWrapper {
     /**
      * Set whether DAC values get saved in non-volatile memory on the DAQ board.
      * <p>
-     * Each time a DAC board is powered up, the board reads DAC values stored in onboard non-volatile memory and sets
-     * the DAC output to those values.
+     * When enabled: when a DAC board is powered up, the board reads DAC values stored in onboard non-volatile memory
+     * and sets the DAC output to those values.
      * <p>
      * To store the current DAC values as start-up values: first, call {@code setStartup(true)}. Then, each time you
      * call AOut() or AOutScan(), the value written for each channel is stored in non-volatile memory on the DAQ board.
@@ -468,7 +468,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDACStartup.htm">BoardConfig.GetDACStartup()</a>
      */
-    public void setStartup(boolean enable) throws JMCCULException {
+    public void setSaveDacValues(boolean enable) throws JMCCULException {
         ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,

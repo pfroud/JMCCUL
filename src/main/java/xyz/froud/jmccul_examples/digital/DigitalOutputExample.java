@@ -62,7 +62,7 @@ public class DigitalOutputExample {
     private static void doDigitalOutput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
         if (port.isPortConfigurable()) {
-            device.digital.configurePort(port.getPortType(), DigitalPortDirection.OUTPUT);
+            device.digital.setPortDirection(port.getPortType(), DigitalPortDirection.OUTPUT);
         }
 
         //                       eight bits: 76453210

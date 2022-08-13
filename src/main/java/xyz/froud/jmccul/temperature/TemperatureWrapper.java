@@ -259,7 +259,7 @@ public class TemperatureWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDetectOpenTC.htm">BoardConfig.GetDetectOpenTc()</a>
      */
-    public boolean getOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
+    public boolean isOpenThermocoupleDetectionEnabled(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -274,7 +274,7 @@ public class TemperatureWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDetectOpenTC.htm">BoardConfig.SetDetectOpenTc()</a>
      */
-    public void setOpenThermocoupleDetection(BaseOrExpansionBoard baseOrExpansionBoard, boolean enable) throws JMCCULException {
+    public void setOpenThermocoupleDetectionEnabled(BaseOrExpansionBoard baseOrExpansionBoard, boolean enable) throws JMCCULException {
         ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,

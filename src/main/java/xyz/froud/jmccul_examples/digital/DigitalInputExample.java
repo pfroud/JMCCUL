@@ -62,7 +62,7 @@ public class DigitalInputExample {
     private static void doDigitalInput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
         if (port.isPortConfigurable()) {
-            device.digital.configurePort(port.getPortType(), DigitalPortDirection.INPUT);
+            device.digital.setPortDirection(port.getPortType(), DigitalPortDirection.INPUT);
         }
 
         System.out.println("Reading the whole port:");
