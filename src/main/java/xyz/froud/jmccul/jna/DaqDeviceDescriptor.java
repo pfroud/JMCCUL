@@ -112,7 +112,7 @@ public class DaqDeviceDescriptor extends Structure {
 
     @Override
     protected List<String> getFieldOrder() {
-        return Arrays.asList("ProductName", "ProductID", "DaqDeviceInterfaceType", "DevString", "UniqueID", "NUID", "Reserved");
+        return Arrays.asList("ProductName", "ProductID", "InterfaceType", "DevString", "UniqueID", "NUID", "Reserved");
     }
 
     @Override
