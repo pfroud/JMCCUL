@@ -932,38 +932,90 @@ public class AnalogInputWrapper {
                 channelType.VALUE
         );
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIADCHANAIMODE -> BI AD CHAN AI MODE -> bordInfo ADC channel analogInput mode
+     Readable? Yes, using the BIADCHANAIMODE config item.
+     Writable? Yes, using the dedicated cbAChanInputMode() function.
+
+     Confirmed in the dot-net docs for BoardConfig.GetChanAIMode()
+     The only other thing to be get and set in different ways is the analog input mode for the whole board.
+     */
 
     /**
+     * Gets the analog input mode for a specific channel.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetChanAIMode.htm">BoardConfig.GetChanAIMode()</a>
      */
-    public int getChannelMode(int channel) throws JMCCULException {
-        // you set this with cbAChanInputMode(). confirmed in the dot ent docs for GetChanAIMode().
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                channel,
-                MeasurementComputingUniversalLibrary.BIADCHANAIMODE //BI AD CHAN AI MODE
+    public AnalogInputMode getModeForChannel(int channel) throws JMCCULException {
+        return AnalogInputMode.parseInt(
+                ConfigurationWrapper.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        channel,
+                        MeasurementComputingUniversalLibrary.BIADCHANAIMODE //BI AD CHAN AI MODE
+                )
         );
     }
 
     /**
+     * Sets the analog input mode for a specific channel.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetChanAIMode.htm">BoardConfig.GetChanAIMode()</a>
+     */
+    public void setModeForChannel(int channel, AnalogInputMode mode) throws JMCCULException {
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAChanInputMode(BOARD_NUMBER, channel, mode.VALUE);
+        JMCCULUtils.checkError(errorCode);
+
+    }
+
+
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIADAIMODE -> BI AD AI MODE -> bordInfo ADC analogInput mode
+     Readable? Yes, using the BIADAIMODE config item.
+     Writable? Yes, using the dedicated cbAInputMode() function.
+
+     Confirmed in the dot-net docs for BoardConfig.GetAIMode()
+     The only other thing to be get and set in different ways is the analog input mode for a specific channel.
+     */
+
+    /**
+     * Gets the analog input mode for the whole board.
+     *
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetAIMode.htm">BoardConfig.GetAIMode()</a>
      */
-    public int getMode() throws JMCCULException {
-        // you set this with cbAInputMode(). confirmed in the dot net docs for GetAIMode().
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BIADAIMODE //BI AD AI MODE
+    public AnalogInputMode getModeForBoard() throws JMCCULException {
+        return AnalogInputMode.parseInt(
+                ConfigurationWrapper.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        0, //devNum is ignored
+                        MeasurementComputingUniversalLibrary.BIADAIMODE //BI AD AI MODE
+                )
         );
+    }
+
+    /**
+     * Sets the analog input mode for the whole board.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbAInputMode.htm">cbAInputMode()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/AInputMode.htm">AInputMode()</a>
+     */
+    public void setModeForBoard(AnalogInputMode mode) throws JMCCULException {
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbAInputMode(BOARD_NUMBER, mode.VALUE);
+        JMCCULUtils.checkError(errorCode);
     }
 
 
