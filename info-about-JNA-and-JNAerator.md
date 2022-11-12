@@ -129,7 +129,7 @@ But the JNAerator jar I'm using doesn't recognize that option and will not run i
 
 Instead, I replaced all matches of the crazy regular expression below with an empty string.
 
-```
+```regex
 \/\*\*\s+\*[\w\s:<>\(\),\*\/\\\.@\{\#\}]+@deprecated\s+int \w+\([\w ,\.]+\);
 ```
 
@@ -152,7 +152,7 @@ public class DaqDeviceDescriptor extends com.sun.jna.Structure {
 }
 ```
 
-[The Javadoc for com.sun.jna.Structure](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html) says:
+[The Javadoc for `com.sun.jna.Structure`](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html) says:
 
 > When used as a function parameter or return value, [the `Structure` class] corresponds to `struct*`.... The tagging interfaces `Structure.ByReference` and `Structure.ByValue` may be used to alter the default behavior.
 
@@ -181,7 +181,7 @@ Everywhere else uses `DaqDeviceDescriptor` with no tagging interface, and I had 
 
 Using the constructor would require adding constructors to `DaqDeviceDescriptor` and the `ByValue` subclass which is annoying, so I chose to use the `newInstance()` method instead.
 
-The [Javadoc for `getPointer()` method](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#getPointer--) warns:
+The [Javadoc for the `getPointer()` method](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#getPointer--) warns:
 
 > if you use the structure's pointer as a function argument, you are responsible for calling `write()` prior to the call and `read()` after the call. These calls are normally handled automatically by the `Function` object when it encounters a `Structure` argument or return value.
 
