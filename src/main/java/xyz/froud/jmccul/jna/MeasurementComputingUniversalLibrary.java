@@ -2033,21 +2033,10 @@ public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
     int cbIgnoreInstaCal();
 
     /**
-     * The original C/C++ function prototype is:<br>
-     * <code>int cbCreateDaqDevice(int BoardNum, DaqDeviceDescriptor deviceDescriptor)</code><br>
-     * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm
-     * <p>
-     * JNAerator generated:<br>
-     * <code>int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor.ByValue DeviceDescriptor);</code>
-     * <p>
-     * I am manually removing the ByValue part because that works. Allocating an array of structs in <br>
-     * Java is already pretty weird and I don't want to try changing it to ByValue. According to this <br>
-     * StackOverflow answer https://stackoverflow.com/a/17698870/7376577 you shouldn't use ByValue.
-     * <p>
      * Original signature : <code>int cbCreateDaqDevice(int, DaqDeviceDescriptor)</code><br>
-     * native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1782
+     * <i>native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1782</i>
      */
-    int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor DeviceDescriptor);
+    int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor.ByValue DeviceDescriptor);
 
     /**
      * Original signature : <code>int cbGetDaqDeviceInventory(DaqDeviceInterface, DaqDeviceDescriptor*, INT*)</code><br>
@@ -2061,20 +2050,11 @@ public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
      */
     int cbReleaseDaqDevice(int BdNum);
 
-    /**
-     * The original C/C++ function prototype is:<br>
-     * <code>int cbGetBoardNumber(DaqDeviceDescriptor DeviceDescriptor)</code><br>
-     * https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm
-     * <p>
-     * JNAerator generated:<br>
-     * <code>int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);</code>
-     * <p>
-     * I am manually removing the ByValue part becasue I don't know how to get a DaqDeviceDescriptor.ByValue from a DaqDeviceDescriptor.
-     * <p>
-     * Original signature : <code>int cbGetBoardNumber(DaqDeviceDescriptor)</code><br>
-     * native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1785
-     */
-    int cbGetBoardNumber(DaqDeviceDescriptor DeviceDescriptor);
+	/**
+	 * Original signature : <code>int cbGetBoardNumber(DaqDeviceDescriptor)</code><br>
+	 * <i>native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h:1785</i>
+	 */
+	int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);
 
     /**
      * Original signature : <code>int cbGetNetDeviceDescriptor(CHAR*, INT, DaqDeviceDescriptor*, INT)</code><br>

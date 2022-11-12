@@ -113,8 +113,9 @@ public class DaqDevice implements AutoCloseable {
      */
     public DaqDevice(DaqDeviceDescriptor descriptor) throws JMCCULException {
         boardNumber = nextBoardNumber;
+
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm
-        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbCreateDaqDevice(boardNumber, descriptor);
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbCreateDaqDevice(boardNumber, descriptor.byValue());
         JMCCULUtils.checkError(errorCode);
         nextBoardNumber++;
         isOpen = true;

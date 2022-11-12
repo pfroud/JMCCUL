@@ -131,11 +131,41 @@ public class DaqDeviceDescriptor extends Structure {
         return new String(ProductName).trim();
     }
 
-    public static class ByReference extends DaqDeviceDescriptor implements Structure.ByReference {
+    /**
+     * When used as a function parameter or return value, the {@code com.sun.jna.Structure} class corresponds to
+     * {@code struct*}. When used as a field within another {@code Structure}, it corresponds to {@code struct}. The
+     * tagging interfaces {@code Structure.ByReference} and {@code Structure.ByValue} may be used to alter the default
+     * behavior.
+     *
+     * @see <a href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html">
+     *         http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html</a>
+     * @see <a
+     *         href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.ByValue.html">http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.ByValue.html</a>
+     */
+    public static class ByValue extends DaqDeviceDescriptor implements Structure.ByValue {
+
 
     }
 
-    public static class ByValue extends DaqDeviceDescriptor implements Structure.ByValue {
-
+    /**
+     * Converts a DaqDeviceDescriptor into a DaqDeviceDescriptor.ByValue.
+     *
+     * @see <a href="https://stackoverflow.com/a/26309505">https://stackoverflow.com/a/26309505</a>
+     * @see <a href="https://github.com/java-native-access/jna/issues/691#issuecomment-242814602">
+     *         https://github.com/java-native-access/jna/issues/691#issuecomment-242814602</a>
+     * @see <a
+     *         href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#newInstance-java.lang.Class-com.sun.jna.Pointer-">
+     *         Javadoc for Structure.newInstance() method</a>
+     * @see <a href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#getPointer--">
+     *         Javadoc for getPointer() method</a>
+     */
+    public DaqDeviceDescriptor.ByValue byValue() {
+        final DaqDeviceDescriptor.ByValue rv = Structure.newInstance(
+                DaqDeviceDescriptor.ByValue.class,
+                getPointer()
+        );
+        // if you don't call read() you'll get error 306
+        rv.read();
+        return rv;
     }
 }

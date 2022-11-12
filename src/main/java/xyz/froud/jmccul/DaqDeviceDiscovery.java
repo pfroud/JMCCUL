@@ -32,8 +32,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static xyz.froud.jmccul.JMCCULUtils.checkError;
-
 /**
  * @author Peter Froud
  */
@@ -89,16 +87,17 @@ public class DaqDeviceDiscovery {
 
         /*
         https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm
-        About the DaqDeviceDescriptor argument:
 
-        In the function's original declaration (in the .h file), the argument is type DaqDeviceDescriptor*.
-        But JNAerator changed it to DaqDeviceDescriptor. Universal Library Help says this about the argument:
-        "Pointer to a user-allocated array of DaqDeviceDescriptor types ..."
+        In the original C method, the DaqDeviceDescriptor parameter has type DaqDeviceDescriptor* (with star).
+        JNAerator changed it to DaqDeviceDescriptor (without star).
+        According to http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html:
+            When used as a function parameter or return value, the com.sun.jna.Structure class corresponds to struct*.
+        so that is okay.
 
-        According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the array.
+        According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the DaqDeviceDescriptor array.
          */
         final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(interfaceBitMask, buffer[0], deviceCount);
-        checkError(errorCode);
+        JMCCULUtils.checkError(errorCode);
 
         // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
         final int devicesFoundCount = deviceCount.get(0);

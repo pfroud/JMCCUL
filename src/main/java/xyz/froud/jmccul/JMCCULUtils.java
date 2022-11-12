@@ -66,7 +66,7 @@ public class JMCCULUtils {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/GetBoardNumber.htm">GetBoardNumber()</a>
      */
     public static int getBoardNumberForDescriptor(DaqDeviceDescriptor descriptor) {
-        return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(descriptor);
+        return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(descriptor.byValue());
     }
 
     /**
