@@ -25,13 +25,19 @@
 package xyz.froud.jmccul;
 
 import xyz.froud.jmccul.analog.AnalogWrapper;
-import xyz.froud.jmccul.config.BoardConfig;
 import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.config.ExpansionConfig;
 import xyz.froud.jmccul.config.NetworkConfig;
 import xyz.froud.jmccul.config.WirelessConfig;
 import xyz.froud.jmccul.counter.CounterWrapper;
 import xyz.froud.jmccul.digital.DigitalWrapper;
+import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
+import xyz.froud.jmccul.enums.CalibrationTableType;
+import xyz.froud.jmccul.enums.ExternalClockType;
+import xyz.froud.jmccul.enums.ExternalPacerClockEdge;
+import xyz.froud.jmccul.enums.FirmwareVersionType;
+import xyz.froud.jmccul.enums.InterruptClockEdge;
+import xyz.froud.jmccul.enums.SyncMode;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.temperature.TemperatureWrapper;
@@ -78,14 +84,11 @@ public class DaqDevice implements AutoCloseable {
 
     private static int nextBoardNumber = 0;
 
-    private final static int BOARD_NAME_LENGTH = MeasurementComputingUniversalLibrary.BOARDNAMELEN;
     private final static int CONFIG_ITEM_LENGTH = MeasurementComputingUniversalLibrary.BOARDNAMELEN;
-    private final static int CONFIG_TYPE_BOARD_INFO = MeasurementComputingUniversalLibrary.BOARDINFO;
-    private final static int CONFIG_ITEM_FACTORY_SERIAL_NUMBER = MeasurementComputingUniversalLibrary.BIDEVSERIALNUM;
-    private final static int CONFIG_ITEM_USER_DEVICE_ID = MeasurementComputingUniversalLibrary.BIUSERDEVID;
 
-    private final int boardNumber;
-    private final int productID;
+    private final int BOARD_NUMBER;
+    private final DaqDeviceDescriptor DESCRIPTOR;
+    private boolean isOpen = false;
 
     /*
     Underscore prefix means the field is lazy-loaded in the getter method.
@@ -93,14 +96,12 @@ public class DaqDevice implements AutoCloseable {
      */
     private String _factorySerialNumber;
     private String _boardName;
-    private boolean isOpen = false;
 
     public final DigitalWrapper digital;
     public final AnalogWrapper analog;
     public final TemperatureWrapper temperature;
     public final CounterWrapper counter;
 
-    public final BoardConfig boardConfig;
     public final ExpansionConfig expansionConfig;
     public final NetworkConfig networkConfig;
     public final WirelessConfig wirelessConfig;
@@ -112,43 +113,51 @@ public class DaqDevice implements AutoCloseable {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/CreateDaqDevice.htm">CreateDaqDevice()</a>
      */
     public DaqDevice(DaqDeviceDescriptor descriptor) throws JMCCULException {
-        boardNumber = nextBoardNumber;
+        BOARD_NUMBER = nextBoardNumber;
 
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm
-        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbCreateDaqDevice(boardNumber, descriptor.byValue());
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbCreateDaqDevice(BOARD_NUMBER, descriptor.byValue());
         JMCCULUtils.checkError(errorCode);
         nextBoardNumber++;
         isOpen = true;
-
-        // TODO can get the product name (any maybe mroe stuff) from the descriptor?
-        productID = descriptor.ProductID;
+        DESCRIPTOR = descriptor;
 
         digital = new DigitalWrapper(this);
         analog = new AnalogWrapper(this);
         temperature = new TemperatureWrapper(this);
         counter = new CounterWrapper(this);
 
-        boardConfig = new BoardConfig(this);
         expansionConfig = new ExpansionConfig(this);
         networkConfig = new NetworkConfig(this);
         wirelessConfig = new WirelessConfig(this);
     }
 
+    public DaqDeviceDescriptor getDescriptor() {
+        return DESCRIPTOR;
+    }
+
     public int getBoardNumber() {
-        return boardNumber;
+        return BOARD_NUMBER;
     }
 
     public int getProductID() {
-        return productID;
+        return DESCRIPTOR.ProductID;
+    }
+
+    public String getProductName() {
+        return DESCRIPTOR.getProductName();
+    }
+
+    public DaqDeviceInterfaceType getInterfaceType() {
+        return DESCRIPTOR.getInterfaceType();
     }
 
     public String getBoardName() throws JMCCULException {
-        // TODO can we get this from the descriptor in the constructor?
         if (_boardName == null) {
-            final ByteBuffer buf = ByteBuffer.allocate(BOARD_NAME_LENGTH);
+            final ByteBuffer buf = ByteBuffer.allocate(CONFIG_ITEM_LENGTH);
 
             // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetBoardName.htm
-            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardName(boardNumber, buf);
+            final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardName(BOARD_NUMBER, buf);
 
             JMCCULUtils.checkError(errorCode);
             _boardName = new String(buf.array()).trim();
@@ -160,10 +169,10 @@ public class DaqDevice implements AutoCloseable {
         if (_factorySerialNumber == null) {
             final int DEVICE_NUMBER_BASE_BOARD = 0; //set to 1 to get the factory serial number of an expansion board
             _factorySerialNumber = ConfigurationWrapper.getString(
-                    CONFIG_TYPE_BOARD_INFO,
-                    boardNumber,
+                    MeasurementComputingUniversalLibrary.BOARDINFO,
+                    BOARD_NUMBER,
                     DEVICE_NUMBER_BASE_BOARD,
-                    CONFIG_ITEM_FACTORY_SERIAL_NUMBER,
+                    MeasurementComputingUniversalLibrary.BIDEVSERIALNUM,
                     CONFIG_ITEM_LENGTH
             );
         }
@@ -178,10 +187,10 @@ public class DaqDevice implements AutoCloseable {
          */
         final int DEVICE_NUMBER_DEFAULT = 0;
         return ConfigurationWrapper.getString(
-                CONFIG_TYPE_BOARD_INFO,
-                boardNumber,
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
                 DEVICE_NUMBER_DEFAULT,
-                CONFIG_ITEM_USER_DEVICE_ID,
+                MeasurementComputingUniversalLibrary.BIUSERDEVID,
                 CONFIG_ITEM_LENGTH
         );
     }
@@ -194,13 +203,878 @@ public class DaqDevice implements AutoCloseable {
     @Override
     public void close() throws JMCCULException {
         // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm
-        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbReleaseDaqDevice(boardNumber);
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbReleaseDaqDevice(BOARD_NUMBER);
         JMCCULUtils.checkError(errorCode);
         isOpen = false;
     }
 
     public boolean isOpen() {
         return isOpen;
+    }
+
+      /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIBASEADR -> BI BASE ADR -> boardInfo base address
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * Recommended for use only with ISA bus boards.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetBaseAdr.htm">BoardConfig.GetBaseAdr()</a>
+     */
+    public int getBaseAddress() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIBASEADR
+        );
+    }
+
+    /**
+     * Recommended for use only with ISA bus boards.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetBaseAdr.htm">BoardConfig.SetBaseAdr()</a>
+     */
+    public void setBaseAddress(int baseAddress) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIBASEADR,
+                baseAddress
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIBOARDTYPE -> BI BOARD TYPE -> boardInfo board type
+     Readable? yes
+     Writable? NO
+     */
+
+    /**
+     * Gets the unique number (device ID) assigned to the board (between 0 and 8000h) indicating the type of board
+     * installed.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetBoardType.htm">BoardConfig.GetBoardType()</a>
+     */
+    public int getBoardType() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIBOARDTYPE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BICALTABLETYPE -> BI CAL TABLE TYPE -> boardInfo calibration table type
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetCalTableType.htm">BoardConfig.GetCalTableType()</a>
+     */
+    public CalibrationTableType getCalibrationTableType(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
+        return CalibrationTableType.parseInt(
+                ConfigurationWrapper.getInt(
+                        MeasurementComputingUniversalLibrary.BOARDINFO,
+                        BOARD_NUMBER,
+                        baseOrExpansionBoard.VALUE,
+                        MeasurementComputingUniversalLibrary.BICALTABLETYPE
+                )
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetCalTableType.htm">BoardConfig.SetCalTableType()</a>
+     */
+    public void setCalibrationTableType(CalibrationTableType calTable) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BICALTABLETYPE,
+                calTable.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BICLOCK -> BI CLOCK -> boardInfo clock
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetClock.htm">BoardConfig.GetClock()</a>
+     */
+    public int getClockFrequencyMegahertz() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored when getting
+                MeasurementComputingUniversalLibrary.BICLOCK
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetClock.htm">BoardConfig.SetClock()</a>
+     */
+    public void setClockFrequencyMegahertz(int channel, int clockFrequency) throws JMCCULException {
+        // todo only supports 1, 4,6 or 10
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                channel, //devNum is the channel when setting
+                MeasurementComputingUniversalLibrary.BICLOCK,
+                clockFrequency
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      BIDMACHAN -> BI DMA CHAN -> boardInfo directMemoryAccess channel
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDmaChan.htm">BoardConfig.GetDmaChan()</a>
+     */
+    public int getDmaChannel() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIDMACHAN
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetDmaChan.htm">BoardConfig.SetDmaChan()</a>
+     */
+    public void setDmaChannel(int dmaChannel) throws JMCCULException {
+        // todo can only be 0, 1, or 3
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIDMACHAN,
+                dmaChannel
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIDTBOARD -> BI DT BOARD -> boardInfo DataTranslation board
+     Readable? yes
+     Writable? NO
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDtBoard.htm">BoardConfig.GetDtBoard()</a>
+     */
+    public int getDataTranslationBoardNumber() throws JMCCULException {
+        // Data Translation, acquired by Measurement Computing in 2015
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0,//devNum is ignored
+                MeasurementComputingUniversalLibrary.BIDTBOARD
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIEXTCLKTYPE -> BI EXT CLK TYPE -> boardInfo external clock type
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetExtClockType.htm">BoardConfig.GetExtClockType()</a>
+     */
+    public ExternalClockType getExternalClockType() throws JMCCULException {
+        return ExternalClockType.parseInt(ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devnum is ignored`
+                MeasurementComputingUniversalLibrary.BIEXTCLKTYPE
+        ));
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetExtClockType.htm">BoardConfig.SetExtClockType()</a>
+     */
+    public void setExternalClockType(ExternalClockType externalClockType) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIEXTCLKTYPE,
+                externalClockType.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIEXTINPACEREDGE  -> BI EXT IN PACER EDGE -> boardInfo external input pacer edge
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetExtInPacerEdge.htm">BoardConfig.GetExtInPacerEdge()</a>
+     */
+    public ExternalPacerClockEdge getInputPacerClockEdge() throws JMCCULException {
+        return ExternalPacerClockEdge.parseInt(ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIEXTINPACEREDGE
+        ));
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetExtInPacerEdge.htm">BoardConfig.SetExtInPacerEdge()</a>
+     */
+    public void setInputPacerClockEdge(ExternalPacerClockEdge externalPacerClockEdge) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIEXTINPACEREDGE,
+                externalPacerClockEdge.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIEXTOUTPACEREDGE -> BI EXT OUT PACER EDGE -> boardInfo external output pacer edge
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetExtOutPacerEdge.htm">BoardConfig.GetExtOutPacerEdge()</a>
+     */
+    public ExternalPacerClockEdge getOutputPacerClockEdge() throws JMCCULException {
+        return ExternalPacerClockEdge.parseInt(ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIEXTOUTPACEREDGE
+        ));
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetExtOutPacerEdge.htm">BoardConfig.SetExtOutPacerEdge()</a>
+     */
+    public void setOutputPacerClockEdge(ExternalPacerClockEdge externalPacerClockEdge) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIEXTOUTPACEREDGE,
+                externalPacerClockEdge.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIOUTPUTPACEROUT -> BI OUTPUT PACER OUT -> boardInfo output pacer output
+     Readable? no but that is probably a mistake in the docs
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetOutputPacerOut.htm">BoardConfig.GetOutputPacerOut()</a>
+     */
+    public boolean getOutputPacerClockEnable() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //they don't say whether devnum is ignored
+                MeasurementComputingUniversalLibrary.BIOUTPUTPACEROUT
+        ) == 1;
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetOutputPacerOut.htm">BoardConfig.GetOutputPacerOut()</a>
+     */
+    public void setOutputPacerClockEnable(boolean enable) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //they don't say whether devnum is ignored
+                MeasurementComputingUniversalLibrary.BIOUTPUTPACEROUT,
+                (enable ? 1 : 0)
+        );
+    }
+
+
+
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIINPUTPACEROUT -> BI INPUT PACER OUT -> boardInfo input pacer output
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetInputPacerOut.htm">BoardConfig.GetInputPacerOut()</a>
+     */
+    public boolean getInputPacerClockEnable() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIINPUTPACEROUT
+        ) == 1;
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetInputPacerOut.htm">BoardConfig.SetInputPacerOut()</a>
+     */
+    public void setInputPacerClockEnable(boolean enable) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIINPUTPACEROUT,
+                (enable ? 1 : 0)
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIINTEDGE -> BI INT EDGE -> boardInfo interrupt edge
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetIntEdge.htm">BoardConfig.GetIntEdge()</a>
+     */
+    public InterruptClockEdge getInterruptEdge() throws JMCCULException {
+        return InterruptClockEdge.parseInt(ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIINTEDGE
+        ));
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetIntEdge.htm">BoardConfig.SetIntEdge()</a>
+     */
+    public void setInterruptEdge(InterruptClockEdge edge) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIINTEDGE,
+                edge.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIINTLEVEL  -> BI INT LEVEL -> boardInfo interrupt level
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetIntLevel.htm">BoardConfig.GetIntLevel()</a>
+     */
+    public int getInterruptLevel() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIINTLEVEL
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetIntLevel.htm">BoardConfig.SetIntLevel()</a>
+     */
+    public void setInterruptLevel(int level) throws JMCCULException {
+        // 0 for none, or 1 to 15.
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIINTLEVEL,
+                level
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BINUMIOPORTS -> BI NUM IO PORTS -> boardInfo number of I/O ports
+     Readable? yes
+     Writable? NO
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumIoPorts.htm">BoardConfig.GetNumIoPorts()</a>
+     */
+    public int getPortCount() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BINUMIOPORTS
+        );
+    }
+
+
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIPATTERNTRIGPORT -> BI PATTERN TRIG PORT -> boardInfo pattern trigger port
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetPatternTrigPort.htm">BoardConfig.GetPatternTrigPort()</a>
+     */
+    public int getPatternTriggerPort() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIPATTERNTRIGPORT
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetPatternTrigPort.htm">BoardConfig.SetPatternTrigPort()</a>
+     */
+    public void setPatternTriggerPort(int port) throws JMCCULException {
+        // it can only be AUXPORT0 or AUXPORT1
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIPATTERNTRIGPORT,
+                port
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BISYNCMODE  -> BI SYNC MODE -> boardInfo sync mode
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * Returns the simultaneous mode setting of supported analog output devices.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetSyncMode.htm">BoardConfig.GetSyncMode()</a>
+     */
+    public SyncMode getSyncMode() throws JMCCULException {
+        return SyncMode.parseInt(ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BISYNCMODE
+        ));
+    }
+
+    /**
+     * Sets the Simultaneous mode option on supported analog output devices.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetSyncMode.htm">BoardConfig.SetSyncMode()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     */
+    public void setSyncMode(SyncMode syncMode) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BISYNCMODE,
+                syncMode.VALUE
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     setAdc -> BI TERM COUNT STAT BIT -> boardInfo terminal count output status bit
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * Returns the terminal count output status for a specified bit.
+     *
+     * @return Returns True when the terminal count output is enabled, and False when disabled.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/IsTerminalCountStatusBitEnabled().htm">BoardConfig.IsTerminalCountOutputEnabled()</a>
+     */
+    public boolean getTerminalCountOutputStatus(int bitNumber) throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                bitNumber,
+                MeasurementComputingUniversalLibrary.BITERMCOUNTSTATBIT
+        ) == 1;
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/DisableTerminalCountStatusBit.htm">BoardConfig.DisableTerminalCountStatusBit()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/EnableTerminalCountStatusBit.htm">BoardConfig.EnableTerminalCountStatusBit()</a>
+     */
+    public void setTerminalCountOutputStatus(int bitNumber, boolean status) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                bitNumber,
+                MeasurementComputingUniversalLibrary.BITERMCOUNTSTATBIT,
+                (status ? 1 : 0)
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIWAITSTATE -> BI WAIT STATE -> boardInfo wait state
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetWaitState.htm">BoardConfig.GetWaitState()</a>
+     */
+    public boolean getWaitStateJumper() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIWAITSTATE
+        ) == 1;
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetWaitState.htm">BoardConfig.SetWaitState()</a>
+     */
+    public void setWaitStateJumper(boolean jumper) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //not specified whether devNum is ignored
+                MeasurementComputingUniversalLibrary.BIWAITSTATE,
+                (jumper ? 1 : 0)
+        );
+    }
+
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BICALOUTPUT -> BI CAL OUTPUT -> boardInfo calibration output
+     Readable? NO
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     */
+    public void setCalPinVoltage(int calPinVoltage) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BICALOUTPUT,
+                calPinVoltage
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIDEVVERSION -> BI DEV VERSION -> boardInfo device version
+     Readable? yes
+     Writable? NO
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceVersion.htm">BoardConfig.GetDeviceVersion()</a>
+     */
+    public String getVersion(FirmwareVersionType version) throws JMCCULException {
+        return ConfigurationWrapper.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                version.VALUE,
+                MeasurementComputingUniversalLibrary.BIDEVVERSION,
+                1024
+        );
+    }
+
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIDEVSERIALNUM -> BI DEV SERIAL NUM -> boardInfo device serial number
+
+    Factory serial number of a USB or Bluetooth device.
+
+
+     Readable? yes
+     Writable? no
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceSerialNum.htm">BoardConfig.GetDeviceSerialNum()</a>
+     */
+    public String getFactorySerialNumber(BaseOrExpansionBoard baseOrExpansionBoard) throws JMCCULException {
+        return ConfigurationWrapper.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                baseOrExpansionBoard.VALUE,
+                MeasurementComputingUniversalLibrary.BIDEVSERIALNUM,
+                1024
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIDEVUNIQUEID -> BI DEV UNIQUE ID -> boardInfo device unique identifier
+
+    Unique identifier of a discoverable device, such as the serial number of a USB device or MAC address of an Ethernet device.
+
+     Readable? yes
+     Writable? no
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetDeviceUniqueID.htm">BoardConfig.GetDeviceUniqueId()</a>
+     */
+    public String getUniqueID() throws JMCCULException {
+        return ConfigurationWrapper.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //not specified what DevNum does
+                MeasurementComputingUniversalLibrary.BIDEVUNIQUEID,
+                1024
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BISERIALNUM -> BI SERIAL NUM -> boardInfo serial number
+
+    User-configured identifier of a supported USB device.
+    Custom serial number assigned by a user to a USB device.
+
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetUserDeviceId.htm">BoardConfig.GetUserDeviceId()</a>
+     */
+    public int getUserSpecifiedSerialNumber() throws JMCCULException {
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BISERIALNUM
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     */
+    public void setUserSpecifiedSerialNumber(int n) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BISERIALNUM,
+                n
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIUSERDEVID -> BI USER DEV ID -> boardInfo user device ID
+
+    User-configured string of up to maxConfigLen character/bytes to an Ethernet, Bluetooth, or USB device.
+
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetUserDeviceIdNum.htm">BoardConfig.GetUserDeviceIdNum()</a>
+     */
+    public String getUserSpecifiedID() throws JMCCULException {
+        return ConfigurationWrapper.getString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIUSERDEVID,
+                1024
+        );
+    }
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetUserDeviceId.htm">BoardConfig.SetUserDeviceId()</a>
+     */
+    public void setUserSpecifiedID(String str) throws JMCCULException {
+        ConfigurationWrapper.setString(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIUSERDEVID,
+                str
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIUSERDEVIDNUM -> BI USER DEV ID NUM -> boardInfo user device ID number3
+
+    User-configured string that identifies a USB device.
+
+
+     Readable?
+     Writable? no
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
+     */
+    public int getUserSpecifiedString() throws JMCCULException {
+        //todo the docs are probably wrong, this should probably use the getString instead of getInt
+        return ConfigurationWrapper.getInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIUSERDEVIDNUM
+        );
+    }
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
+     Readable? yes
+     Writable? yes
+     */
+
+    /**
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm">cbSetConfig()</a>
+     */
+    public void setHideLoginDialog(boolean hide) throws JMCCULException {
+        ConfigurationWrapper.setInt(
+                MeasurementComputingUniversalLibrary.BOARDINFO,
+                BOARD_NUMBER,
+                0, //devNum is ignored
+                MeasurementComputingUniversalLibrary.BIHIDELOGINDLG,
+                (hide ? 1 : 0)
+        );
+
     }
 
 }
