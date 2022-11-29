@@ -117,10 +117,14 @@ public class DaqDeviceDescriptor extends Structure {
 
     @Override
     public String toString() {
-        final DaqDeviceInterfaceType theInterface = DaqDeviceInterfaceType.parseInt(InterfaceType);
+        final DaqDeviceInterfaceType theInterface = getInterfaceType();
         return "product name \"" + getProductName() + "\" (productID " + ProductID
                 + "); interface type " + theInterface.DISPLAY_NAME + "; "
                 + theInterface.LABEL_FOR_UNIQUE_ID + " \"" + getUniqueID() + "\" (" + NUID + ")";
+    }
+
+    public DaqDeviceInterfaceType getInterfaceType() {
+        return DaqDeviceInterfaceType.parseInt(InterfaceType);
     }
 
     public String getUniqueID() {
@@ -143,8 +147,7 @@ public class DaqDeviceDescriptor extends Structure {
      *         href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.ByValue.html">http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.ByValue.html</a>
      */
     public static class ByValue extends DaqDeviceDescriptor implements Structure.ByValue {
-
-
+        // empty
     }
 
     /**
@@ -167,5 +170,20 @@ public class DaqDeviceDescriptor extends Structure {
         // if you don't call read() you'll get error 306
         rv.read();
         return rv;
+    }
+
+    /**
+     * Returns the board number of the DAQ device created from this descriptor, or –1 if a DAQ device hasn't been
+     * created.
+     *
+     * @return The board number or –1.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm">cbGetBoardNumber()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/GetBoardNumber.htm">GetBoardNumber()</a>
+     */
+    public int getBoardNumber() {
+        return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(byValue());
     }
 }

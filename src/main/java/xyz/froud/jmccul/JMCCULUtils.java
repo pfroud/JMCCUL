@@ -24,7 +24,6 @@
 
 package xyz.froud.jmccul;
 
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.ByteBuffer;
@@ -55,21 +54,6 @@ public class JMCCULUtils {
     }
 
     /**
-     * Returns the board number of the DAQ device specified by the descriptor, or –1 if the DAQ device hasn't been
-     * created in the library yet.
-     *
-     * @return The board number or –1.
-     *
-     * @see <a
-     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm">cbGetBoardNumber()</a>
-     * @see <a
-     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/GetBoardNumber.htm">GetBoardNumber()</a>
-     */
-    public static int getBoardNumberForDescriptor(DaqDeviceDescriptor descriptor) {
-        return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(descriptor.byValue());
-    }
-
-    /**
      * Gets the revision level of Universal Library DLL.
      *
      * @see <a
@@ -79,7 +63,7 @@ public class JMCCULUtils {
      */
     public static float getDLLRevision() throws JMCCULException {
         /*
-        VXD apparently is an old deviCe driver system for Windows 2, 3, and 9x.
+        VXD apparently is an old device driver system for Windows 2, 3, and 9x.
         Since that is ancient I will only return the DLL version.
         https://en.wikipedia.org/wiki/VxD
          */
