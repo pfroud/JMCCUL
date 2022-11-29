@@ -26,6 +26,9 @@ package xyz.froud.jmccul.digital;
 
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Peter Froud
  * @see DigitalWrapper#setBitDirection(DigitalPortType, int, DigitalPortDirection)
@@ -34,10 +37,26 @@ import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 public enum DigitalPortDirection {
     OUTPUT(MeasurementComputingUniversalLibrary.DIGITALOUT),
     INPUT(MeasurementComputingUniversalLibrary.DIGITALIN);
+
+    private static final Map<Integer, DigitalPortDirection> valueMap;
+
+    static {
+        final DigitalPortDirection[] allDirections = DigitalPortDirection.values();
+        valueMap = new HashMap<>(allDirections.length, 1);
+        for (DigitalPortDirection direction : allDirections) {
+            valueMap.put(direction.VALUE, direction);
+        }
+    }
+
+    public static DigitalPortDirection parseInt(int value) {
+        return valueMap.get(value);
+    }
+
     public final int VALUE;
 
     DigitalPortDirection(int value) {
         VALUE = value;
     }
+
 
 }

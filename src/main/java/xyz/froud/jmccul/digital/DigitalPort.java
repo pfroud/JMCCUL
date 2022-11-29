@@ -201,6 +201,12 @@ public class DigitalPort {
 
     }
 
+    public DigitalPortDirection getDirection() throws JMCCULException {
+        return DigitalPortDirection.parseInt(
+                getConfigItem(MeasurementComputingUniversalLibrary.DICONFIG)
+        );
+    }
+
     /**
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L77">first_bit
