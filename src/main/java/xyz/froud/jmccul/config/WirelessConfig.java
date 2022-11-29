@@ -51,7 +51,7 @@ public class WirelessConfig {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetRFChannel.htm">BoardConfig.GetRFChannel()</a>
      */
-    public int getWirelessRfChannel() throws JMCCULException {
+    public int getRfChannel() throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -66,7 +66,7 @@ public class WirelessConfig {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetRFChannel.htm">BoardConfig.SetRFChannel()</a>
      */
-    public void setWirelessRfChannel(int channel) throws JMCCULException {
+    public void setRfChannel(int channel) throws JMCCULException {
         ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -88,7 +88,7 @@ public class WirelessConfig {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetRSS.htm">BoardConfig.GetRSS()</a>
      */
-    public int getWirelessSignalStrength() throws JMCCULException {
+    public int getSignalStrength() throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,

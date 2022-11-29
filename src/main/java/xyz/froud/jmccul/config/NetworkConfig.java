@@ -51,7 +51,7 @@ public class NetworkConfig {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNetConnectionCode.htm">BoardConfig.GetNetConnectionCode()</a>
      */
-    public int getNetworkConnectionCode() throws JMCCULException {
+    public int getConnectionCode() throws JMCCULException {
         return ConfigurationWrapper.getInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
@@ -66,7 +66,7 @@ public class NetworkConfig {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/SetNetConnectionCode.htm">BoardConfig.SetNetConnectionCode()</a>
      */
-    public void setNetworkConnectionCode(int code) throws JMCCULException {
+    public void setConnectionCode(int code) throws JMCCULException {
         ConfigurationWrapper.setInt(
                 MeasurementComputingUniversalLibrary.BOARDINFO,
                 BOARD_NUMBER,
