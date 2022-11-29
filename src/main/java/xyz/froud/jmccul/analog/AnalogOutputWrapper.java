@@ -238,7 +238,7 @@ public class AnalogOutputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AOutScan.htm">AOutScan()</a>
      */
-    public void scan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, AnalogOutputScanOptions... options) throws JMCCULException {
+    private void scan(int lowChannel, int highChannel, long count, long rateHz, AnalogRange range, short[] values, AnalogOutputScanOptions... options) throws JMCCULException {
 
         /*
         For 16-bit data, create the buffer with cbWinBufAlloc().

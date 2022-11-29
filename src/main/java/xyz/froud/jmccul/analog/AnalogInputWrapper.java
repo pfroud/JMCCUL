@@ -535,7 +535,7 @@ public class AnalogInputWrapper {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions_for_NET/AInScan.htm">AInScan()</a>
      */
-    public void scan(int lowChan, int highChan, long count, long rateHz, AnalogRange range, AnalogInputScanOptions... options) throws JMCCULException {
+    private void scan(int lowChan, int highChan, long count, long rateHz, AnalogRange range, AnalogInputScanOptions... options) throws JMCCULException {
 
         final NativeLongByReference rateByReference = new NativeLongByReference(new NativeLong(rateHz));
 
