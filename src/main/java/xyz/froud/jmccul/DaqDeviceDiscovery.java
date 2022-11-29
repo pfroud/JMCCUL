@@ -143,7 +143,7 @@ public class DaqDeviceDiscovery {
             trying to create the DaqDevice will throw error code 1027
             "specified DAQ device already created."
              */
-            if (JMCCULUtils.getBoardNumberForDescriptor(descriptor) == -1) {
+            if (descriptor.getBoardNumber() == -1) {
                 DaqDevice device = new DaqDevice(descriptor);
                 if (predicate.test(device)) {
                     return Optional.of(device);

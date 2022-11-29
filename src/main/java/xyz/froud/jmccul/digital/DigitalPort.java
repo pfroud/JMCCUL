@@ -94,7 +94,7 @@ public class DigitalPort {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumBits.htm">DioConfig.GetNumBits()</a>
      */
-
+    //TODO rename this to 'size' or something
     public int getBitCount() throws JMCCULException {
         if (_bitCount == null) {
             _bitCount = getConfigItem(MeasurementComputingUniversalLibrary.DINUMBITS);
@@ -103,8 +103,8 @@ public class DigitalPort {
     }
 
     /**
-     * Use getInputMask() and getOutputMask() to to determine if an AuxPort is configurable. If you apply both methods
-     * to the same port, and both configVal parameters returned have input and output bits that overlap, the port is not
+     * Use getInputMask() and getOutputMask() to determine if an AuxPort is configurable. If you apply both methods to
+     * the same port, and both configVal parameters returned have input and output bits that overlap, the port is not
      * configurable. You can determine overlapping bits by ANDing both parameters.
      * <p>
      * For example, the PCI-DAS08 board has seven bits of digital I/O (four outputs and three inputs). For this board,

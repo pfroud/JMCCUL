@@ -67,24 +67,6 @@ public class CounterWrapper {
         return getChannelCount() > 0;
     }
 
-     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BICINUMDEVS -> BI CI NUM DEVS -> boardInfo counterInfo number of devices
-     Readable? yes
-     Writable? NO
-     */
-
-    /**
-     * @see <a
-     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
-     */
-    public int getCounterDeviceCount() throws JMCCULException {
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.BOARDINFO,
-                BOARD_NUMBER,
-                0, //devNum is ignored
-                MeasurementComputingUniversalLibrary.BICINUMDEVS
-        );
-    }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      BICTRTRIGCOUNT -> BI CTR TRIG COUNT -> boardInfo counter trigger count
