@@ -14,33 +14,34 @@
 
 1. Launch InstaCal.  
    ![InstaCal splash screen](img/for-first-time-setup/instacal-splash-screen.bmp)
-    * Path to the executable:
-      > C:\Program Files (x86)\Measurement Computing\DAQ\inscal32.exe
     * Link to information about InstaCal: https://www.mccdaq.com/daq-software/instacal.aspx
+    * Path to the InstaCal executable:
+      > C:\Program Files (x86)\Measurement Computing\DAQ\inscal32.exe
+    
 
-1. InstaCal will show a dialog which says "System Modifications Required". Click Yes.  
+1. InstaCal will show a dialog box titled "System Modifications Required". Click Yes.  
    ![Screenshot of dialog box titled System Modifications Required](img/for-first-time-setup/03-instacal-system-modifications-required.png)
 
 1. InstaCal closes itself and launches HID Registry Updater. It has a blank white rectangle.  
    ![Screenshot of HID Registry Updater window with blank white ](img/for-first-time-setup/04-hid-registry-updater-before-running.png)
-    * Link to information: [HID Devices with Windows 8.1 & Windows 10](https://kb.mccdaq.com/KnowledgebaseArticle50499.aspx)
-    * Path to the executable:
+    * Link to information about HID Registry Updater: [HID Devices with Windows 8.1 & Windows 10](https://kb.mccdaq.com/KnowledgebaseArticle50499.aspx)
+    * Path to the HID Registry Updater executable:
        > C:\Program Files (x86)\Measurement Computing\DAQ\HIDRegUpdater.exe
 
 1. Click 'Update' button.
 
-1. HID Registry Updater will say "Updating registry keys" and then "Update successful". Then HID Registry Updater will show a dialog box which says "reset required".  
+1. HID Registry Updater will say "Updating registry keys" and then "Update successful". Then HID Registry Updater will show a dialog box titled "Reset required".  
    ![Screenshot of HID Registry Updater with a dialog box titled Reset Required](img/for-first-time-setup/05-hid-registry-updater-finished.png)
 
-1. Click OK on the Reset Required dialog box. Close HID Registry Updater.
+1. Click OK and then clock Close.
 
 1. Reset the device by unplugging it and plugging it back in.
 
 1. Launch InstaCal again.
 
-1. InstaCal will show a dialog box which says "Plug and Play Board Detection". Click OK.
+1. InstaCal will show a dialog box titled "Plug and Play Board Detection". Click OK.
    ![Screenshot of InstaCal with a dialog box titled Plug and Play Board Detection](img/for-first-time-setup/06-instacal-plug-and-play-board-detected.png)
-    * The device gets saved to a text file here:
+    * The configuration file they refer to is a text file here:
       > C:\ProgramData\Measurement Computing\DAQ\CB.CFG
 
 1. The board will appear in InstaCal.  

@@ -1,6 +1,6 @@
 # How to check Universal Library version numbers
 
-## How to check what version of UL is currently installed
+## How to check what version of Universal Library is currently installed
 
 Here are two ways, they should provide the same result.
 
@@ -42,7 +42,7 @@ Screenshot of the expected output:
 
 ![Screenshot of Windows PowerShell running a command to get the version of a DLL file](img/for-checking-UL-version/get-dll-version-using-powershell.png)
 
-## How to check what the newest version of UL is
+## How to check what the newest version of Universal Library is
 
 Go to https://www.mccdaq.com/Software-Downloads.
 
@@ -56,7 +56,7 @@ Screenshot of the webpage:
 
 ![Screenshot of webpage with version number text highlighted with a red box](img/for-checking-UL-version/newest-version-online.png)
 
-## How to check what version of UL is in a mccdaq.exe installer
+## How to check what version of Universal Library is in an mccdaq.exe installer
 
 Open the `mccdaq.exe` file in [7-Zip](https://www.7-zip.org/). Here are two ways to do that:
 

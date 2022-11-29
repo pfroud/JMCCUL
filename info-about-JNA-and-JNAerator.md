@@ -118,9 +118,9 @@ int cbDIn(int BoardNum, int PortType, ShortByReference DataValue);
 int cbDIn(int BoardNum, int PortType, ShortBuffer DataValue);
 ```
 
-(Confusingly, the `@deprecated` Javadoc tag suggests two safer alternative methods, but the second suggestion is the deprecated method0.)
+(Confusingly, the `@deprecated` Javadoc tag suggests two safer alternative methods, but the second suggestion is the deprecated method.)
 
-I want to remove all the deprecated methods to streamline my IDE's code completion. According to [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables), this JNAerator option should work:
+I want to remove all the deprecated methods. According to [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables), this JNAerator option should work:
 
 > * -skipDeprecated  
 > Don't generate members that would be tagged as @Deprecated
@@ -158,7 +158,9 @@ public class DaqDeviceDescriptor extends com.sun.jna.Structure {
 
 The `ByReference` subclass is not used in JMCCUL and can be removed from DaqDeviceDescriptor.java.
 
-The `ByValue` subclass is used twice, for the [`cbCreateDaqDevice()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm) and [`cbGetBoardNumber()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm) functions. Those functions are declared as:
+The `ByValue` subclass is used twice, as parameters for the [`cbCreateDaqDevice()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm) and [`cbGetBoardNumber()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm) functions.
+
+The original Universal Library signatures of those functions are:
 
 ```C
 int cbCreateDaqDevice(int BoardNum, DaqDeviceDescriptor deviceDescriptor);
@@ -166,7 +168,7 @@ int cbCreateDaqDevice(int BoardNum, DaqDeviceDescriptor deviceDescriptor);
 int cbGetBoardNumber(DaqDeviceDescriptor DeviceDescriptor);
 ```
 
-JNAerator correctly generates:
+The `DaqDeviceDescriptor` parameters are not pointers so JNAerator generates:
 
 ```java
 int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor.ByValue DeviceDescriptor);
@@ -174,7 +176,7 @@ int cbCreateDaqDevice(int BdNum, DaqDeviceDescriptor.ByValue DeviceDescriptor);
 int cbGetBoardNumber(DaqDeviceDescriptor.ByValue DeviceDescriptor);
 ```
 
-Everywhere else uses `DaqDeviceDescriptor` with no tagging interface, and I had a hard time figuring out how to convert to `DaqDeviceDescriptor.ByReference`. (If you try to cast it it'll throw a ClassCastException.) I found [these](https://stackoverflow.com/a/26309505) [two](https://github.com/java-native-access/jna/issues/691#issuecomment-242814602) comments which say to first call `getPointer()` and then either
+Everywhere else uses `DaqDeviceDescriptor` with no tagging interface, and I had a hard time figuring out how to convert to `DaqDeviceDescriptor.ByReference`. (If you try to cast it it'll throw a ClassCastException.) I found [these](https://stackoverflow.com/a/26309505) [two](https://github.com/java-native-access/jna/issues/691#issuecomment-242814602) comments which say to first call `getPointer()` and then either:
 
 * use the [`Structure` constructor which accepts a `Pointer` parameter](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#Structure-com.sun.jna.Pointer-), or
 * call the [static `Structure.newInstance()` method](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#newInstance-java.lang.Class-com.sun.jna.Pointer-).
@@ -185,7 +187,7 @@ The [Javadoc for the `getPointer()` method](http://java-native-access.github.io/
 
 > if you use the structure's pointer as a function argument, you are responsible for calling `write()` prior to the call and `read()` after the call. These calls are normally handled automatically by the `Function` object when it encounters a `Structure` argument or return value.
 
-and indeed if you don't call [`read()`](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#read--) after calling `Structure.newInstance()`, then `cbCreateDaqDevice()` will fail with error code 306. [cbGetErrMsg()](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm) says "Error number 306 has no text" but cbw.h reveals:
+And indeed if you don't call [`read()`](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#read--) after calling `Structure.newInstance()`, then `cbCreateDaqDevice()` will fail with error code 306. [cbGetErrMsg()](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm) says "Error number 306 has no text" but cbw.h reveals:
 
 ```c
 /* Internal errors returned by 32 bit library */
