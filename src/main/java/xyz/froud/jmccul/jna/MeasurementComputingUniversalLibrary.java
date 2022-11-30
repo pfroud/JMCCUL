@@ -25,8 +25,8 @@
 package xyz.froud.jmccul.jna;
 
 import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
 import com.sun.jna.NativeLong;
+import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
 import com.sun.jna.ptr.NativeLongByReference;
@@ -50,9 +50,10 @@ import java.nio.ShortBuffer;
 @SuppressWarnings("ALL")
 public interface MeasurementComputingUniversalLibrary extends StdCallLibrary {
 
-    public static final String JNA_LIBRARY_NAME = "cbw64";
-    public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(MeasurementComputingUniversalLibrary.JNA_LIBRARY_NAME);
-    public static final MeasurementComputingUniversalLibrary INSTANCE = (MeasurementComputingUniversalLibrary) Native.load(MeasurementComputingUniversalLibrary.JNA_LIBRARY_NAME, MeasurementComputingUniversalLibrary.class);
+    public static final MeasurementComputingUniversalLibrary INSTANCE = Native.load(
+            (Platform.is64Bit() ? "cbw64.dll" : "cbw32.dll"),
+            MeasurementComputingUniversalLibrary.class
+    );
 
     public static final int TRIG_ANALOG_SW = (int) 3;
     public static final int CONVERTDATA = (int) 0x0008;
