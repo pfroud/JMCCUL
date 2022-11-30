@@ -86,6 +86,22 @@ JNaerator will create these two Java files:
 
 ## Post-processing
 
+### Set name of DLL to load
+
+Replace the first three lines of the `MeasurementComputingUniversalLibrary` interface body with:
+
+```java
+public static final MeasurementComputingUniversalLibrary INSTANCE = Native.load(
+    (com.sun.jna.Platform.is64Bit() ? "cbw64.dll" : "cbw32.dll"),
+    MeasurementComputingUniversalLibrary.class
+);
+```
+
+You can [read the Javadoc](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Native.html#load-java.lang.String-java.lang.Class-) for the `Native.load()` method.
+
+No Javadoc for the `Platform.is64Bit()` method, but the [source code](https://github.com/java-native-access/jna/blob/529b7167c9c0eaf4dcca0dbcacff616842b10566/src/com/sun/jna/Platform.java#L187) is somewhat interesting.
+
+
 ### Remove deprecated methods
 
 For simple cases, JNAerator produces one Java method signature for each C function. But if a C function involves pointers, JNAerator produces two Java method signatures, one marked `deprecated` and one not.
