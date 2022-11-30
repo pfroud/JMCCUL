@@ -18,10 +18,10 @@ Screenshot of the Google Code page:
 
 ## How to run JNAerator
 
-Assuming you installed Universal Library with the default settings, on 64-bit Windows, this is the command to run:
+Run this command:
 
 ```shell
-java -jar path/to/jnaerator-0.12-SNAPSHOT-20130727.jar -library MeasurementComputingUniversal -mode Directory -runtime JNA -package jmccul -o outputDirectory -f "C:\Program Files (x86)\Measurement Computing\DAQ\cbw64.dll" "C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h"
+java -jar path/to/jnaerator-0.12-SNAPSHOT-20130727.jar -library MeasurementComputingUniversal -mode Directory -runtime JNA -package xyz.froud.jmccul -o outputDirectory "C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h"
 ```
 
 Explanation of the JNAerator options used:
@@ -31,7 +31,6 @@ Explanation of the JNAerator options used:
 * `-runtime JNA`: use JNA instead of [BridJ](https://github.com/nativelibs4java/BridJ).
 * `-package xyz.froud.jmccul`: adds a `package` statement to the top of the generated Java files, and creates subdirectories for each part of the package name.
 * `-o outputDirectory`: put all the output files in a folder called `outputDirectory`.
-* `-f`: overwrite existing files. Without this flag, if the output files already exist, JNAerator will crash with an `IOException`.
 
 For the list of all available JNAerator options, visit the wiki page on GitHub called [Command Line Options And Environment Variables](https://github.com/nativelibs4java/JNAerator/wiki/Command-Line-Options-And-Environment-Variables).
 
@@ -84,15 +83,6 @@ JNaerator will create these two Java files:
 
 * `outputDirectory/xyz/froud/jmccul/MeasurementComputingUniversalLibrary.java`
 * `outputDirectory/xyz/froud/jmccul/DaqDeviceDescriptor.java`
-
-Also, JNaerator will copy cbw64.dll into this directory:
-
-* `outputDirectory/lib/win64`
-
-You only need the generated Java files. You can delete the copy of cbw64.dll.
-
-The Universal Library installer adds `C:\Program Files (x86)\Measurement Computing\DAQ\` to the PATH environment variable. The JNA runtime uses the PATH environment variable to search for shared library files.
- 
 
 ## Post-processing
 
