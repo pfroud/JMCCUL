@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package xyz.froud.jmccul.digital;
 
 import com.sun.jna.NativeLong;
@@ -38,7 +37,7 @@ import java.nio.ShortBuffer;
  * @author Peter Froud
  * @see <a
  *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L50">class
- *         PortInfo in dio_info.py</a>
+ * PortInfo in dio_info.py</a>
  */
 public class DigitalPort {
 
@@ -94,8 +93,7 @@ public class DigitalPort {
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions_for_NET/GetNumBits.htm">DioConfig.GetNumBits()</a>
      */
-    //TODO rename this to 'size' or something
-    public int getBitCount() throws JMCCULException {
+    public int getResolution() throws JMCCULException {
         if (_bitCount == null) {
             _bitCount = getConfigItem(MeasurementComputingUniversalLibrary.DINUMBITS);
         }
@@ -118,7 +116,7 @@ public class DigitalPort {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L61">in_mask
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public int getInputMask() throws JMCCULException {
         if (_inputMask == null) {
@@ -143,9 +141,8 @@ public class DigitalPort {
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L66">out_mask
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
-
     public int getOutputMask() throws JMCCULException {
         if (_outputMask == null) {
             _outputMask = getConfigItem(MeasurementComputingUniversalLibrary.DIOUTMASK);
@@ -210,7 +207,7 @@ public class DigitalPort {
     /**
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L77">first_bit
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public int getFirstBit() throws JMCCULException {
         /*
@@ -261,6 +258,7 @@ public class DigitalPort {
                 _isIndividualBitConfigurable = false;
             }
         }
+        
         return _isIndividualBitConfigurable;
     }
 
@@ -269,7 +267,7 @@ public class DigitalPort {
      * @see #getOutputMask()
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L130">is_port_configurable
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public boolean isDirectionOfEntirePortSettable() throws JMCCULException {
         if (_isPortConfigurable == null) {
@@ -298,7 +296,7 @@ public class DigitalPort {
     /**
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L87">supports_input
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public boolean isInputSupported() throws JMCCULException {
         return (getInputMask() > 0) || isDirectionOfEntirePortSettable();
@@ -307,7 +305,7 @@ public class DigitalPort {
     /**
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L109">supports_output
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public boolean isOutputSupported() throws JMCCULException {
         return (getOutputMask() > 0) || isDirectionOfEntirePortSettable();
@@ -316,11 +314,11 @@ public class DigitalPort {
     /**
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L91">supports_input_scan
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public boolean isInputScanSupported() throws JMCCULException {
         if (_isInputScanSupported == null) {
-        /*
+            /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
             DIFUNCTION      Specifies digital input scans started with cbDInScan().
@@ -329,7 +327,7 @@ public class DigitalPort {
             DAQOFUNCTION    Specifies a synchronous output scan started with cbDaqOutScan().
         Blog post:
         https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
-         */
+             */
             try {
                 // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
@@ -352,11 +350,11 @@ public class DigitalPort {
     /**
      * @see <a
      *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/dio_info.py#L100">supports_output_scan
-     *         in class PortInfo in dio_info.py</a>
+     * in class PortInfo in dio_info.py</a>
      */
     public boolean isOutputScanSupported() throws JMCCULException {
         if (_isOutputScanSupported == null) {
-        /*
+            /*
         TODO what does "scan" mean? Is it the same as "synchronous"?
         Table of cbGetStatus()/cbGetIOStatus() arguments:
             DIFUNCTION      Specifies digital input scans started with cbDInScan().
@@ -365,7 +363,7 @@ public class DigitalPort {
             DAQOFUNCTION    Specifies a synchronous output scan started with cbDaqOutScan().
         Blog post:
         https://www.mccdaq.com/blog/2018/01/11/how-to-synchronous-analog-digital-and-encoder-measurements-in-labview/
-         */
+             */
             try {
                 // // https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbGetStatus.htm
                 final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetIOStatus(
@@ -384,4 +382,60 @@ public class DigitalPort {
         }
         return _isOutputScanSupported;
     }
+
+    /**
+     * Configures a specific digital bit for input or output. This function treats all DIO ports on a board as a single
+     * port (AUXPORT); it is not supported by 8255 type DIO ports.
+     *
+     * @param portType The port (AUXPORT) whose bits are to be configured. The port specified must be bitwise
+     * @param bitNumber The bit number to configure as input or output. configurable.
+     * @param direction DIGITALOUT or DIGITALIN configures the specified bit for output or input, respectively.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigBit.htm">cbDConfigBit()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DConfigBit.htm">DConfigBit()</a>
+     */
+    public void setBitDirection(int bitNumber, DigitalPortDirection direction) throws JMCCULException {
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigBit(
+                DAQ_DEVICE.getBoardNumber(),
+                getPortType().VALUE,
+                bitNumber,
+                direction.VALUE
+        );
+        JMCCULUtils.checkError(errorCode);
+    }
+
+    /**
+     * Configures a digital port as input or output.
+     * <p>
+     * This function is for use with ports that may be programmed as input or output, such as those on the 82C55 chips
+     * and 8536 chips. Refer to the 82C55A data sheet (82C55A.pdf) for details of chip operation. This document is
+     * installed in the Documents subdirectory where the UL is installed. Refer to the Zilog 8536 manual for details of
+     * 8536 chip operation.
+     * <p>
+     * Note: When used on ports within an 8255 chip, this function will reset all ports on that chip configured for
+     * output to a zero state. This means that if you set an output value on FIRSTPORTA and then change the
+     * configuration on FIRSTPORTB from OUTPUT to INPUT, the output value at FIRSTPORTA will be all zeros. You can,
+     * however, set the configuration on SECONDPORTx without affecting the value at FIRSTPORTA. For this reason, this
+     * function is usually called at the beginning of the program for each port requiring configuration.
+     *
+     * @param portType The port to configure. The port must be configurable. For most boards, AUXPORT is not
+     * configurable. Check the board-specific information in the Universal Library User's Guide for details.
+     * @param direction DIGITALOUT or DIGITALIN configures the entire eight or four bit port for output or input.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDConfigPort.htm">cbDConfigPort()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions_for_NET/DConfigPort.htm">DConfigPort()</a>
+     */
+    public void setPortDirection(DigitalPortDirection direction) throws JMCCULException {
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbDConfigPort(
+                DAQ_DEVICE.getBoardNumber(),
+                getPortType().VALUE,
+                direction.VALUE
+        );
+        JMCCULUtils.checkError(errorCode);
+    }
+
 }
