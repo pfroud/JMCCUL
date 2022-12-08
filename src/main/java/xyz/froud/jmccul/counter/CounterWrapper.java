@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package xyz.froud.jmccul.counter;
 
 import xyz.froud.jmccul.DaqDevice;
@@ -41,15 +40,20 @@ public class CounterWrapper {
     /*
     Underscore prefix means the field is lazy-loaded in the getter method.
     It is a reminder to call the getter method instead of reading the field directly.
-    */
+     */
     private Integer _channelCount;
+    private CounterDevice[] _devices;
 
     public CounterWrapper(DaqDevice device) {
         DAQ_DEVICE = device;
         BOARD_NUMBER = device.getBoardNumber();
     }
 
-    private int getChannelCount() throws JMCCULException {
+    /**
+     *
+     * @return how many counters the DAQ device has.
+     */
+    public int getDeviceCount() throws JMCCULException {
         if (_channelCount == null) {
             // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ctr_info.py#L28
             _channelCount = ConfigurationWrapper.getInt(
@@ -62,9 +66,20 @@ public class CounterWrapper {
         return _channelCount;
     }
 
-    public boolean isCounterSupported() throws JMCCULException {
+    public boolean isSupported() throws JMCCULException {
         // https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ctr_info.py#L33
-        return getChannelCount() > 0;
+        return getDeviceCount() > 0;
+    }
+
+    public CounterDevice[] getDevices() throws JMCCULException {
+        if (_devices == null) {
+            final int deviceCount = getDeviceCount();
+            _devices = new CounterDevice[deviceCount];
+            for (int i = 0; i < deviceCount; i++) {
+                _devices[i] = new CounterDevice(DAQ_DEVICE, i);
+            }
+        }
+        return _devices;
     }
 
 
@@ -73,7 +88,6 @@ public class CounterWrapper {
      Readable? yes
      Writable? NO
      */
-
     /**
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
@@ -106,7 +120,6 @@ public class CounterWrapper {
      Readable? yes
      Writable? NO
      */
-
     /**
      * @see <a
      *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
@@ -120,51 +133,6 @@ public class CounterWrapper {
         );
     }
 
-    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     CICTRTYPE -> CI CTR TYPE -> counterInfo counter type
-     Readable? yes
-     Writable? NO
 
-    Can't find anything in cbw.h for this. It says:
-    Counter type, where:
-    1 = 8254, 2 = 9513, 3 = 8536, 4 = 7266, 5 = event counter, 6 = scan counter,
-    7 = timer counter, 8 = quadrature counter, and 9 = pulse counter.
-
-
-     */
-
-    /**
-     * @see <a
-     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
-     */
-    public int getCounterType(int idx) throws JMCCULException {
-        return ConfigurationWrapper.getInt(
-                MeasurementComputingUniversalLibrary.COUNTERINFO,
-                BOARD_NUMBER,
-                idx,
-                MeasurementComputingUniversalLibrary.CICTRTYPE
-        );
-    }
-
-
-    /**
-     * @see <a
-     *         href="https://github.com/mccdaq/mcculw/blob/d5d4a3eebaace9544a356a1243963c7af5f8ca53/mcculw/device_info/ctr_info.py#L45">CtrChanInfo</a>
-     */
-    class CounterChannel {
-
-        int channelNumber;
-        CounterChannelType type;
-        Object scanOptions; //need to use bit flag
-    }
-
-    /**
-     * @see <a
-     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm">cbGetConfig()</a>
-     * @see <a
-     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Counter_Functions_for_NET/GetCtrType.htm">CtrConfig.GetCtrType()</a>
-     */
-    enum CounterChannelType {
-    }
 
 }
