@@ -21,35 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package xyz.froud.jmccul_examples;
 
-package xyz.froud.jmccul_examples.temperature;
-
-import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
-
-import java.util.Optional;
+import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 
 /**
  * @author Peter Froud
  */
-public class PrintTemperatureInfo {
+public class DeviceDiscoveryExample {
 
     public static void main(String[] args) throws JMCCULException {
-
-        final Optional<DaqDevice> optionalDevice = DaqDeviceDiscovery.findFirstDeviceMatching(
-                d -> d.temperature.isSupported()
-        );
-
-        if (optionalDevice.isPresent()) {
-            try (DaqDevice device = optionalDevice.get()) {
-                System.out.println("Temperature input info for this device: " + device);
-                System.out.println("getChannelCount = " + device.temperature.getChannelCount());
-            }
+        final DaqDeviceDescriptor[] descriptors = DaqDeviceDescriptor.find();
+        if (descriptors.length == 0) {
+            System.out.println("No DAQ devices found.");
         } else {
-            System.out.println("Didn't find a device which supports temperature input.");
+            System.out.printf("Found %d DAQ device descriptors(s):\n", descriptors.length);
+            for (DaqDeviceDescriptor descriptor : descriptors) {
+                System.out.println(descriptor);
+            }
         }
-
     }
-
 }

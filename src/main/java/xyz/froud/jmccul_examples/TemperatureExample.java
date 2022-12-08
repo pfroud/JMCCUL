@@ -21,16 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package xyz.froud.jmccul_examples.temperature;
+package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.temperature.TemperatureUnit;
 
 import java.util.Optional;
+import xyz.froud.jmccul.temperature.ThermocoupleType;
 
 /**
  * @author Peter Froud
@@ -39,36 +38,38 @@ public class TemperatureExample {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DaqDevice> optionalDevice = DaqDeviceDiscovery.findFirstDeviceMatching(
-                d -> d.temperature.isSupported()
+        final Optional<DaqDevice> optionalDevice = DaqDevice.findFirstMatching(
+                device -> device.temperature.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
-            try (DaqDevice device = optionalDevice.get()) {
+            try ( DaqDevice device = optionalDevice.get()) {
                 System.out.println("Opened this device: " + device);
-                doTemperatureInput(device);
+                doThermocoupleInput(device, 0);
             }
         } else {
-            System.out.println("Didn't find a device which supports temperature input.");
+            System.out.println("Didn't find a DAQ device which supports temperature input.");
         }
 
     }
 
-    private static void doTemperatureInput(DaqDevice device) throws JMCCULException {
 
-        // TODO set thermocouple type!!!!
+    private static void doThermocoupleInput(DaqDevice device, int channel) throws JMCCULException {
         try {
-            System.out.printf("Temperature is %f C\n",
-                    device.temperature.read(0, TemperatureUnit.CELSIUS));
+            device.temperature.setThermocoupleType(channel, ThermocoupleType.K);
+
+            // TODO why can we set units here and in the read() method??
+            device.temperature.setUnits(TemperatureUnit.CELSIUS);
+
+            final float temperature = device.temperature.read(channel, TemperatureUnit.CELSIUS);
+            System.out.printf("Temperature is %f C\n", temperature);
         } catch (JMCCULException ex) {
             if (ex.ERROR_CODE == MeasurementComputingUniversalLibrary.OPENCONNECTION) {
                 System.out.println("The thermocouple connection is open.");
             } else {
                 throw ex;
             }
-
         }
-
     }
 
 }

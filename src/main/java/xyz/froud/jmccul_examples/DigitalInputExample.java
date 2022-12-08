@@ -21,8 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package xyz.froud.jmccul_examples.digital;
+package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
@@ -38,17 +37,16 @@ public class DigitalInputExample {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DigitalPort> optionalPort = DigitalExampleUtils.findPortWhichSupports(DigitalPort::isInputSupported);
+        final Optional<DigitalPort> optionalPort = DaqDevice.findPortMatching(DigitalPort::isInputSupported);
 
         if (optionalPort.isPresent()) {
             final DigitalPort port = optionalPort.get();
-            final DaqDevice device = port.getDaqDevice();
+            try ( DaqDevice device = port.getDaqDevice()) {
+                System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
+                        device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
 
-            System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
-                    device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
-
-            doDigitalInput(device, port);
-            device.close();
+                doDigitalInput(device, port);
+            }
 
         } else {
             System.out.println("Didn't find a device which supports digital input.");
@@ -59,16 +57,19 @@ public class DigitalInputExample {
     private static void doDigitalInput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
         if (port.isDirectionOfEntirePortSettable()) {
-            device.digital.setPortDirection(port.getPortType(), DigitalPortDirection.INPUT);
+            port.setPortDirection(DigitalPortDirection.INPUT);
         }
 
         System.out.println("Reading the whole port:");
         final short portInput = device.digital.input.readPort(port.getPortType());
         System.out.println("0b" + Integer.toBinaryString(portInput));
 
+        final int portInput32 = device.digital.input.readPort32(port.getPortType());
+
         System.out.println("Now reading one bit at a time:");
         System.out.print("0b");
-        for (int bitIndex = port.getBitCount() - 1; bitIndex >= 0; bitIndex--) {
+        for (int bitIndex = port.getResolution() - 1; bitIndex >= 0; bitIndex--) {
+            port.setBitDirection(bitIndex, DigitalPortDirection.INPUT);
             final boolean bitInput = device.digital.input.readBit(port.getPortType(), bitIndex);
             final char zeroOrOne = bitInput ? '1' : '0';
             System.out.print(zeroOrOne);
@@ -76,6 +77,5 @@ public class DigitalInputExample {
         System.out.println();
 
     }
-
 
 }

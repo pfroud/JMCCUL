@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package xyz.froud.jmccul_examples.analog_input;
+package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.DaqDevice;
-import xyz.froud.jmccul.DaqDeviceDiscovery;
 import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.analog.AnalogInputMode;
 import xyz.froud.jmccul.analog.AnalogRange;
 
 import java.util.Optional;
@@ -38,34 +37,42 @@ public class AnalogInputExample {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DaqDevice> optionalDevice = DaqDeviceDiscovery.findFirstDeviceMatching(
-                d -> d.analog.input.isSupported()
+        final Optional<DaqDevice> optionalDevice = DaqDevice.findFirstMatching(
+                device -> device.analog.input.isSupported()
         );
 
         if (optionalDevice.isPresent()) {
-            try (DaqDevice device = optionalDevice.get()) {
+            try ( DaqDevice device = optionalDevice.get()) {
                 System.out.println("Opened this device: " + device);
-                // TODO set differential vs single-ended!!
-                doAnalogInput(device);
+                doAnalogInput(device, 0);
             }
         } else {
-            System.out.println("Didn't find a device which supports analog input.");
+            System.out.println("Didn't find a DAQ device which supports analog input.");
         }
 
     }
 
-    private static void doAnalogInput(DaqDevice device) throws JMCCULException {
+    private static void doAnalogInput(DaqDevice device, int channel) throws JMCCULException {
+        device.analog.input.setModeForBoard(AnalogInputMode.SINGLE_ENDED);
+
+        final boolean is32BitInputSupported = device.analog.input.getResolution() > 16;
 
         final AnalogRange rangeToUse = device.analog.input.getSupportedRanges().get(0);
         System.out.println("Using this range: " + rangeToUse);
 
         System.out.println("Reading the raw ADC value:");
-        System.out.println(device.analog.input.read(0, rangeToUse));
-        System.out.println(device.analog.input.read32(0, rangeToUse));
+        System.out.println(device.analog.input.read(channel, rangeToUse));
+        if (is32BitInputSupported) {
+            System.out.println(device.analog.input.read32(channel, rangeToUse));
+        }
 
-        System.out.println("Reading it as voltage:");
-        System.out.println(device.analog.input.readVoltage(0, rangeToUse));
-        System.out.println(device.analog.input.readVoltage32(0, rangeToUse));
+        if (device.analog.input.isVoltageInputSupported()) {
+            System.out.println("Reading it as voltage:");
+            System.out.println(device.analog.input.readVoltage(channel, rangeToUse));
+            if (is32BitInputSupported) {
+                System.out.println(device.analog.input.readVoltage32(channel, rangeToUse));
+            }
+        }
 
     }
 

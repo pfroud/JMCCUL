@@ -21,8 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package xyz.froud.jmccul_examples.digital;
+package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
@@ -38,17 +37,16 @@ public class DigitalOutputExample {
 
     public static void main(String[] args) throws JMCCULException {
 
-        final Optional<DigitalPort> optionalPort = DigitalExampleUtils.findPortWhichSupports(DigitalPort::isOutputSupported);
+        final Optional<DigitalPort> optionalPort = DaqDevice.findPortMatching(DigitalPort::isOutputSupported);
 
         if (optionalPort.isPresent()) {
             final DigitalPort port = optionalPort.get();
-            final DaqDevice device = port.getDaqDevice();
+            try ( DaqDevice device = port.getDaqDevice()) {
+                System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
+                        device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
 
-            System.out.printf("Using device with model name %s, serial number %s, port %s.\n",
-                    device.getBoardName(), device.getFactorySerialNumber(), port.getPortType());
-
-            doDigitalOutput(device, port);
-            device.close();
+                doDigitalOutput(device, port);
+            }
 
         } else {
             System.out.println("Didn't find a device which supports digital output.");
@@ -56,19 +54,31 @@ public class DigitalOutputExample {
 
     }
 
+    /**
+     * Writes some arbitrary values to the port.
+     *
+     * @see <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html">Primitive Data Types</a>
+     */
     private static void doDigitalOutput(DaqDevice device, DigitalPort port) throws JMCCULException {
 
         if (port.isDirectionOfEntirePortSettable()) {
-            device.digital.setPortDirection(port.getPortType(), DigitalPortDirection.OUTPUT);
+            port.setPortDirection(DigitalPortDirection.OUTPUT);
         }
 
-        //                       eight bits: 76453210
-        final short valueToWrite = (short) 0b10110110;
+        // short is sixteen bits
+        final short valueToWrite = (short) 0b1011_0110_0110_0110;
         System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(valueToWrite));
         device.digital.output.writePort(port.getPortType(), valueToWrite);
 
+        // TODO probably need to check the port resolution before trying to write 32-bit value
+        // int is thirty-two bits
+        final int intToWriteInt = 0b1111_1111_1111_1111_1111_1111_1111_1111;
+        System.out.println("Writing this value to the whole port: 0b" + Integer.toBinaryString(intToWriteInt));
+        device.digital.output.writePort(port.getPortType(), valueToWrite);
+
         System.out.println("Now setting each bit to logic-high individually");
-        for (int bitIdx = 0; bitIdx < port.getBitCount(); bitIdx++) {
+        for (int bitIdx = 0; bitIdx < port.getResolution(); bitIdx++) {
+            port.setBitDirection(bitIdx, DigitalPortDirection.OUTPUT);
             device.digital.output.writeBit(port.getPortType(), bitIdx, true);
         }
 
