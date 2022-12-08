@@ -24,8 +24,6 @@
 
 package xyz.froud.jmccul;
 
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
-
 /**
  * @author Peter Froud
  */

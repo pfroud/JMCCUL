@@ -24,7 +24,7 @@
 
 package xyz.froud.jmccul.analog;
 
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 import java.util.Arrays;
 import java.util.HashMap;

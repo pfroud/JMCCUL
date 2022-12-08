@@ -4,7 +4,7 @@ import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.counter.CounterDevice;
 import xyz.froud.jmccul.digital.DigitalPort;
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
+import xyz.froud.jmccul.DaqDeviceDescriptor;
 
 /**
  *

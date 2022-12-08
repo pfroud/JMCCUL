@@ -24,7 +24,7 @@
 package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
+import xyz.froud.jmccul.DaqDeviceDescriptor;
 
 /**
  * @author Peter Froud

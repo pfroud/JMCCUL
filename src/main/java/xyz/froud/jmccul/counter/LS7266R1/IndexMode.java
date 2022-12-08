@@ -25,7 +25,7 @@
 package xyz.froud.jmccul.counter.LS7266R1;
 
 
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 import java.util.HashMap;
 import java.util.Map;

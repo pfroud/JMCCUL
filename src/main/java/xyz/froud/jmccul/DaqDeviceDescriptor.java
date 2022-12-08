@@ -21,18 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package xyz.froud.jmccul.jna;
+package xyz.froud.jmccul;
 
 import com.sun.jna.Structure;
 import java.nio.IntBuffer;
-import xyz.froud.jmccul.DaqDeviceInterfaceType;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.JMCCULUtils;
 
 /**
  * <i>native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h</i><br>

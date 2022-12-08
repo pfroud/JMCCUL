@@ -24,7 +24,6 @@
 
 package xyz.froud.jmccul;
 
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

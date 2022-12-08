@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package xyz.froud.jmccul.jna;
+package xyz.froud.jmccul;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;

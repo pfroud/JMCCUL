@@ -38,8 +38,6 @@ import xyz.froud.jmccul.enums.ExternalPacerClockEdge;
 import xyz.froud.jmccul.enums.FirmwareVersionType;
 import xyz.froud.jmccul.enums.InterruptClockEdge;
 import xyz.froud.jmccul.enums.SyncMode;
-import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.temperature.TemperatureWrapper;
 import java.nio.ByteBuffer;
 import java.util.Optional;

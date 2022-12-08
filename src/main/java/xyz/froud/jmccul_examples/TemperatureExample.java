@@ -25,7 +25,7 @@ package xyz.froud.jmccul_examples;
 
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.temperature.TemperatureUnit;
 
 import java.util.Optional;

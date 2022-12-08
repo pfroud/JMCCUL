@@ -26,7 +26,7 @@ package xyz.froud.jmccul.counter;
 import xyz.froud.jmccul.DaqDevice;
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.config.ConfigurationWrapper;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 /**
  * @author Peter Froud

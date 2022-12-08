@@ -26,7 +26,7 @@ package xyz.froud.jmccul.config;
 
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

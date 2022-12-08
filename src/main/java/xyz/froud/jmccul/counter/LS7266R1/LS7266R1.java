@@ -2,7 +2,7 @@ package xyz.froud.jmccul.counter.LS7266R1;
 
 import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 /**
  *

@@ -29,7 +29,7 @@ import xyz.froud.jmccul.JMCCULException;
 import xyz.froud.jmccul.JMCCULUtils;
 import xyz.froud.jmccul.config.ConfigurationWrapper;
 import xyz.froud.jmccul.enums.BaseOrExpansionBoard;
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 import java.nio.FloatBuffer;
 

@@ -24,7 +24,7 @@
 
 package xyz.froud.jmccul.enums;
 
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 import java.util.HashMap;
 import java.util.Map;

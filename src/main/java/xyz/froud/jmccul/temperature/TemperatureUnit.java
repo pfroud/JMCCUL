@@ -24,7 +24,7 @@
 
 package xyz.froud.jmccul.temperature;
 
-import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
+import xyz.froud.jmccul.MeasurementComputingUniversalLibrary;
 
 import java.util.HashMap;
 import java.util.Map;
