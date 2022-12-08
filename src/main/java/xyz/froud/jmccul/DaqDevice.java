@@ -41,8 +41,9 @@ import xyz.froud.jmccul.enums.SyncMode;
 import xyz.froud.jmccul.jna.DaqDeviceDescriptor;
 import xyz.froud.jmccul.jna.MeasurementComputingUniversalLibrary;
 import xyz.froud.jmccul.temperature.TemperatureWrapper;
-
 import java.nio.ByteBuffer;
+import java.util.Optional;
+import xyz.froud.jmccul.digital.DigitalPort;
 
 /**
  * @author Peter Froud
@@ -197,7 +198,11 @@ public class DaqDevice implements AutoCloseable {
 
     @Override
     public String toString() {
-        return "model " + _boardName + ", serial number " + _factorySerialNumber;
+        try{
+        return "model " + getBoardName() + ", serial number " + getFactorySerialNumber();
+        }catch (Exception ex) {
+            return "DaqDevice: exception getting the board name or factory serial number";
+        }
     }
 
     @Override
@@ -212,11 +217,13 @@ public class DaqDevice implements AutoCloseable {
         return isOpen;
     }
 
-      /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIBASEADR -> BI BASE ADR -> boardInfo base address
-     Readable? yes
-     Writable? yes
-     */
+    //<editor-fold desc="config items">
+
+    /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    BIBASEADR -> BI BASE ADR -> boardInfo base address
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * Recommended for use only with ISA bus boards.
@@ -254,10 +261,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIBOARDTYPE -> BI BOARD TYPE -> boardInfo board type
-     Readable? yes
-     Writable? NO
-     */
+    BIBOARDTYPE -> BI BOARD TYPE -> boardInfo board type
+    Readable? yes
+    Writable? NO
+    */
 
     /**
      * Gets the unique number (device ID) assigned to the board (between 0 and 8000h) indicating the type of board
@@ -278,10 +285,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BICALTABLETYPE -> BI CAL TABLE TYPE -> boardInfo calibration table type
-     Readable? yes
-     Writable? yes
-     */
+    BICALTABLETYPE -> BI CAL TABLE TYPE -> boardInfo calibration table type
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -317,10 +324,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BICLOCK -> BI CLOCK -> boardInfo clock
-     Readable? yes
-     Writable? yes
-     */
+    BICLOCK -> BI CLOCK -> boardInfo clock
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -355,10 +362,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      BIDMACHAN -> BI DMA CHAN -> boardInfo directMemoryAccess channel
-     Readable? yes
-     Writable? yes
-     */
+    BIDMACHAN -> BI DMA CHAN -> boardInfo directMemoryAccess channel
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -393,10 +400,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIDTBOARD -> BI DT BOARD -> boardInfo DataTranslation board
-     Readable? yes
-     Writable? NO
-     */
+    BIDTBOARD -> BI DT BOARD -> boardInfo DataTranslation board
+    Readable? yes
+    Writable? NO
+    */
 
     /**
      * @see <a
@@ -415,10 +422,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIEXTCLKTYPE -> BI EXT CLK TYPE -> boardInfo external clock type
-     Readable? yes
-     Writable? yes
-     */
+    BIEXTCLKTYPE -> BI EXT CLK TYPE -> boardInfo external clock type
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -452,10 +459,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIEXTINPACEREDGE  -> BI EXT IN PACER EDGE -> boardInfo external input pacer edge
-     Readable? yes
-     Writable? yes
-     */
+    BIEXTINPACEREDGE  -> BI EXT IN PACER EDGE -> boardInfo external input pacer edge
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -489,10 +496,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIEXTOUTPACEREDGE -> BI EXT OUT PACER EDGE -> boardInfo external output pacer edge
-     Readable? yes
-     Writable? yes
-     */
+    BIEXTOUTPACEREDGE -> BI EXT OUT PACER EDGE -> boardInfo external output pacer edge
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -526,10 +533,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIOUTPUTPACEROUT -> BI OUTPUT PACER OUT -> boardInfo output pacer output
-     Readable? no but that is probably a mistake in the docs
-     Writable? yes
-     */
+    BIOUTPUTPACEROUT -> BI OUTPUT PACER OUT -> boardInfo output pacer output
+    Readable? no but that is probably a mistake in the docs
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -564,10 +571,10 @@ public class DaqDevice implements AutoCloseable {
 
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIINPUTPACEROUT -> BI INPUT PACER OUT -> boardInfo input pacer output
-     Readable? yes
-     Writable? yes
-     */
+    BIINPUTPACEROUT -> BI INPUT PACER OUT -> boardInfo input pacer output
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -601,10 +608,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIINTEDGE -> BI INT EDGE -> boardInfo interrupt edge
-     Readable? yes
-     Writable? yes
-     */
+    BIINTEDGE -> BI INT EDGE -> boardInfo interrupt edge
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -638,10 +645,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIINTLEVEL  -> BI INT LEVEL -> boardInfo interrupt level
-     Readable? yes
-     Writable? yes
-     */
+    BIINTLEVEL  -> BI INT LEVEL -> boardInfo interrupt level
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -676,10 +683,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BINUMIOPORTS -> BI NUM IO PORTS -> boardInfo number of I/O ports
-     Readable? yes
-     Writable? NO
-     */
+    BINUMIOPORTS -> BI NUM IO PORTS -> boardInfo number of I/O ports
+    Readable? yes
+    Writable? NO
+    */
 
     /**
      * @see <a
@@ -699,10 +706,10 @@ public class DaqDevice implements AutoCloseable {
 
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIPATTERNTRIGPORT -> BI PATTERN TRIG PORT -> boardInfo pattern trigger port
-     Readable? yes
-     Writable? yes
-     */
+    BIPATTERNTRIGPORT -> BI PATTERN TRIG PORT -> boardInfo pattern trigger port
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -737,10 +744,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BISYNCMODE  -> BI SYNC MODE -> boardInfo sync mode
-     Readable? yes
-     Writable? yes
-     */
+    BISYNCMODE  -> BI SYNC MODE -> boardInfo sync mode
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * Returns the simultaneous mode setting of supported analog output devices.
@@ -778,10 +785,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     setAdc -> BI TERM COUNT STAT BIT -> boardInfo terminal count output status bit
-     Readable? yes
-     Writable? yes
-     */
+    setAdc -> BI TERM COUNT STAT BIT -> boardInfo terminal count output status bit
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * Returns the terminal count output status for a specified bit.
@@ -821,10 +828,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIWAITSTATE -> BI WAIT STATE -> boardInfo wait state
-     Readable? yes
-     Writable? yes
-     */
+    BIWAITSTATE -> BI WAIT STATE -> boardInfo wait state
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -859,10 +866,10 @@ public class DaqDevice implements AutoCloseable {
 
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BICALOUTPUT -> BI CAL OUTPUT -> boardInfo calibration output
-     Readable? NO
-     Writable? yes
-     */
+    BICALOUTPUT -> BI CAL OUTPUT -> boardInfo calibration output
+    Readable? NO
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -879,10 +886,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIDEVVERSION -> BI DEV VERSION -> boardInfo device version
-     Readable? yes
-     Writable? NO
-     */
+    BIDEVVERSION -> BI DEV VERSION -> boardInfo device version
+    Readable? yes
+    Writable? NO
+    */
 
     /**
      * @see <a
@@ -902,14 +909,14 @@ public class DaqDevice implements AutoCloseable {
 
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIDEVSERIALNUM -> BI DEV SERIAL NUM -> boardInfo device serial number
+    BIDEVSERIALNUM -> BI DEV SERIAL NUM -> boardInfo device serial number
 
     Factory serial number of a USB or Bluetooth device.
 
 
-     Readable? yes
-     Writable? no
-     */
+    Readable? yes
+    Writable? no
+    */
 
     /**
      * @see <a
@@ -928,13 +935,13 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIDEVUNIQUEID -> BI DEV UNIQUE ID -> boardInfo device unique identifier
+    BIDEVUNIQUEID -> BI DEV UNIQUE ID -> boardInfo device unique identifier
 
     Unique identifier of a discoverable device, such as the serial number of a USB device or MAC address of an Ethernet device.
 
-     Readable? yes
-     Writable? no
-     */
+    Readable? yes
+    Writable? no
+    */
 
     /**
      * @see <a
@@ -953,14 +960,14 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BISERIALNUM -> BI SERIAL NUM -> boardInfo serial number
+    BISERIALNUM -> BI SERIAL NUM -> boardInfo serial number
 
     User-configured identifier of a supported USB device.
     Custom serial number assigned by a user to a USB device.
 
-     Readable? yes
-     Writable? yes
-     */
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -992,13 +999,13 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIUSERDEVID -> BI USER DEV ID -> boardInfo user device ID
+    BIUSERDEVID -> BI USER DEV ID -> boardInfo user device ID
 
     User-configured string of up to maxConfigLen character/bytes to an Ethernet, Bluetooth, or USB device.
 
-     Readable? yes
-     Writable? yes
-     */
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -1033,14 +1040,14 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIUSERDEVIDNUM -> BI USER DEV ID NUM -> boardInfo user device ID number3
+    BIUSERDEVIDNUM -> BI USER DEV ID NUM -> boardInfo user device ID number3
 
     User-configured string that identifies a USB device.
 
 
-     Readable?
-     Writable? no
-     */
+    Readable?
+    Writable? no
+    */
 
     /**
      * @see <a
@@ -1057,10 +1064,10 @@ public class DaqDevice implements AutoCloseable {
     }
 
     /* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
-     Readable? yes
-     Writable? yes
-     */
+    BIHIDELOGINDLG -> BI HIDE LOGIN DLG -> boardInfo hide login dialog
+    Readable? yes
+    Writable? yes
+    */
 
     /**
      * @see <a
@@ -1075,6 +1082,101 @@ public class DaqDevice implements AutoCloseable {
                 (hide ? 1 : 0)
         );
 
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="discovery">
+    public static Optional<DaqDevice> findByProductName(String desiredProductName) throws JMCCULException {
+        // Best to do this by filtering descriptors because we don't need to open and close devices.
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                DaqDeviceDescriptor.findFirstMatching(d -> d.getProductName().equals(desiredProductName))
+        );
+    }
+
+    public static Optional<DaqDevice> findByUniqueID(String desiredUniqueID) throws JMCCULException {
+        // Best to do this by filtering descriptors because we don't need to open and close devices.
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                DaqDeviceDescriptor.findFirstMatching(d -> d.getUniqueID().equals(desiredUniqueID))
+        );
+    }
+
+    public static Optional<DaqDevice> findByUniqueID(long desiredUniqueID) throws JMCCULException {
+        // Best to do this by filtering descriptors because we don't need to open and close devices.
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(
+                DaqDeviceDescriptor.findFirstMatching(d -> d.NUID == desiredUniqueID)
+        );
+    }
+
+    public static Optional<DaqDevice> findFirstMatching(PredicateThrowsJMCCULException<DaqDevice> predicate) throws JMCCULException {
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        for (DaqDeviceDescriptor descriptor : DaqDeviceDescriptor.find()) {
+
+            /*
+            If the descriptor already has a board number assigned to it,
+            trying to create the DaqDevice will throw error code 1027
+            "specified DAQ device already created."
+            */
+            if (descriptor.getBoardNumber() == -1) {
+                DaqDevice device = new DaqDevice(descriptor);
+                if (predicate.test(device)) {
+                    return Optional.of(device);
+                } else {
+                    device.close();
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<DaqDevice> findFirst() throws JMCCULException {
+        // Can't do this cleanly with Stream because the DaqDevice constructor throws a checked exception.
+        return getOptionalDeviceFromOptionalDescriptor(DaqDeviceDescriptor.findFirst());
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private static Optional<DaqDevice> getOptionalDeviceFromOptionalDescriptor(Optional<DaqDeviceDescriptor> optDescr) throws JMCCULException {
+        /*
+        Use this method instead of
+        optDescr.map(DaqDevice::new);
+        because the DaqDevice constructor throws a checked exception.
+        */
+        if (optDescr.isPresent()) {
+            return Optional.of(new DaqDevice(optDescr.get()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Same as {@link java.util.function.Predicate} but it throws a JMCCUL exception.
+     */
+    @FunctionalInterface
+    public interface PredicateThrowsJMCCULException<T> {
+
+        boolean test(T t) throws JMCCULException;
+    }
+    //</editor-fold>
+
+    public static Optional<DigitalPort> findPortMatching(PredicateThrowsJMCCULException<DigitalPort> predicate) throws JMCCULException {
+        final DaqDeviceDescriptor[] allDeviceDescriptors = DaqDeviceDescriptor.find();
+
+        for (DaqDeviceDescriptor descriptor : allDeviceDescriptors) {
+            final DaqDevice device = new DaqDevice(descriptor);
+            if (device.digital.isSupported()) {
+                for (DigitalPort port : device.digital.getPorts()) {
+                    if (predicate.test(port)) {
+                        return Optional.of(port);
+                    }
+                }
+            }
+            // Checked all ports on the device, none satisfy the predicate.
+            device.close();
+        }
+        // Checked all devices, none have a port that satisfies the predicate.
+        return Optional.empty();
     }
 
 }

@@ -21,14 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package xyz.froud.jmccul.jna;
 
 import com.sun.jna.Structure;
+import java.nio.IntBuffer;
 import xyz.froud.jmccul.DaqDeviceInterfaceType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import xyz.froud.jmccul.JMCCULException;
+import xyz.froud.jmccul.JMCCULUtils;
 
 /**
  * <i>native declaration : C:\Users\Public\Documents\Measurement Computing\DAQ\C\cbw.h</i><br>
@@ -142,7 +146,7 @@ public class DaqDeviceDescriptor extends Structure {
      * behavior.
      *
      * @see <a href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html">
-     *         http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html</a>
+     * http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html</a>
      * @see <a
      *         href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.ByValue.html">http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.ByValue.html</a>
      */
@@ -155,12 +159,12 @@ public class DaqDeviceDescriptor extends Structure {
      *
      * @see <a href="https://stackoverflow.com/a/26309505">https://stackoverflow.com/a/26309505</a>
      * @see <a href="https://github.com/java-native-access/jna/issues/691#issuecomment-242814602">
-     *         https://github.com/java-native-access/jna/issues/691#issuecomment-242814602</a>
+     * https://github.com/java-native-access/jna/issues/691#issuecomment-242814602</a>
      * @see <a
      *         href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#newInstance-java.lang.Class-com.sun.jna.Pointer-">
-     *         Javadoc for Structure.newInstance() method</a>
+     * Javadoc for Structure.newInstance() method</a>
      * @see <a href="http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#getPointer--">
-     *         Javadoc for getPointer() method</a>
+     * Javadoc for getPointer() method</a>
      */
     public DaqDeviceDescriptor.ByValue byValue() {
         final DaqDeviceDescriptor.ByValue rv = Structure.newInstance(
@@ -186,4 +190,83 @@ public class DaqDeviceDescriptor extends Structure {
     public int getBoardNumber() {
         return MeasurementComputingUniversalLibrary.INSTANCE.cbGetBoardNumber(byValue());
     }
+
+    //<editor-fold desc="discovery">
+    /**
+     * Detects USB, Bluetooth and/or Ethernet DAQ devices, and returns device descriptors of the detected devices.
+     * <p>
+     * This function detects Ethernet DAQ devices on the same subnet as the host PC. To detect Ethernet DAQ devices on a
+     * different subnet than the host PC, use cbGetNetDeviceDescriptor().
+     * <p>
+     * You may optionally filter DAQ devices by interface type. If no interface types are specified for the filter, then
+     * the filter is set to {@link xyz.froud.jmccul.DaqDeviceInterfaceType#ANY}. So, these three calls do the same
+     * thing:
+     * <ul>
+     * <li>{@code findDescriptors()}</li>
+     * <li>{@code findDescriptors(DaqDeviceInterfaceType.ANY)}</li>
+     * <li>{@code findDescriptors(DaqDeviceInterfaceType.USB, DaqDeviceInterfaceType.BLUETOOTH, DaqDeviceInterfaceType.ETHERNET)}</li>
+     * </ul>
+     *
+     * @param interfaceTypeFilter which interface type(s) should be searched for DAQ devices. If no interface types are
+     * specified, then all interface types are searched.
+     *
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm">cbGetDaqDeviceInventory()</a>
+     * @see <a
+     *         href="https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery-NET/GetDaqDeviceInventory.htm">GetDaqDeviceInventory()</a>
+     */
+    public static DaqDeviceDescriptor[] find(DaqDeviceInterfaceType... interfaceTypeFilter) throws JMCCULException {
+
+        // Can be any arbitrary number, just needed so C can allocate stuff
+        final int MAX_DEVICE_COUNT = 16;
+
+        /*
+        Allocate an array of empty DaqDeviceDescriptors. The cbGetDaqDeviceInventory() call will populate this array.
+        See Stack Overflow answer to 'How to fill an array of structures in JNA?' https://stackoverflow.com/a/25186232
+        */
+        final DaqDeviceDescriptor[] buffer = (DaqDeviceDescriptor[]) new DaqDeviceDescriptor().toArray(MAX_DEVICE_COUNT);
+
+        /*
+        The deviceCount variable is used both an input and output to cbGetDaqDeviceInventory().
+        As an input, it is the length of the DaqDeviceDescriptor array.
+        As an output, it is how many DAQ devices were actually found.
+        */
+        final IntBuffer deviceCount = IntBuffer.wrap(new int[]{MAX_DEVICE_COUNT});
+
+        final int interfaceBitMask;
+        if (interfaceTypeFilter.length == 0) {
+            interfaceBitMask = DaqDeviceInterfaceType.ANY.VALUE;
+        } else {
+            interfaceBitMask = DaqDeviceInterfaceType.bitwiseOr(interfaceTypeFilter);
+        }
+
+        /*
+        https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm
+
+        In the original C method, the DaqDeviceDescriptor parameter has type DaqDeviceDescriptor* (with star).
+        JNAerator changed it to DaqDeviceDescriptor (without star).
+        According to http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html:
+        When used as a function parameter or return value, the com.sun.jna.Structure class corresponds to struct*.
+        so that is okay.
+
+        According to https://stackoverflow.com/a/25186232, we need to pass the 0th element of the DaqDeviceDescriptor array.
+        */
+        final int errorCode = MeasurementComputingUniversalLibrary.INSTANCE.cbGetDaqDeviceInventory(interfaceBitMask, buffer[0], deviceCount);
+        JMCCULUtils.checkError(errorCode);
+
+        // After calling cbGetDaqDeviceInventory(), deviceCount now contains how many devices were actually found.
+        final int devicesFoundCount = deviceCount.get(0);
+
+        // The buffer still has MAX_DEVICE_COUNT elements in it. Return a subarray with only found devices.
+        return Arrays.copyOf(buffer, devicesFoundCount);
+    }
+
+    public static Optional<DaqDeviceDescriptor> findFirst() throws JMCCULException {
+        return Arrays.stream(find()).findAny();
+    }
+
+    public static Optional<DaqDeviceDescriptor> findFirstMatching(Predicate<DaqDeviceDescriptor> predicate) throws JMCCULException {
+        return Arrays.stream(find()).filter(predicate).findFirst();
+    }
+    //</editor-fold>
 }
