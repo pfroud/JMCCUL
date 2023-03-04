@@ -2,11 +2,14 @@
 
 This is a liSt of all Universal Library functions from https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/ULStart.htm
 
+Universal Library Function Reference > UL for Windows.
+
 To get there, look in the left sidebar and expand Universal Library Function Reference > UL for Windows.
 
-The Status column means whether the JNA wrapper has been written.
+The Status column means whether the JNA wrapper has been written in JMCCUL.
 
 TODO for rows which have been written, say what the Java method is.
+
 
 ## Analog I/O functions
 
@@ -27,6 +30,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbVIn32()`               ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVIn32.htm)               | ✅ `AnalogInputWrapper#readVoltage32()`                               |
 | [ `cbVOut()`                ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbVOut.htm)                | ✅ `AnalogOutputWrapper#writeVoltage()`                               |
 
+
 ## Configuration functions
 
 | UL function                                                                                                                                                            | Status                                     |
@@ -40,6 +44,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbSetConfig()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfig.htm)       | ✅ `ConfigurationWrapper#setInt()`          |
 | [ `cbSetConfigString()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetConfigString.htm) | ✅ `ConfigurationWrapper#setString()`       |
 | [ `cbSetTrigger()`      ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbSetTrigger.htm)      | Not written                                |
+
 
 ## Counter functions
 
@@ -68,6 +73,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbTimerOutStart()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Counter_Functions/cbTimerOutStart.htm) | Not written |
 | [ `cbTimerOutStop()`  ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Counter_Functions/cbTimerOutStop.htm)  | Not written |
 
+
 ## Data Logger functions
 
 | UL function                                                                                                                                                                   | Status            |
@@ -87,6 +93,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbLogReadTimeTags()`      ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogReadTimeTags.htm)      | ❌ Won't implement |
 | [ `cbLogSetPreferences()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogSetPreferences.htm)    | ❌ Won't implement |
 
+
 ## Device Discovery functions
 
 | UL function                                                                                                                                                                   | Status                                   |
@@ -97,6 +104,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbGetNetDeviceDescriptor()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetNetDeviceDescriptor.htm) | ❔ Not written - don't have hardware      |
 | [ `cbIgnoreInstaCal()`         ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbIgnoreInstaCal.htm)         | ✅ `DaqDevice` static initializer block   |
 | [ `cbReleaseDaqDevice()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbReleaseDaqDevice.htm)       | ✅ `DaqDevice#close()`                    |
+
 
 ## Digital I/O functions
 
@@ -116,12 +124,14 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbDOutArray()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutArray.htm)   | ❔ Not written - don't know how to do JNA binding                                |
 | [ `cbDOutScan()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDOutScan.htm)    | ❔ Written but not tested - don't have hardware                                  |
 
+
 ## Error Handling functions
 
 | UL function                                                                                                                                                     | Status                            |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|
 | [ `cbErrHandling()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbErrHandling.htm) | ❌ Won't implement                 |
 | [ `cbGetErrMsg()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm)   | ✅ `JMCCULUtils#getErrorMessage()` |
+
 
 ## Memory Board functions
 
@@ -133,12 +143,14 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbMemSetDTMode()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Memory_Board_Functions/cbMemSetDTMode.htm)   | Not written |
 | [ `cbMemWrite()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Memory_Board_Functions/cbMemWrite.htm)       | Not written |
 
+
 ## Revision Control functions
 
 | UL function                                                                                                                                                               | Status                           |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
 | [ `cbDeclareRevision()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions/cbDeclareRevision.htm) | ❌ Won't implement                |
 | [ `cbGetRevision()`     ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions/cbGetRevision.htm)     | ✅ `JMCCULUtils#getDLLRevision()` |
+
 
 ## Streamer File functions
 
@@ -149,6 +161,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbFilePretrig()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFilePretrig.htm) | ❌ Won't implement |
 | [ `cbFileRead()`    ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileRead.htm)    | ❌ Won't implement |
 
+
 ## Synchronous I/O functions
 
 | UL function                                                                                                                                                             | Status      |
@@ -158,12 +171,14 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbDaqSetSetpoints()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Synchronous_IO_Functions/cbDaqSetSetpoints.htm) | Not written |
 | [ `cbDaqSetTrigger()`   ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Synchronous_IO_Functions/cbDaqSetTrigger.htm)   | Not written |
 
+
 ## Temperature Input functions
 
 | UL function                                                                                                                                                | Status                                           |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
 | [ `cbTIn()`     ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm)     | ✅ `TemperatureWrapper#read()`                    |
 | [ `cbTInScan()` ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTInScan.htm) | ❔ Not written - don't know how to do JNA binding |
+
 
 ## Windows Memory Management functions
 
@@ -181,6 +196,7 @@ TODO for rows which have been written, say what the Java method is.
 | [ `cbWinBufToArray()`       ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbWinBufToArray.htm)       | ???    |
 | [ `cbWinBufToArray32()`     ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbWinBufToArray32.htm)     | ???    |
 | [ `cbWinBufToArray64()`     ](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbWinBufToArray64.htm)     | ???    |
+
 
 ## Miscellaneous functions
 

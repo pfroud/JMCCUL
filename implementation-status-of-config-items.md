@@ -1,5 +1,7 @@
 # Implementation status of config items
 
+This document shows whether config items have been implemented in JMCCUL.
+
 There are four Universal Library functions to read/write configuration items:
 
 * [`cbGetConfig`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm)
@@ -37,6 +39,7 @@ What the columns mean in the tables below:
 * Read - the JMCCUL method to read the config item, or "not readable".
 * Write - the JMCCUL method to write the config item, or "not writeable".
 
+
 ## Global Info
 
 | Item             | Expanded            | Type | Description                                                               | Read                                          | Write         |
@@ -44,6 +47,7 @@ What the columns mean in the tables below:
 | `GIVERSION`      | `GI VERSION`        | int  | cb.cfg file format, used by Universal Library to determine compatibility. | `Configuration#getConfigFileVersion()`        | Not writable  |
 | `GINUMBOARDS`    | `GI NUM BOARDS`     | int  | Maximum number of boards that can be installed.                           | `Configuration#getMaxBoardCount()`            | Not writable  |
 | `GINUMEXPBOARDS` | `GI NUM EXP BOARDS` | int  | Maximum number of expansion boards that can be installed.                 | `ExpansionConfig#getMaxExpansionBoardCount()` | Not writable  |
+
 
 ## Board info
 
@@ -118,6 +122,7 @@ What the columns mean in the tables below:
 | `BIUSESEXPS`         | `BI USES EXPS          ` | int (Boolean) | Expansion board support.                                                                                                    | `ExpansionConfig#isExpansionBoardSupported()`       | Not writable                                                   |
 | `BIWAITSTATE`        | `BI WAIT STATE         ` | int           | Wait State jumper setting.                                                                                                  | `DaqDevice#getWaitStateJumper()`                    | `DaqDevice#setWaitStateJumper()`                               |
 
+
 ## Digital info
 
 | Item                | Expanded               | Type | Description                                                                                   | Read                                     | Write                                    |
@@ -130,12 +135,14 @@ What the columns mean in the tables below:
 | `DIINMASK`          | `DI IN MASK          ` | int  | Which bits are configured for input.                                                          | `DigitalPort#getInputMask()`             | Not writeable                            |
 | `DIOUTMASK`         | `DI OUT MASK         ` | int  | Which bits are configured for output.                                                         | `DigitalPort#getOutputMask()`            | Not writeable                            |
 
+
 ## Counter info
 
 | Item        | Expanded      | Type | Description     | Read              | Write |
 |-------------|---------------|------|-----------------|-------------------|-------|
 | `CICTRNUM`  | `CI CTR NUM ` | int  | Counter number. | yes CounterConfig | NO    |
 | `CICTRTYPE` | `CI CTR TYPE` | int  | Counter type.   | yes CounterConfig | NO    |
+
 
 ## Expansion info
 
