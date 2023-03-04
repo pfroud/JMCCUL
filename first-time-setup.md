@@ -6,14 +6,14 @@ This is focused on DAQ devices which connect to a PC via USB. I don't know what 
 
 1. Run the Universal Library installer (mccdaq.exe) if you haven't already.
 
-   1. When you launch the installer, first a WinZip prompt will appear, click OK.
-   ![](img/for-first-time-setup/installer/01-WinZip-prompt.png)
+   1. When you launch the installer, first a WinZip prompt will appear, click OK.  
+   ![Screenshot of prompt to wun WinZip](img/for-first-time-setup/installer/01-WinZip-prompt.png)
 
-   1. Then the main WinZip window will appear, click Setup.
-   ![](img/for-first-time-setup/installer/02-WinZip-main-window.png)
+   1. Then the main WinZip window will appear, click Setup.  
+   ![Screenshot of WinZip self-extractor main window](img/for-first-time-setup/installer/02-WinZip-main-window.png)
 
-   11. Now the installer actually appears:
-   ![](img/for-first-time-setup/installer/03-MCC-DAQ-installer.png)
+   11. Now the installer actually appears:  
+   ![Screenshot of MCC DAQ installer](img/for-first-time-setup/installer/03-MCC-DAQ-installer.png)
        * [DAQami](https://www.mccdaq.com/daq-software/DAQami.aspx) is nice for troubleshooting.
        * InstaCal & Universal Library is required.
        * [TracerDaq](https://www.mccdaq.com/daq-software/tracerdaq-series.aspx) is deprecated in favor of DAQami I think.
