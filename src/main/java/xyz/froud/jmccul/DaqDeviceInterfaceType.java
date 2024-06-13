@@ -58,12 +58,12 @@ public enum DaqDeviceInterfaceType {
     public final int VALUE;
 
     /**
-     * @see xyz.froud.jmccul.jna.DaqDeviceDescriptor#toString()
+     * @see xyz.froud.jmccul.DaqDeviceDescriptor#toString()
      */
     public final String DISPLAY_NAME;
     /**
-     * @see xyz.froud.jmccul.jna.DaqDeviceDescriptor#UniqueID
-     * @see xyz.froud.jmccul.jna.DaqDeviceDescriptor#toString()
+     * @see xyz.froud.jmccul.DaqDeviceDescriptor#UniqueID
+     * @see xyz.froud.jmccul.DaqDeviceDescriptor#toString()
      */
     public final String LABEL_FOR_UNIQUE_ID;
 

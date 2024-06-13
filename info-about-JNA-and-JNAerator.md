@@ -106,7 +106,7 @@ No Javadoc for the `Platform.is64Bit()` method, but the [source code](https://gi
 
 For simple cases, JNAerator produces one Java method signature for each C function. But if a C function involves pointers, JNAerator produces two Java method signatures, one marked `deprecated` and one not.
 
-Here's a simplified example. This is the function prototype for [`cbDIn()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm):
+Here's a simplified example. This is the function prototype for [`cbDIn()`](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDIn.htm):
 
 ```C
 int cbDIn(int BoardNum, int PortType, unsigned short *DataValue);
@@ -143,7 +143,7 @@ Link to try the regular expression: https://regexr.com/6bokv
 
 ### Add helper method for `Structure.ByValue`
 
-For the [`DaqDeviceDescriptor`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/DaqDeviceDescriptor-type.htm) struct, JNAerator generates a class with two empty subclasses:
+For the [`DaqDeviceDescriptor`](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/DaqDeviceDescriptor-type.htm) struct, JNAerator generates a class with two empty subclasses:
 
 ```java
 public class DaqDeviceDescriptor extends com.sun.jna.Structure {
@@ -164,7 +164,7 @@ public class DaqDeviceDescriptor extends com.sun.jna.Structure {
 
 The `ByReference` subclass is not used in JMCCUL and can be removed from DaqDeviceDescriptor.java.
 
-The `ByValue` subclass is used twice, as parameters for the [`cbCreateDaqDevice()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm) and [`cbGetBoardNumber()`](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm) functions.
+The `ByValue` subclass is used twice, as parameters for the [`cbCreateDaqDevice()`](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm) and [`cbGetBoardNumber()`](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm) functions.
 
 The original Universal Library signatures of those functions are:
 
@@ -193,7 +193,7 @@ The [Javadoc for the `getPointer()` method](http://java-native-access.github.io/
 
 > if you use the structure's pointer as a function argument, you are responsible for calling `write()` prior to the call and `read()` after the call. These calls are normally handled automatically by the `Function` object when it encounters a `Structure` argument or return value.
 
-And indeed if you don't call [`read()`](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#read--) after calling `Structure.newInstance()`, then `cbCreateDaqDevice()` will fail with error code 306. [cbGetErrMsg()](https://www.mccdaq.com/pdfs/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm) says "Error number 306 has no text" but cbw.h reveals:
+And indeed if you don't call [`read()`](http://java-native-access.github.io/jna/5.12.1/javadoc/com/sun/jna/Structure.html#read--) after calling `Structure.newInstance()`, then `cbCreateDaqDevice()` will fail with error code 306. [cbGetErrMsg()](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm) says "Error number 306 has no text" but cbw.h reveals:
 
 ```c
 /* Internal errors returned by 32 bit library */
