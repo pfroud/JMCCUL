@@ -25,7 +25,7 @@ For ready-to-use examples, see the [`xyz.froud.jmccul_examples` package](src/mai
 To quickly open a DAQ device:
 
 ```java
-DaqDevice myDevice = new DaqDevice.findFirst().get();
+DaqDevice myDevice = DaqDevice.findFirst().get();
 ```
 
 To discover all connected DAQ devices then open the first one:
@@ -84,9 +84,11 @@ There is also partial implementation of [counter](src/main/java/xyz/froud/jmccul
 
 * I have a list of stuff to ask MCC.
 
-Replace static block for enum valueMap with this line
+* Replace static block for enum valueMap with this line
 
- = Arrays.stream(values()).collect(Collectors.toMap(
+    ```java
+    = Arrays.stream(values()).collect(Collectors.toMap(
                     alarmType -> alarmType.VALUE,
                     Function.identity()
             ));
+    ```

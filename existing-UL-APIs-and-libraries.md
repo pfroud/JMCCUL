@@ -42,10 +42,4 @@ A separate library is provided for the DAQ HAT devices for Raspberry Pi. Links:
 Android is supported:
 * https://www.mccdaq.com/daq-software/universal-library-android.aspx
 
-It is written in Java, but it uses a different approach.
-
-It uses the [`android.hardware.usb`](https://developer.android.com/reference/android/hardware/usb/package-summary) and [`android.bluetooth`](https://developer.android.com/reference/android/bluetooth/package-summary) packages
-
-The network uses `java.net` package.
-
-Source: decompilation of ul.jar using [JD-GUI](http://java-decompiler.github.io/).
+It is written in Java, but uses the [`android.hardware.usb`](https://developer.android.com/reference/android/hardware/usb/package-summary) and [`android.bluetooth`](https://developer.android.com/reference/android/bluetooth/package-summary) packages. Source: decompilation of ul.jar using [JD-GUI](http://java-decompiler.github.io/).

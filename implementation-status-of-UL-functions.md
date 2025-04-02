@@ -8,13 +8,10 @@ To get there, look in the left sidebar and expand Universal Library Function Ref
 
 The Status column means whether the JNA wrapper has been written in JMCCUL.
 
-TODO for rows which have been written, say what the Java method is.
-
-
 ## Analog I/O functions
 
-| UL function                                                                                                                                                                | Status                                                               |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| UL function                                                                                                                                                               | Status                                                               |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
 | [ `cbACalibrateData()`      ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbACalibrateData.htm)      | Not written                                                          |
 | [ `cbAConvertData()`        ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAConvertData.htm)        | Not written                                                          |
 | [ `cbAConvertPreTrigData()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Analog_IO_Functions/cbAConvertPreTrigData.htm) | Not written                                                          |
@@ -33,8 +30,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Configuration functions
 
-| UL function                                                                                                                                                            | Status                                     |
-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
+| UL function                                                                                                                                                           | Status                                     |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
 | [ `cbAChanInputMode()`  ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbAChanInputMode.htm)  | ✅ `AnalogInputWrapper#setModeForChannel()` |
 | [ `cbAInputMode()`      ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbAInputMode.htm)      | ✅ `AnalogInputWrapper#setModeForBoard()`   |
 | [ `cbGetConfig()`       ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Configuration_Functions/cbGetConfig.htm)       | ✅ `ConfigurationWrapper#getInt()`          |
@@ -48,8 +45,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Counter functions
 
-| UL function                                                                                                                                                  | Status      |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| UL function                                                                                                                                                 | Status      |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
 | [ `cbC7266Config()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Counter_Functions/cbC7266Config.htm)   | Not written |
 | [ `cbC8254Config()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Counter_Functions/cbC8254Config.htm)   | Not written |
 | [ `cbC8536Config()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Counter_Functions/cbC8536Config.htm)   | Not written |
@@ -76,8 +73,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Data Logger functions
 
-| UL function                                                                                                                                                                   | Status            |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| UL function                                                                                                                                                                  | Status            |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
 | [ `cbLogConvertFile()`       ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogConvertFile.htm)       | ❌ Won't implement |
 | [ `cbLogGetAIChannelCount()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetAIChannelCount.htm) | ❌ Won't implement |
 | [ `cbLogGetAIInfo()`         ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/DataLogger_Functions/cbLogGetAIInfo.htm)         | ❌ Won't implement |
@@ -96,8 +93,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Device Discovery functions
 
-| UL function                                                                                                                                                                   | Status                                   |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| UL function                                                                                                                                                                  | Status                                   |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
 | [ `cbCreateDaqDevice()`        ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbCreateDaqDevice.htm)        | ✅ `DaqDevice` constructor                |
 | [ `cbGetBoardNumber()`         ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetBoardNumber.htm)         | ✅ `DaqDeviceDescriptor#getBoardNumber()` |
 | [ `cbGetDaqDeviceInventory()`  ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Device-Discovery/cbGetDaqDeviceInventory.htm)  | ✅ `DaqDeviceDiscovery#findDescriptors()` |
@@ -108,8 +105,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Digital I/O functions
 
-| UL function                                                                                                                                                 | Status                                                                          |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| UL function                                                                                                                                                | Status                                                                          |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
 | [ `cbDBitIn()`      ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitIn.htm)      | ✅ `DigitalInputWrapper#readBit()`                                               |
 | [ `cbDBitOut()`     ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDBitOut.htm)     | ✅ `DigitalOutputWrapper#writeBit()`                                             |
 | [ `cbDClearAlarm()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Digital_IO_Functions/cbDClearAlarm.htm) | Not written                                                                     |
@@ -127,16 +124,16 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Error Handling functions
 
-| UL function                                                                                                                                                     | Status                            |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|
+| UL function                                                                                                                                                    | Status                            |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|
 | [ `cbErrHandling()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbErrHandling.htm) | ❌ Won't implement                 |
 | [ `cbGetErrMsg()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Error_Handling_Functions/cbGetErrMsg.htm)   | ✅ `JMCCULUtils#getErrorMessage()` |
 
 
 ## Memory Board functions
 
-| UL function                                                                                                                                                         | Status      |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| UL function                                                                                                                                                        | Status      |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
 | [ `cbMemRead()`        ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Memory_Board_Functions/cbMemRead.htm)        | Not written |
 | [ `cbMemReadPretrig()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Memory_Board_Functions/cbMemReadPretrig.htm) | Not written |
 | [ `cbMemReset()`       ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Memory_Board_Functions/cbMemReset.htm)       | Not written |
@@ -146,16 +143,16 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Revision Control functions
 
-| UL function                                                                                                                                                               | Status                           |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| UL function                                                                                                                                                              | Status                           |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
 | [ `cbDeclareRevision()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions/cbDeclareRevision.htm) | ❌ Won't implement                |
 | [ `cbGetRevision()`     ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Revision_Control_Functions/cbGetRevision.htm)     | ✅ `JMCCULUtils#getDLLRevision()` |
 
 
 ## Streamer File functions
 
-| UL function                                                                                                                                                    | Status            |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| UL function                                                                                                                                                   | Status            |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
 | [ `cbFileAInScan()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileAInScan.htm) | ❌ Won't implement |
 | [ `cbFileGetInfo()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFileGetInfo.htm) | ❌ Won't implement |
 | [ `cbFilePretrig()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Streamer_File_Functions/cbFilePretrig.htm) | ❌ Won't implement |
@@ -164,8 +161,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Synchronous I/O functions
 
-| UL function                                                                                                                                                             | Status      |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| UL function                                                                                                                                                            | Status      |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
 | [ `cbDaqInScan()`       ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Synchronous_IO_Functions/cbDaqInScan.htm)       | Not written |
 | [ `cbDaqOutScan()`      ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Synchronous_IO_Functions/cbDaqOutScan.htm)      | Not written |
 | [ `cbDaqSetSetpoints()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Synchronous_IO_Functions/cbDaqSetSetpoints.htm) | Not written |
@@ -174,16 +171,16 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Temperature Input functions
 
-| UL function                                                                                                                                                | Status                                           |
-|------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| UL function                                                                                                                                               | Status                                           |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
 | [ `cbTIn()`     ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTIn.htm)     | ✅ `TemperatureWrapper#read()`                    |
 | [ `cbTInScan()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Temperature_Input_Functions/cbTInScan.htm) | ❔ Not written - don't know how to do JNA binding |
 
 
 ## Windows Memory Management functions
 
-| UL function                                                                                                                                                                                | Status |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|
+| UL function                                                                                                                                                                               | Status |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|
 | [ `cbScaledWinArrayToBuf()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbScaledWinArrayToBuf.htm) | ???    |
 | [ `cbScaledWinBufAlloc()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbScaledWinBufAlloc.htm)   | ???    |
 | [ `cbScaledWinBufToArray()` ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Windows_Memory_Management_Functions/cbScaledWinBufToArray.htm) | ???    |
@@ -200,8 +197,8 @@ TODO for rows which have been written, say what the Java method is.
 
 ## Miscellaneous functions
 
-| UL function                                                                                                                                                          | Status                       |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------|
+| UL function                                                                                                                                                         | Status                       |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------|
 | [ `cbDeviceLogin()`    ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbDeviceLogin.htm)    | Not written                  |
 | [ `cbDeviceLogout()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbDeviceLogout.htm)   | Not written                  |
 | [ `cbDisableEvent()`   ](https://files.digilent.com/manuals/Mcculw_WebHelp/hh_goto.htm?ULStart.htm#Function_Reference/Miscellaneous_Functions/cbDisableEvent.htm)   | Not written                  |

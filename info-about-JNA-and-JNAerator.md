@@ -200,3 +200,5 @@ And indeed if you don't call [`read()`](http://java-native-access.github.io/jna/
 ...
 #define CREATE_BOARD_FAILURE    306   /* 32 bit - failed to create board */
 ```
+
+So I added a [helper method](https://github.com/pfroud/JMCCUL/blob/e0289003adba43b84e9705ad06b38984009e75f3/src/main/java/xyz/froud/jmccul/DaqDeviceDescriptor.java#L166-L174) which calls Structure.newInstance() then Structure#read().
